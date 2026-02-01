@@ -6,18 +6,18 @@
     </style>
 
     <style name="CustomDatePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="colorPrimary">#09BC5E</item>
+        <item name="colorPrimary">@color/accent</item>
         <item name="colorSurface">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="CustomDatePickerButtonTheme" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">#09BC5E</item>
+        <item name="android:textColor">@color/accent</item>
     </style>
 
     <style name="CustomTimePickerTheme" parent="ThemeOverlay.Material3.MaterialTimePicker">
         <!-- This changes the colors of the confirm/cancel buttons -->
-        <item name="colorPrimary">#09BC5E</item>
+        <item name="colorPrimary">@color/accent</item>
     </style>
 
 

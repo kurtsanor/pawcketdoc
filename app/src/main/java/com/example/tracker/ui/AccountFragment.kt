@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
 
 class AccountFragment : Fragment() {
@@ -32,6 +33,21 @@ class AccountFragment : Fragment() {
             val loginPage = Intent(requireContext(), MainActivity:: class.java)
             startActivity(loginPage)
         }
+
+        val editProfile = view.findViewById<TextView>(R.id.tvEditProfile)
+        editProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_account_to_editProfile)
+        }
+
+        val changePassword = view.findViewById<TextView>(R.id.tvChangePassword)
+        changePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_account_to_changePassword)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().findViewById<TextView>(R.id.txtHeaderTitle).text = "Account"
     }
 
 }

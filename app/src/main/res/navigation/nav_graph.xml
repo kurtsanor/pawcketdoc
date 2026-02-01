@@ -39,6 +39,22 @@
         android:name="com.example.tracker.ui.AccountFragment"
         android:label="Account"
         >
+        <action
+            android:id="@+id/action_account_to_editProfile"
+            app:destination="@+id/editProfileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_out_right"
+            />
+        <action
+            android:id="@+id/action_account_to_changePassword"
+            app:destination="@+id/changePasswordFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_out_right"
+            />
     </fragment>
 
     <fragment
@@ -195,6 +211,20 @@
         android:label="Medication Form"
         >
     </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.tracker.ui.EditProfileFragment"
+        android:label="Edit Profile"
+        >
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.tracker.ui.ChangePasswordFragment"
+        android:label="Change Password"
+        >
+    </fragment>
+
+
 
 
 </navigation>

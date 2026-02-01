@@ -92,9 +92,7 @@ class AppointmentFormFragment : Fragment() {
             Toast.makeText(context, "Appointment set!", Toast.LENGTH_SHORT).show()
             parentFragmentManager.popBackStack()
         }
-
         setupDateTimePicker(view)
-
     }
 
     override fun onDestroyView() {

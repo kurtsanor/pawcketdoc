@@ -96,6 +96,7 @@
                     android:textColor="#767676"
                     />
                     <TextView
+                        android:id="@+id/tvEditProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Edit Profile"
@@ -107,6 +108,7 @@
                         android:drawableRight="@drawable/rightarrow"
                         android:drawablePadding="20dp" />
                     <TextView
+                        android:id="@+id/tvChangePassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Change Password"
