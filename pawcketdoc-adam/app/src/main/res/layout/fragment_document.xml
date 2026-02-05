@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.DocumentsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eff0f4"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Search Bar -->
+        <SearchView
+            style="@style/Widget.AppCompat.SearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bar_design"
+            android:queryHint="Search documents..."
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#FFFFFF" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            app:cardCornerRadius="20dp"
+            android:layout_marginBottom="20dp"
+            app:cardElevation="2dp"
+            app:cardMaxElevation="3dp"
+            app:cardPreventCornerOverlap="true"
+            android:layout_marginHorizontal="3dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--Appointment Header-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Uploaded Files"
+                    android:layout_marginVertical="15dp"
+                    android:textSize="20sp"
+                    android:fontFamily="sans-serif-condensed-light"
+                    android:layout_marginStart="15dp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <!--Appointment Schedule Item-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+
+                    app:contentPadding="10dp"
+                    app:cardElevation="0dp"
+                    app:cardMaxElevation="0dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginHorizontal="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="8dp"
+                            android:layout_marginRight="8dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/file"
+                                android:background="#69F0AE"
+                                />
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="7"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Vaccination Record"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Proof of vaccines recieved"
+                                android:textSize="11sp"
+                                android:textColor="@color/black"
+                                />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mar 03, 2025"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:gravity="end" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <!--Appointment Schedule Item-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+
+                    app:contentPadding="10dp"
+                    app:cardElevation="0dp"
+                    app:cardMaxElevation="0dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginHorizontal="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="8dp"
+                            android:layout_marginRight="8dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/file"
+                                android:background="#8C9EFF"
+                                />
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="7"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Prescription Sheets"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="List of medications"
+                                android:textSize="11sp"
+                                android:textColor="@color/black"
+                                />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mar 03, 2025"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:gravity="end" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</FrameLayout>

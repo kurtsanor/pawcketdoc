@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.PetProfileFragment"
+    android:background="@color/white">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:background="#eff0f4"
+        >
+
+        <!--Profile Card-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="20dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:gravity="center"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:src="@drawable/doggy"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Buddy"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="8 months, Male"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="#7E7E7E"
+                    android:textAlignment="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Golden Retriever, Beige"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="#7E7E7E"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <!--Quick Actions Grid-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="3"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="2dp"
+            app:cardMaxElevation="3dp"
+            app:cardPreventCornerOverlap="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_bold"
+                    android:text="My Stuff"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="20sp"
+                    />
+
+                <!--Buttons Grid-->
+                <androidx.gridlayout.widget.GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:columnCount="3">
+                    <Button
+                        android:id="@+id/buttonDocuments"
+                        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Surface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Documents"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textColorLink="#100101"
+                        app:icon="@drawable/paper"
+                        app:iconGravity="top"
+                        app:iconPadding="0dp"
+                        app:iconSize="60dp"
+                        app:iconTint="#FFD180"
+                        android:textSize="11sp"
+                        app:backgroundTint="@color/white"
+                        app:layout_columnWeight="1" />
+                    <Button
+                        android:id="@+id/buttonVaccination"
+                        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Surface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Vaccines"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textColorLink="#100101"
+                        app:icon="@drawable/vaccine"
+                        app:iconGravity="top"
+                        android:textSize="11sp"
+                        app:iconPadding="0dp"
+                        app:iconSize="60dp"
+                        app:backgroundTint="@color/white"
+                        app:iconTint="#FF9E80"
+                        app:layout_columnWeight="1" />
+                    <Button
+                        android:id="@+id/buttonGrowth"
+                        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Surface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Growth"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textColorLink="#100101"
+                        app:icon="@drawable/rise"
+                        app:iconGravity="top"
+                        app:iconPadding="0dp"
+                        app:iconSize="60dp"
+                        android:textSize="11sp"
+                        app:backgroundTint="@color/white"
+                        app:iconTint="#08d46c"
+                        app:layout_columnWeight="1" />
+                    <Button
+                        android:id="@+id/buttonMedicalHistory"
+                        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Surface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Medical History"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textColorLink="#100101"
+                        app:icon="@drawable/healthcare"
+                        android:textSize="11sp"
+                        app:iconGravity="top"
+                        app:iconPadding="0dp"
+                        app:iconSize="60dp"
+                        app:backgroundTint="@color/white"
+                        app:iconTint="#f45b5b"
+                        app:layout_columnWeight="1" />
+                    <Button
+                        android:id="@+id/buttonAppointments"
+                        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Surface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="Appointments"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textSize="11sp"
+                        android:textColor="@color/black"
+                        android:textColorLink="#100101"
+                        app:icon="@drawable/appointment"
+                        app:iconGravity="top"
+                        app:iconPadding="0dp"
+                        app:iconSize="60dp"
+                        app:backgroundTint="@color/white"
+                        app:iconTint="#536DFE"
+                        app:layout_columnWeight="1" />
+                    <Button
+                        android:id="@+id/buttonMedications"
+                        style="@style/Widget.Material3.ExtendedFloatingActionButton.Icon.Surface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:layout_margin="8dp"
+                        android:text="Medications"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black"
+                        android:textColorLink="#100101"
+                        app:icon="@drawable/pills"
+                        app:iconGravity="top"
+                        app:iconPadding="0dp"
+                        app:iconSize="60dp"
+                        app:backgroundTint="@color/white"
+                        app:iconTint="#FF6E40"
+                        app:layout_columnWeight="1" />
+                </androidx.gridlayout.widget.GridLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--Appointment Container-->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            app:cardCornerRadius="20dp"
+            android:layout_marginBottom="20dp"
+            app:cardElevation="2dp"
+            app:cardMaxElevation="3dp"
+            app:cardPreventCornerOverlap="true"
+            android:layout_marginHorizontal="3dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--Appointment Header-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Recent Activities"
+                    android:layout_marginVertical="10dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textSize="20sp"
+                    android:layout_marginStart="15dp"
+                    android:textColor="@color/black"
+                    />
+
+                <!--Appointment Schedule Item-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+
+                    app:contentPadding="10dp"
+                    app:cardElevation="0dp"
+                    app:cardMaxElevation="0dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginHorizontal="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="8dp"
+                            android:layout_marginRight="8dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/checkup"
+                                android:background="#FF9E80"
+                                />
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="7"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Vet Checkup"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="You have upcoming checkup"
+                                android:textSize="11sp"
+                                android:textColor="@color/black"
+                                />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mar 03, 2025"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:gravity="end" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <!--Appointment Schedule Item-->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+
+                    app:contentPadding="10dp"
+                    app:cardElevation="0dp"
+                    app:cardMaxElevation="0dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginHorizontal="3dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="8dp"
+                            android:layout_marginRight="8dp">
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/checkup"
+                                android:background="#8C9EFF"
+                                />
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="7"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Annual Checkup for Max"
+                                android:textSize="14sp"
+                                android:textColor="@color/black"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Max needs checkup"
+                                android:textSize="11sp"
+                                android:textColor="@color/black"
+                                />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mar 03, 2025"
+                            android:textSize="12sp"
+                            android:textColor="@color/black"
+                            android:gravity="end" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</FrameLayout>

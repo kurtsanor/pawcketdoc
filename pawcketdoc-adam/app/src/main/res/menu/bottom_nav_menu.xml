@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/sweethome"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/nav_pets"
+        android:icon="@drawable/pawprint"
+        android:title="Pets" />
+
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@drawable/userfilled"
+        android:title="Account" />
+
+</menu>

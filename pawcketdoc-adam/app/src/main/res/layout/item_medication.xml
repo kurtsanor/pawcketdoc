@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardElevation="0dp"
+    android:backgroundTint="#FFFFFF"
+    android:layout_margin="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <!-- LEFT PANEL (Dosage/Frequency) -->
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/pills"
+            style="@style/CircleShape"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="center"
+            />
+
+        <!-- RIGHT PANEL (Details) -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <!-- Medication Name -->
+            <TextView
+                android:id="@+id/textViewMedName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Carprofen"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="18sp"
+                android:textColor="@color/black" />
+
+            <!-- Date Range -->
+            <TextView
+                android:id="@+id/textViewDateRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jan 10 – Jan 17, 2026"
+                android:fontFamily="@font/inter_regular"
+                android:textSize="13sp"
+                android:textColor="#777777"
+                android:layout_marginTop="6dp" />
+
+            <!-- Reason -->
+            <TextView
+                android:id="@+id/textViewReason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="For arthritis pain"
+                android:textColor="#555555"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="#E8F0FE"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/textViewDose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:text="25 mg"
+                android:textSize="16sp"
+                android:textColor="#1A73E8"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewFrequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Twice/day"
+                android:textSize="12sp"
+                android:fontFamily="@font/inter_regular"
+                android:textColor="#1A73E8"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
