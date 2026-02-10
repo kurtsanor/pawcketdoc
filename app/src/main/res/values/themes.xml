@@ -1,0 +1,49 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CRUD_prac" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="CustomDatePickerTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">#09BC5E</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="CustomDatePickerButtonTheme" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">#09BC5E</item>
+    </style>
+
+    <style name="CustomTimePickerTheme" parent="ThemeOverlay.Material3.MaterialTimePicker">
+        <!-- This changes the colors of the confirm/cancel buttons -->
+        <item name="colorPrimary">#09BC5E</item>
+    </style>
+
+
+
+
+
+    <style name="CircleFAB">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="CircleShape">
+        <item name="android:background">@drawable/circle_background</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:elevation">0dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="tint">#0C6631</item>
+    </style>
+
+    <style name="Theme.PetTrackr.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.CRUD_prac</item>
+    </style>
+
+
+
+    <style name="Theme.CRUD_prac" parent="Base.Theme.CRUD_prac" />
+</resources>

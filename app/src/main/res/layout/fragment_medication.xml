@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.MedicationFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eff0f4"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Search Bar -->
+        <SearchView
+            style="@style/Widget.AppCompat.SearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bar_design"
+            android:queryHint="Search documents..."
+            android:layout_marginBottom="20dp"
+            android:backgroundTint="#FFFFFF" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            app:cardCornerRadius="20dp"
+            android:layout_marginBottom="20dp"
+            app:cardElevation="2dp"
+            app:cardMaxElevation="3dp"
+            app:cardPreventCornerOverlap="true"
+            android:layout_marginHorizontal="3dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--Appointment Header-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Medications Log"
+                    android:layout_marginVertical="15dp"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:layout_marginStart="15dp"
+                    android:textColor="@color/black"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewMedications"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_medication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="25dp"
+        android:contentDescription="Add Medication"
+        app:srcCompat="@drawable/add"
+        app:tint="@null"
+        android:backgroundTint="#08d46c"
+        app:shapeAppearanceOverlay="@style/CircleFAB"
+        />
+
+</FrameLayout>

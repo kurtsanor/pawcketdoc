@@ -1,0 +1,48 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="300"
+    android:viewportHeight="140">
+
+    <!-- Background -->
+    <path
+        android:pathData="M0,0 H300 V140 H0 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Horizontal grid lines -->
+    <path
+        android:pathData="M20,30 L290,30 M20,55 L290,55 M20,80 L290,80 M20,105 L290,105"
+        android:strokeColor="#E0E0E0"
+        android:strokeWidth="1" />
+
+    <!-- Axes -->
+    <path
+        android:pathData="M30,20 L30,110 L290,110"
+        android:strokeColor="#9E9E9E"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+
+    <!-- Growth line -->
+    <path
+        android:pathData="M50,95 L90,75 L130,70 L170,60 L210,55 L250,45"
+        android:strokeColor="#08D46C"
+        android:strokeWidth="4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent" />
+
+    <!-- Data points (replaced circles with pathData) -->
+    <path android:fillColor="#08D46C" android:pathData="M50,90 a5,5 0 1,0 0.1,0 z" />
+    <path android:fillColor="#08D46C" android:pathData="M90,70 a5,5 0 1,0 0.1,0 z" />
+    <path android:fillColor="#08D46C" android:pathData="M130,65 a5,5 0 1,0 0.1,0 z" />
+    <path android:fillColor="#08D46C" android:pathData="M170,55 a5,5 0 1,0 0.1,0 z" />
+    <path android:fillColor="#08D46C" android:pathData="M210,50 a5,5 0 1,0 0.1,0 z" />
+    <path android:fillColor="#08D46C" android:pathData="M250,40 a5,5 0 1,0 0.1,0 z" />
+
+    <!-- Vertical month grid markers -->
+    <path
+        android:pathData="M50,110 L50,115 M90,110 L90,115 M130,110 L130,115 M170,110 L170,115 M210,110 L210,115 M250,110 L250,115"
+        android:strokeColor="#9E9E9E"
+        android:strokeWidth="2" />
+
+</vector>
