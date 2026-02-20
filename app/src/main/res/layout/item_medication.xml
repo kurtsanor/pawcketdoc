@@ -90,7 +90,8 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="25mg"
                     android:textSize="14sp"
-                    android:textColor="@color/accent" />
+                    android:textColor="@color/accent"
+                    android:ellipsize="end"/>
 
                 <TextView
                     android:id="@+id/textViewFrequency"
@@ -100,7 +101,8 @@
                     android:textSize="10sp"
                     android:fontFamily="@font/inter_bold"
                     android:textColor="@color/accent"
-                    android:textAllCaps="true" />
+                    android:textAllCaps="true"
+                    android:ellipsize="end"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

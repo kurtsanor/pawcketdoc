@@ -1,5 +1,6 @@
 package com.example.tracker.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,16 +8,29 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.model.Medication
+import com.example.tracker.service.MedicationService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
 class MedicationFormFragment : Fragment() {
+
+    private lateinit var db: AppDatabase
+    private lateinit var medicationService: MedicationService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +48,7 @@ class MedicationFormFragment : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,12 +60,18 @@ class MedicationFormFragment : Fragment() {
         subtitle.text = "Record new medication schedule"
         subtitle.visibility = View.VISIBLE
 
+        db = DatabaseProvider.getDatabase(requireContext())
+        medicationService = MedicationService(db.medicationDao())
+
+        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+
         val etMedicationName = view.findViewById<TextInputEditText>(R.id.etMedicationName)
         val etDosage = view.findViewById<TextInputEditText>(R.id.etDosage)
         val etFrequency = view.findViewById<TextInputEditText>(R.id.etFrequency)
         val etStartDate = view.findViewById<TextInputEditText>(R.id.etStartDate)
         val etEndDate = view.findViewById<TextInputEditText>(R.id.etEndDate)
         val etReason = view.findViewById<TextInputEditText>(R.id.etReason)
+        val etNotes = view.findViewById<TextInputEditText>(R.id.etNotes)
         val buttonSaveMedication = view.findViewById<Button>(R.id.btnSaveMedication)
 
         buttonSaveMedication.setOnClickListener {
@@ -91,7 +112,7 @@ class MedicationFormFragment : Fragment() {
 
             // Validate End Date is after Start Date
             try {
-                val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val startDate = dateFormat.parse(etStartDate.text.toString())
                 val endDate = dateFormat.parse(etEndDate.text.toString())
 
@@ -112,8 +133,30 @@ class MedicationFormFragment : Fragment() {
                 etReason.error = null
             }
 
-            Toast.makeText(context, "Medication Saved!", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+            val newMedication = Medication(
+                petId = petId,
+                name = etMedicationName.text.toString(),
+                dosage = etDosage.text.toString(),
+                frequency = etFrequency.text.toString(),
+                startDate = LocalDate.parse(etStartDate.text.toString(), formatter),
+                endDate = LocalDate.parse(etEndDate.text.toString(), formatter),
+                reason = etReason.text.toString(),
+                notes = etNotes.text.toString()
+            )
+
+            lifecycleScope.launch {
+                try {
+                    medicationService.insert(newMedication)
+                    Toast.makeText(context, "Medication Saved!", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                } catch (e: Exception) {
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
         }
     }
 
@@ -151,7 +194,7 @@ class MedicationFormFragment : Fragment() {
             datePicker.show(requireActivity().supportFragmentManager, "start_date_picker")
 
             datePicker.addOnPositiveButtonClickListener { selection ->
-                val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val dateString = formatter.format(Date(selection))
                 dateInput.setText(dateString)
             }
@@ -171,7 +214,7 @@ class MedicationFormFragment : Fragment() {
             datePicker.show(requireActivity().supportFragmentManager, "end_date_picker")
 
             datePicker.addOnPositiveButtonClickListener { selection ->
-                val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val dateString = formatter.format(Date(selection))
                 dateInput.setText(dateString)
             }
