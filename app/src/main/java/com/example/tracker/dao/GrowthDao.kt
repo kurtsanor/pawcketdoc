@@ -1,5 +1,6 @@
 package com.example.tracker.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -11,5 +12,8 @@ interface GrowthDao {
     suspend fun insert(growth: Growth)
 
     @Query("SELECT * FROM Growth WHERE petId = :petId")
-    suspend fun findAllByPetId(petId: Long): List<Growth>
+    fun findAllByPetId(petId: Long): LiveData<List<Growth>>
+
+    @Query("DELETE FROM Growth WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }

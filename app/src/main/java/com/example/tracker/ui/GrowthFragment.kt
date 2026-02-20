@@ -1,8 +1,10 @@
 package com.example.tracker.ui
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,14 +28,29 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.time.LocalDate
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.TooltipCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.model.Vaccination
+import com.example.tracker.service.GrowthService
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
+import java.lang.RuntimeException
 import com.google.android.material.R as MaterialR
 
 
 class GrowthFragment : Fragment() {
+
+    private lateinit var db: AppDatabase
+    private lateinit var growthService: GrowthService
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var growthList: LiveData<List<Growth>>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,12 +78,24 @@ class GrowthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        db = DatabaseProvider.getDatabase(requireContext())
+        growthService = GrowthService(db.growthDao())
+
+        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+
         val weightLayout = view.findViewById<TextInputLayout>(R.id.weightLayout)
         val heightLayout = view.findViewById<TextInputLayout>(R.id.heightLayout)
         val notesLayout = view.findViewById<TextInputLayout>(R.id.notesLayout)
         val weightInput = view.findViewById<TextInputEditText>(R.id.weightInput)
         val heightInput = view.findViewById<TextInputEditText>(R.id.heightInput)
+        val notesInput = view.findViewById<TextInputEditText>(R.id.notesInput)
         val buttonSaveRecord = view.findViewById<Button>(R.id.buttonSaveRecord)
+
+        fun clearFields() {
+            weightInput.setText("")
+            heightInput.setText("")
+            notesInput.setText("")
+        }
 
         fun TextInputLayout.setEndIconTooltip(text: CharSequence) {
             val iconView = findViewById<View>(MaterialR.id.text_input_end_icon) ?: return
@@ -112,8 +141,25 @@ class GrowthFragment : Fragment() {
                 heightInput.error = null
             }
 
-            Toast.makeText(context, "Record Saved!", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
+            val newEntry = Growth(
+                petId = petId,
+                weight = weightInput.text.toString().toFloat(),
+                height = heightInput.text.toString().toFloat(),
+                notes = notesInput.text.toString(),
+                dateRecorded = LocalDate.now()
+            )
+            lifecycleScope.launch {
+                try {
+                    growthService.insert(newEntry)
+                    clearFields()
+                    Toast.makeText(context, "Record Saved!", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception){
+                    Log.d("error", e.toString())
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
         }
 
         weightLayout.setEndIconTooltip("Weight in kilograms e.g '19.4'")
@@ -123,19 +169,88 @@ class GrowthFragment : Fragment() {
         val barChart = view.findViewById<LineChart>(R.id.barChart)
         createLineChart(barChart)
 
-        val growths = listOf(
-            Growth(1,0, 12.4.toFloat(), 14.toFloat(), "Growing", LocalDate.of(2025,1,1)),
-            Growth(1,0, 12.4.toFloat(), 14.toFloat(), "Growing", LocalDate.of(2025,1,1)),
-            Growth(1,0, 12.4.toFloat(), 14.toFloat(), "Growing", LocalDate.of(2025,1,1)),
-            Growth(1,0, 12.4.toFloat(), 14.toFloat(), "Growing", LocalDate.of(2025,1,1)),
-        )
-
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewGrowth)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewGrowth)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = GrowthAdapter(growths, {growth ->
-            val bottomSheet = GrowthDetailsBottomSheet()
-            bottomSheet.show(parentFragmentManager, "GrowthDetailsBottomSheet")
-        })
+
+        loadGrowthEntries(petId)
+        setupSwipeHandler()
+    }
+
+    fun setupPlaceholders (growthList: List<Growth>) {
+        val placeholder: LinearLayout? = view?.findViewById(R.id.placeholder_empty_growth)
+        if (growthList.isEmpty()) {
+            placeholder?.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            placeholder?.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun loadGrowthEntries(petId: Long) {
+        growthList = growthService.findAllByPetId(petId)
+        growthList.observe(viewLifecycleOwner) { growths ->
+            recyclerView.adapter = GrowthAdapter(growths) { growth ->
+                val bottomSheet = GrowthDetailsBottomSheet()
+                bottomSheet.show(parentFragmentManager, "GrowthDetailsBottomSheet")
+            }
+            setupPlaceholders(growths)
+        }
+    }
+
+    private fun setupSwipeHandler() {
+        val swipeHandler = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+
+            // drag n drop feature
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            // Called when an item is swiped
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val growth = growthList.value?.get(position)
+
+                if (growth == null) {
+                    return
+                }
+
+
+                // Show confirmation dialog
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Record")
+                    .setMessage("Are you sure you want to delete id ${growth?.id}?")
+                    .setPositiveButton("Yes") { dialog, _ ->
+                        lifecycleScope.launch {
+                            try {
+                                growthService.deleteById(growth.id)
+                                Toast.makeText(requireContext(), "id ${growth?.id} deleted", Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            } catch (e: RuntimeException) {}
+                        }
+
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        // User cancelled, reset the item so it doesn’t disappear
+                        recyclerView.adapter?.notifyItemChanged(position)
+                        dialog.dismiss()
+                    }
+                    .setCancelable(false)
+                    .show()
+
+                // Show a simple toast on swipe
+                val dir = if (direction == ItemTouchHelper.LEFT) "left" else "right"
+                Toast.makeText(requireContext(), "Swiped id ${growth?.id} to $dir", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+        // Attach the swipe handler to RecyclerView
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun createLineChart(lineChart: LineChart) {

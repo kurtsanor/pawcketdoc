@@ -52,27 +52,27 @@ class PetProfileFragment : Fragment() {
 
         val buttonMedicalHistory = view.findViewById< Button>(R.id.buttonMedicalHistory)
         buttonMedicalHistory.setOnClickListener {
-            findNavController().navigate(R.id.action_petProfile_to_medicalHistory)
+            findNavController().navigate(R.id.action_petProfile_to_medicalHistory, bundle)
         }
 
         val buttonGrowth = view.findViewById< Button>(R.id.buttonGrowth)
         buttonGrowth.setOnClickListener {
-            findNavController().navigate(R.id.action_petProfile_to_growth)
+            findNavController().navigate(R.id.action_petProfile_to_growth, bundle)
         }
 
         val buttonDocuments = view.findViewById< Button>(R.id.buttonDocuments)
         buttonDocuments.setOnClickListener {
-            findNavController().navigate(R.id.action_petProfile_to_documents)
+            findNavController().navigate(R.id.action_petProfile_to_documents, bundle)
         }
 
         val buttonAppointments = view.findViewById< Button>(R.id.buttonAppointments)
         buttonAppointments.setOnClickListener {
-            findNavController().navigate(R.id.action_petProfile_to_appointments)
+            findNavController().navigate(R.id.action_petProfile_to_appointments, bundle)
         }
 
         val buttonMedications = view.findViewById< Button>(R.id.buttonMedications)
         buttonMedications.setOnClickListener {
-            findNavController().navigate(R.id.action_petProfile_to_medications)
+            findNavController().navigate(R.id.action_petProfile_to_medications, bundle)
         }
 
     }

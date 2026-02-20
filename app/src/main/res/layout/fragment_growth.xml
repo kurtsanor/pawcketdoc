@@ -209,6 +209,12 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false" />
 
+            <include
+                android:id="@+id/placeholder_empty_growth"
+                layout="@layout/placeholder_empty_growths"
+                android:visibility="gone"
+                />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
