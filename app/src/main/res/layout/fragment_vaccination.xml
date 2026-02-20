@@ -54,6 +54,13 @@
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false" />
 
+            <include
+                android:id="@+id/placeholder_empty_vaccinations"
+                layout="@layout/placeholder_empty_vaccinations"
+
+                android:visibility="gone"
+
+                />
 
             <!-- Add Button -->
             <Button

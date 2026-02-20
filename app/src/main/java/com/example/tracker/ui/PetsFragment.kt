@@ -70,7 +70,7 @@ class PetsFragment : Fragment() {
 
         val fabAddPet = view.findViewById<FloatingActionButton>(R.id.fab_add_pet)
         fabAddPet.setOnClickListener {
-            findNavController().navigate(R.id.action_pets_to_petForm)
+            findNavController().navigate(R.id.action_pets_to_petForm, )
         }
         loadPets()
         setupSwipeHandler()
@@ -90,7 +90,10 @@ class PetsFragment : Fragment() {
 
         petList.observe(viewLifecycleOwner){ pets ->
             recyclerView.adapter = PetAdapter(pets) { pet ->
-                findNavController().navigate(R.id.action_pets_to_petProfile)
+                val bundle = Bundle().apply {
+                    putLong("pet_id", pet.id)
+                }
+                findNavController().navigate(R.id.action_pets_to_petProfile, bundle)
                 Toast.makeText(requireContext(), "Clicked: ${pet.name}", Toast.LENGTH_SHORT).show()
             }
             setupPlaceholders(pets)

@@ -39,11 +39,15 @@ class PetProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val petId: Long? = arguments?.getLong("pet_id", -1L)
 
+        val bundle = Bundle().apply {
+            putLong("pet_id", petId ?: -1L)
+        }
 
         val buttonVaccination = view.findViewById< Button>(R.id.buttonVaccination)
         buttonVaccination.setOnClickListener {
-            findNavController().navigate(R.id.action_petProfile_to_vaccinations)
+            findNavController().navigate(R.id.action_petProfile_to_vaccinations, bundle)
         }
 
         val buttonMedicalHistory = view.findViewById< Button>(R.id.buttonMedicalHistory)

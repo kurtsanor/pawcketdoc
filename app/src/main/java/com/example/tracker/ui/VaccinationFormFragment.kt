@@ -1,5 +1,6 @@
 package com.example.tracker.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,17 +8,30 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.model.Vaccination
+import com.example.tracker.service.VaccinationService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 class VaccinationFormFragment : Fragment() {
+
+    private lateinit var db: AppDatabase
+    private lateinit var vaccinationService: VaccinationService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +44,7 @@ class VaccinationFormFragment : Fragment() {
         return inflater.inflate(R.layout.activity_vaccination_form, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,9 +58,13 @@ class VaccinationFormFragment : Fragment() {
 
         setupDatePicker(view)
 
+        db = DatabaseProvider.getDatabase(requireContext())
+        vaccinationService = VaccinationService(db.vaccinationDao())
+
         val etVaccineName = view.findViewById<TextInputEditText>(R.id.etVaccineName)
         val etAdministeredDate = view.findViewById<TextInputEditText>(R.id.etAdministeredDate)
         val buttonSaveVaccination = view.findViewById<Button>(R.id.btnSaveVaccination)
+        val etNotes = view.findViewById<TextInputEditText>(R.id.etVaccineNotes)
 
         buttonSaveVaccination.setOnClickListener {
             if (etVaccineName.text.isNullOrBlank()) {
@@ -64,7 +83,7 @@ class VaccinationFormFragment : Fragment() {
 
             // dont allow dates in the future
             try {
-                val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val selectedDate = dateFormat.parse(etAdministeredDate.text.toString())
                 val currentDate = Calendar.getInstance().time
 
@@ -78,8 +97,30 @@ class VaccinationFormFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            Toast.makeText(context, "Vaccination Saved!", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
+            val petId = arguments?.getLong("pet_id", -1L)
+
+            if (petId == null) {
+                Toast.makeText(context, "Missing pet ID", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            lifecycleScope.launch {
+                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                val newVaccination = Vaccination(
+                    petId = petId,
+                    name = etVaccineName.text.toString(),
+                    notes = etNotes.text.toString(),
+                    administeredDate = LocalDate.parse(etAdministeredDate.text.toString(), formatter)
+                )
+                try {
+                    vaccinationService.insert(newVaccination)
+                    Toast.makeText(requireContext(), "Record has been added", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                } catch (e: RuntimeException) {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
     }
 
@@ -120,7 +161,7 @@ class VaccinationFormFragment : Fragment() {
             datePicker.show(parentFragmentManager, "vaccination_date_picker")
 
             datePicker.addOnPositiveButtonClickListener { selection ->
-                val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val dateString = formatter.format(Date(selection))
                 dateInput.setText(dateString)
             }
