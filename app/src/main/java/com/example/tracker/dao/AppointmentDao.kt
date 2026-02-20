@@ -1,5 +1,6 @@
 package com.example.tracker.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -19,7 +20,7 @@ interface AppointmentDao {
     suspend fun deleteById(id: Long)
 
     @Query("SELECT * FROM Appointment WHERE petId = :petId")
-    suspend fun findAllByPetId(petId: Long): List<Appointment>
+    fun findAllByPetId(petId: Long): LiveData<List<Appointment>>
 
     @Query("""SELECT a.* FROM Pet p
             JOIN User u ON p.userId = u.id

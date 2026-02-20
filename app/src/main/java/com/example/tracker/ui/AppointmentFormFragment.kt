@@ -11,16 +11,26 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.model.Appointment
+import com.example.tracker.service.AppointmentService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class AppointmentFormFragment : Fragment() {
+
+    private lateinit var db: AppDatabase
+    private lateinit var appointmentService: AppointmentService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,9 +57,15 @@ class AppointmentFormFragment : Fragment() {
         subtitle.text = "Schedule a visit for your pet."
         subtitle.visibility = View.VISIBLE
 
+        db = DatabaseProvider.getDatabase(requireContext())
+        appointmentService = AppointmentService(db.appointmentDao())
+
+        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+
         val etAppointmentTitle = view.findViewById<TextInputEditText>(R.id.etAppointmentTitle)
         val etAppointmentLocation = view.findViewById<TextInputEditText>(R.id.etAppointmentLocation)
         val etAppointmentDateTime = view.findViewById<TextInputEditText>(R.id.etAppointmentDateTime)
+        val etAppointmentNotes = view.findViewById<TextInputEditText>(R.id.etAppointmentNotes)
         val buttonSaveAppointment = view.findViewById<Button>(R.id.btnSaveAppointment)
 
         buttonSaveAppointment.setOnClickListener {
@@ -75,7 +91,7 @@ class AppointmentFormFragment : Fragment() {
             }
 
             try {
-                val formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a")
+                val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mm a")
                 val selectedDateTime = LocalDateTime.parse(etAppointmentDateTime.text.toString(), formatter)
                 val currentDateTime = LocalDateTime.now()
 
@@ -89,8 +105,28 @@ class AppointmentFormFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mm a")
+
+            val newAppointment = Appointment(
+                petId = petId,
+                title = etAppointmentTitle.text.toString(),
+                location = etAppointmentLocation.text.toString(),
+                notes = etAppointmentNotes.text.toString(),
+                status = "Confirmed",
+                datetime = LocalDateTime.parse(etAppointmentDateTime.text.toString(), formatter)
+            )
+
+            lifecycleScope.launch {
+                try {
+                    appointmentService.insert(newAppointment)
+                    Toast.makeText(context, "Appointment set!", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                } catch (e: Exception) {
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }
+
             Toast.makeText(context, "Appointment set!", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
         }
         setupDateTimePicker(view)
     }
@@ -161,7 +197,7 @@ class AppointmentFormFragment : Fragment() {
                     val selectedDateTime = LocalDateTime.of(year, month, day, hour, minute)
 
                     // 4. Format for display (UI only)
-                    val uiFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a")
+                    val uiFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy h:mm a")
                     val formatted = selectedDateTime.format(uiFormat)
 
                     // 5. Display in text field

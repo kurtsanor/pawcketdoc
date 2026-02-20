@@ -54,6 +54,12 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false" />
 
+            <include
+                android:id="@+id/placeholder_empty_appointment"
+                layout="@layout/placeholder_empty_appointments"
+                android:visibility="gone"
+                />
+
             <!-- Add button -->
             <Button
                 android:id="@+id/buttonAddAppointment"
