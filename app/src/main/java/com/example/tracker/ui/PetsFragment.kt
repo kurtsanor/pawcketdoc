@@ -18,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -39,7 +40,7 @@ class PetsFragment : Fragment() {
     private lateinit var db: AppDatabase
     private lateinit var petService: PetService
     private lateinit var recyclerView: RecyclerView
-    private lateinit var petList: MutableList<Pet>
+    private lateinit var petList: LiveData<List<Pet>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +55,7 @@ class PetsFragment : Fragment() {
         requireActivity()
             .findViewById<TextView>(R.id.txtHeaderTitle)
             .text = "My Pets"
-        loadPets()
+//        loadPets()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -71,6 +72,7 @@ class PetsFragment : Fragment() {
         fabAddPet.setOnClickListener {
             findNavController().navigate(R.id.action_pets_to_petForm)
         }
+        loadPets()
         setupSwipeHandler()
     }
 
@@ -83,20 +85,21 @@ class PetsFragment : Fragment() {
     }
 
     fun loadPets() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
-            petList = petService.findAllByUserId(userId).toMutableList()
-            setupPlaceholders()
-            recyclerView.adapter = PetAdapter(petList) { pet ->
+        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+        petList = petService.findAllByUserId(userId)
+
+        petList.observe(viewLifecycleOwner){ pets ->
+            recyclerView.adapter = PetAdapter(pets) { pet ->
                 findNavController().navigate(R.id.action_pets_to_petProfile)
                 Toast.makeText(requireContext(), "Clicked: ${pet.name}", Toast.LENGTH_SHORT).show()
             }
+            setupPlaceholders(pets)
         }
     }
 
-    fun setupPlaceholders () {
+    fun setupPlaceholders (pets: List<Pet>) {
         val placeholder: LinearLayout? = view?.findViewById(R.id.placeholder_empty_pet)
-        if (petList.isEmpty()) {
+        if (pets.isEmpty()) {
             placeholder?.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
@@ -120,23 +123,22 @@ class PetsFragment : Fragment() {
             // Called when an item is swiped
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val pet = petList[position]
+                val pet = petList.value?.get(position)
 
 
                 // Show confirmation dialog
                 AlertDialog.Builder(requireContext())
                     .setTitle("Delete Pet")
-                    .setMessage("Are you sure you want to delete ${pet.name}?")
+                    .setMessage("Are you sure you want to delete ${pet?.name}?")
                     .setPositiveButton("Yes") { dialog, _ ->
                         lifecycleScope.launch {
                             try {
-                                deleteById(pet.id)
+                                deleteById(pet?.id ?: 0)
 
                                 // User confirmed, remove pet from list then update adapter
-                                petList.removeAt(position)
-                                recyclerView.adapter?.notifyItemRemoved(position)
-                                setupPlaceholders()
-                                Toast.makeText(requireContext(), "${pet.name} deleted", Toast.LENGTH_SHORT).show()
+//                                petList.removeAt(position)
+//                                recyclerView.adapter?.notifyItemRemoved(position)
+                                Toast.makeText(requireContext(), "${pet?.name} deleted", Toast.LENGTH_SHORT).show()
                                 dialog.dismiss()
                             } catch (e: RuntimeException) {}
                         }
@@ -152,7 +154,7 @@ class PetsFragment : Fragment() {
 
                 // Show a simple toast on swipe
                 val dir = if (direction == ItemTouchHelper.LEFT) "left" else "right"
-                Toast.makeText(requireContext(), "Swiped ${pet.name} to $dir", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Swiped ${pet?.name} to $dir", Toast.LENGTH_SHORT).show()
 
             }
         }

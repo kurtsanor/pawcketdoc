@@ -2,13 +2,14 @@ package com.example.tracker.service
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.LiveData
 import com.example.tracker.dao.PetDao
 import com.example.tracker.model.Pet
 import java.lang.RuntimeException
 import java.time.LocalDate
 
 class PetService(private val petDao: PetDao) {
-    suspend fun findAllByUserId(userId: Long): List<Pet> {
+    fun findAllByUserId(userId: Long): LiveData<List<Pet>>  {
         return petDao.findAllByUserId(userId)
     }
 
