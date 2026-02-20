@@ -44,6 +44,12 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"/>
 
+            <include
+                android:id="@+id/placeholder_empty_medical_record"
+                layout="@layout/placeholder_empty_medical_record"
+                android:visibility="gone"
+                />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

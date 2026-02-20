@@ -76,8 +76,6 @@ class VaccinationFragment : Fragment() {
 
         val buttonAdd = view.findViewById<Button>(R.id.buttonAddVaccine)
 
-
-
         val bundle = Bundle().apply {
             putLong("pet_id", arguments?.getLong("pet_id", -1L) ?: -1L)
         }
