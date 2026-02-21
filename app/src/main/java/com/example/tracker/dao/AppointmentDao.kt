@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.tracker.model.Appointment
 import com.example.tracker.model.Growth
+import java.time.LocalDateTime
 
 @Dao
 interface AppointmentDao {
@@ -27,5 +28,11 @@ interface AppointmentDao {
             JOIN Appointment a ON p.id = a.petId
             WHERE u.id = :userId""")
     suspend fun findAllByUserId(userId: Long): List<Appointment>
+
+    @Query("""SELECT a.* FROM Pet p
+            JOIN User u ON p.userId = u.id
+            JOIN Appointment a ON p.id = a.petId
+            WHERE u.id = :userId AND a.datetime >= :now""")
+    fun findUpcomingByUserId(userId: Long, now: LocalDateTime): LiveData<List<Appointment>>
 
 }

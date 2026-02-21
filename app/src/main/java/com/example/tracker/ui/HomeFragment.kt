@@ -11,16 +11,21 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tracker.R
 import com.example.tracker.adapter.AppointmentAdapter
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.model.Appointment
+import com.example.tracker.service.AppointmentService
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -38,6 +43,13 @@ import java.time.LocalDateTime
 
 class HomeFragment : Fragment() {
 
+    private lateinit var db: AppDatabase
+    private lateinit var appointmentService: AppointmentService
+
+    private lateinit var recyclerView: RecyclerView
+
+    private lateinit var appointments: LiveData<List<Appointment>>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,9 +66,8 @@ class HomeFragment : Fragment() {
 
         headerTitle.text = "Dashboard"
 
-        headerTitle.setOnClickListener {
-
-        }
+        db = DatabaseProvider.getDatabase(requireContext())
+        appointmentService = AppointmentService(db.appointmentDao())
 
         val donutChart = view.findViewById<PieChart>(R.id.donutChart)
         createDonutChart(donutChart)
@@ -64,24 +75,34 @@ class HomeFragment : Fragment() {
         val barChart = view.findViewById<LineChart>(R.id.barChart)
         createLineChart(barChart)
 
-        val mockDate = LocalDateTime.of(2003, 5, 2, 0,0,0,0)
-
-        val appointments = listOf(
-            Appointment(1, 1, "Check-up", "Urgent", "123 Plaza",mockDate, "Confirmed"),
-            Appointment(1, 1, "Check-up", "Urgent", "123 Plaza",mockDate, "Confirmed"),
-            Appointment(1, 1, "Check-up", "Urgent", "123 Plaza",mockDate, "Confirmed"),
-            Appointment(1, 1, "Check-up", "Urgent", "123 Plaza",mockDate, "Confirmed"),
-        )
-
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewVaccinationHome)
+        recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewVaccinationHome)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        recyclerView.adapter = AppointmentAdapter(appointments, {appointment ->
-            val bottomSheet = AppointmentDetailsBottomSheet()
-            bottomSheet.show(parentFragmentManager, "AppointmentDetailsBottomSheet")
-        })
 
         val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
-        Toast.makeText(requireContext(), "Id is $userId", Toast.LENGTH_SHORT).show()
+        loadUpcomingAppointments(userId)
+    }
+
+    fun setupPlaceholders (appointments: List<Appointment>) {
+        val placeholder: LinearLayout? = view?.findViewById(R.id.placeholder_empty_appointment)
+        if (appointments.isEmpty()) {
+            placeholder?.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            placeholder?.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loadUpcomingAppointments(userId: Long) {
+        appointments = appointmentService.findUpcomingByUserId(userId)
+        appointments.observe(viewLifecycleOwner) { appointments ->
+            recyclerView.adapter = AppointmentAdapter(appointments) { appointment ->
+                val bottomSheet = AppointmentDetailsBottomSheet()
+                bottomSheet.show(parentFragmentManager, "AppointmentDetailsBottomSheet")
+            }
+            setupPlaceholders(appointments)
+        }
     }
 
     private fun createLineChart(lineChart: LineChart) {

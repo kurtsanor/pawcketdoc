@@ -127,9 +127,6 @@ class VaccinationFormFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        val headerBar = requireActivity().findViewById<View>(R.id.headerBar)
-        headerBar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondary))
-
         val subtitle = requireActivity().findViewById<TextView>(R.id.txtHeaderSubtitle)
         subtitle.text = ""
         subtitle.visibility = View.GONE
