@@ -18,14 +18,18 @@ import androidx.annotation.RequiresApi
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tracker.R
 import com.example.tracker.adapter.AppointmentAdapter
 import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.dto.HealthAnalytics
 import com.example.tracker.model.Appointment
 import com.example.tracker.service.AppointmentService
+import com.example.tracker.service.MedicationService
+import com.example.tracker.util.HealthUtil
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -38,6 +42,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 
@@ -45,6 +50,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var db: AppDatabase
     private lateinit var appointmentService: AppointmentService
+    private lateinit var medicationService: MedicationService
 
     private lateinit var recyclerView: RecyclerView
 
@@ -66,11 +72,17 @@ class HomeFragment : Fragment() {
 
         headerTitle.text = "Dashboard"
 
+        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+
         db = DatabaseProvider.getDatabase(requireContext())
         appointmentService = AppointmentService(db.appointmentDao())
+        medicationService = MedicationService(db.medicationDao())
 
         val donutChart = view.findViewById<PieChart>(R.id.donutChart)
-        createDonutChart(donutChart)
+        lifecycleScope.launch {
+            val analytics = medicationService.getPetsHealthAnalytics(userId)
+            createDonutChart(donutChart, analytics)
+        }
 
         val barChart = view.findViewById<LineChart>(R.id.barChart)
         createLineChart(barChart)
@@ -78,7 +90,7 @@ class HomeFragment : Fragment() {
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewVaccinationHome)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+
         loadUpcomingAppointments(userId)
     }
 
@@ -114,7 +126,7 @@ class HomeFragment : Fragment() {
 
         val dataSet = LineDataSet(entries, "Pets")
 
-        val accentColor = Color.parseColor("#4da972")
+        val accentColor = "#4da972".toColorInt()
 
         dataSet.color = accentColor
         dataSet.setCircleColor(accentColor)
@@ -161,18 +173,17 @@ class HomeFragment : Fragment() {
         lineChart.invalidate()
     }
 
-    private fun createDonutChart(donutChart: PieChart) {
+    private fun createDonutChart(donutChart: PieChart, healthAnalytics: HealthAnalytics) {
         val entries = listOf(
-            PieEntry(40f, "Healthy"),
-            PieEntry(30f, "Minor Issues"),
-            PieEntry(20f, "Serious Issues"),
-            PieEntry(10f, "Critical")
+            PieEntry(healthAnalytics.healthyCount.toFloat(), "Healthy"),
+            PieEntry(healthAnalytics.minorIssueCount.toFloat(), "Minor Issues"),
+            PieEntry(healthAnalytics.seriousIssueCount.toFloat(), "Serious Issues"),
+            PieEntry(healthAnalytics.criticalIssueCount.toFloat(), "Critical")
         )
 
         val dataSet = PieDataSet(entries, "").apply {
             setDrawValues(false)
 
-            // Harmonized colors with new primary green
             colors = listOf(
                 "#2C9270".toColorInt(), // Healthy - primary green
                 "#D9B750".toColorInt(), // Minor Issues - warm yellow
@@ -197,13 +208,13 @@ class HomeFragment : Fragment() {
 
             animateY(1400, Easing.EaseInOutQuad)
 
-            val text = "85%\nHealth"
+            val healthyPercentage = HealthUtil.calculateHealthyPercentage(healthAnalytics).toInt()
+
+            val text = "${healthyPercentage}%\nHealthy"
             val ss = SpannableString(text)
             ss.setSpan(StyleSpan(Typeface.BOLD), 0, 3, 0)
             ss.setSpan(RelativeSizeSpan(1.9f), 0, 3, 0)
             ss.setSpan(ForegroundColorSpan(Color.GRAY), 4, text.length, 0)
-            ss.setSpan(RelativeSizeSpan(1.0f), 4, text.length, 0)
-
             centerText = ss
         }
 

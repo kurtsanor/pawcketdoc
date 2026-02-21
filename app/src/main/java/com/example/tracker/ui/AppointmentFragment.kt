@@ -112,10 +112,10 @@ class AppointmentFragment : Fragment() {
     fun loadAppointments(petId: Long) {
         appointments = appointmentService.findAllByPetId(petId)
         appointments.observe(viewLifecycleOwner) { appointments ->
-            recyclerView.adapter = AppointmentAdapter(appointments, {appointment ->
+            recyclerView.adapter = AppointmentAdapter(appointments) { appointment ->
                 val bottomSheet = AppointmentDetailsBottomSheet()
                 bottomSheet.show(parentFragmentManager, "AppointmentDetailsBottomSheet")
-            })
+            }
             setupPlaceholders(appointments)
         }
     }
