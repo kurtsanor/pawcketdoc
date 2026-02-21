@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.tracker.dto.AppointmentMonthCount
 import com.example.tracker.model.Appointment
 import com.example.tracker.model.Growth
 import java.time.LocalDateTime
@@ -35,4 +36,14 @@ interface AppointmentDao {
             WHERE u.id = :userId AND a.datetime >= :now""")
     fun findUpcomingByUserId(userId: Long, now: LocalDateTime): LiveData<List<Appointment>>
 
+    @Query("""
+        SELECT strftime('%m', a.datetime) AS month, COUNT(*) AS appointmentCount
+        FROM Appointment a
+        INNER JOIN Pet p ON a.petId = p.id
+        WHERE strftime('%Y', a.datetime) = :year
+        AND p.userId = :userId
+        GROUP BY month
+        ORDER BY month
+    """)
+    suspend fun getAppointmentCountsPerMonth(userId: Long, year: String): List<AppointmentMonthCount>
 }

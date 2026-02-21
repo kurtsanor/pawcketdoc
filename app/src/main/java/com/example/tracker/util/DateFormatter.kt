@@ -10,8 +10,8 @@ import java.util.Locale
 object DateFormatter {
     @RequiresApi(Build.VERSION_CODES.O)
     fun toShortMonthFormat(date: LocalDate): String {
-        val formatter = DateTimeFormatter.ofPattern("dd MMM", Locale.ENGLISH)
-        return date.format(formatter).uppercase()
+        val formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy", Locale.ENGLISH)
+        return date.format(formatter)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

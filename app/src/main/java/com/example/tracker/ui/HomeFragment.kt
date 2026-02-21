@@ -11,7 +11,9 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -25,6 +27,7 @@ import com.example.tracker.R
 import com.example.tracker.adapter.AppointmentAdapter
 import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.dto.AppointmentMonthCount
 import com.example.tracker.dto.HealthAnalytics
 import com.example.tracker.model.Appointment
 import com.example.tracker.service.AppointmentService
@@ -43,6 +46,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 
@@ -79,18 +83,20 @@ class HomeFragment : Fragment() {
         medicationService = MedicationService(db.medicationDao())
 
         val donutChart = view.findViewById<PieChart>(R.id.donutChart)
+        val barChart = view.findViewById<LineChart>(R.id.barChart)
         lifecycleScope.launch {
             val analytics = medicationService.getPetsHealthAnalytics(userId)
             createDonutChart(donutChart, analytics)
+
+            val yearNow = LocalDate.now().year.toString()
+            val appointmentEntries = appointmentService.getAppointmentCountsPerMonth(userId, yearNow)
+            createLineChart(barChart, appointmentEntries)
         }
 
-        val barChart = view.findViewById<LineChart>(R.id.barChart)
-        createLineChart(barChart)
+        setupYearDropdown()
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewVaccinationHome)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-
         loadUpcomingAppointments(userId)
     }
 
@@ -117,53 +123,75 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun createLineChart(lineChart: LineChart) {
-        val entries = ArrayList<Entry>()
-        entries.add(Entry(0f, 9f))
-        entries.add(Entry(1f, 10f))
-        entries.add(Entry(2f, 8f))
-        entries.add(Entry(3f, 7f))
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setupYearDropdown() {
+        val spinner = view?.findViewById<Spinner>(R.id.spinnerYear)
+        val currentYear = LocalDate.now().year
+        val years = (2023..currentYear).map { it.toString() }
 
-        val dataSet = LineDataSet(entries, "Pets")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner?.adapter = adapter
+    }
+
+
+    private fun createLineChart(lineChart: LineChart, appointmentEntry: List<AppointmentMonthCount>) {
+        val entries = ArrayList<Entry>()
+        var index = 0f
+        for (entry in appointmentEntry) {
+            entries.add(Entry(index, entry.appointmentCount.toFloat()))
+            index++
+        }
+
+        val dataSet = LineDataSet(entries, "Appointments")
 
         val accentColor = "#4da972".toColorInt()
 
         dataSet.color = accentColor
         dataSet.setCircleColor(accentColor)
-        dataSet.circleHoleColor = Color.WHITE // Makes the dots pop
+        dataSet.circleHoleColor = Color.WHITE
         dataSet.lineWidth = 3f
         dataSet.circleRadius = 5f
         dataSet.setDrawCircleHole(true)
-        dataSet.valueTextSize = 12f
-        dataSet.valueTextColor = Color.DKGRAY // Keeps text legible
+        dataSet.setDrawValues(false) // remove values beside dots
+        dataSet.setDrawCircles(false)
 
-        // Smooth Curved Line styling
         dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-        dataSet.cubicIntensity = 0.15f //
+        dataSet.cubicIntensity = 0.15f
 
         dataSet.setDrawFilled(true)
         dataSet.fillColor = accentColor
-        dataSet.fillAlpha = 65
+        dataSet.fillAlpha = 35
 
         val lineData = LineData(dataSet)
         lineChart.data = lineData
 
-        // Chart Configuration
         lineChart.description.isEnabled = false
         lineChart.legend.isEnabled = false
 
-        lineChart.xAxis.setDrawGridLines(false)
-        lineChart.axisLeft.setDrawGridLines(false)
-        lineChart.axisRight.setDrawGridLines(false)
+        // X axis
+        lineChart.xAxis.setDrawGridLines(true)
+        lineChart.xAxis.gridColor = Color.parseColor("#E0E0E0")
+        lineChart.xAxis.gridLineWidth = 0.5f
         lineChart.xAxis.setDrawAxisLine(false)
-        lineChart.axisLeft.setDrawAxisLine(false)
 
+        // Left axis (values on the left)
+        lineChart.axisLeft.isEnabled = true
+        lineChart.axisLeft.setDrawGridLines(true)
+        lineChart.axisLeft.gridColor = Color.parseColor("#E0E0E0")
+        lineChart.axisLeft.gridLineWidth = 0.5f
+        lineChart.axisLeft.setDrawAxisLine(false)
+        lineChart.axisLeft.textColor = Color.parseColor("#757575")
+        lineChart.axisLeft.granularity = 1f
+        lineChart.axisLeft.setDrawZeroLine(false)
+
+        // Disable right axis
         lineChart.axisRight.isEnabled = false
-        lineChart.axisLeft.isEnabled = false
 
         lineChart.animateY(800, Easing.EaseInOutQuad)
 
-        val labels = listOf("Dog", "Cat", "Bird", "Rabbit")
+        val labels = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
         val xAxis = lineChart.xAxis
         xAxis.valueFormatter = IndexAxisValueFormatter(labels)
         xAxis.position = XAxis.XAxisPosition.BOTTOM

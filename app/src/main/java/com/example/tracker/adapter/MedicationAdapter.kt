@@ -41,7 +41,11 @@ class MedicationAdapter(
     ) {
         val medication = medications[position]
         holder.medName.text = medication.name
-        holder.dateRange.text = DateFormatter.toShortMonthFormat(medication.startDate)  + " - " + DateFormatter.toShortMonthFormat(medication.endDate)
+        holder.dateRange.text = buildString {
+            append(DateFormatter.toShortMonthFormat(medication.startDate))
+            append(" - ")
+            append(DateFormatter.toShortMonthFormat(medication.endDate))
+        }
         holder.reason.text = medication.reason
         holder.dose.text = medication.dosage
         holder.frequency.text = medication.frequency
