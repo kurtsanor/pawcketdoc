@@ -42,4 +42,8 @@ class PetService(private val petDao: PetDao) {
         petDao.deleteById(id)
     }
 
+    suspend fun findById(id: Long): Pet {
+        return petDao.findById(id)
+    }
+
 }

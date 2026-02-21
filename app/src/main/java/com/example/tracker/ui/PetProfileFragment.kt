@@ -10,10 +10,18 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.service.PetService
+import kotlinx.coroutines.launch
 
 class PetProfileFragment : Fragment() {
+
+    private lateinit var db: AppDatabase
+    private lateinit var petService: PetService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,10 +47,13 @@ class PetProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val petId: Long? = arguments?.getLong("pet_id", -1L)
+        db = DatabaseProvider.getDatabase(requireContext())
+        petService = PetService(db.petDao())
+
+        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
 
         val bundle = Bundle().apply {
-            putLong("pet_id", petId ?: -1L)
+            putLong("pet_id", petId)
         }
 
         val buttonVaccination = view.findViewById< Button>(R.id.buttonVaccination)
@@ -75,6 +86,29 @@ class PetProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_petProfile_to_medications, bundle)
         }
 
+        loadPetProfile(petId)
+    }
+
+    fun loadPetProfile(petId: Long) {
+        val petName = view?.findViewById<TextView>(R.id.petName)
+        val petBreed = view?.findViewById<TextView>(R.id.petBreed)
+
+        val infoPetName = view?.findViewById<TextView>(R.id.infoPetName)
+        val infoPetSpecies = view?.findViewById<TextView>(R.id.infoPetSpecies)
+        val infoPetBreed = view?.findViewById<TextView>(R.id.infoPetBreed)
+        val infoPetGender = view?.findViewById<TextView>(R.id.infoPetGender)
+        val infoPetBirthdate = view?.findViewById<TextView>(R.id.infoPetBirthdate)
+
+        lifecycleScope.launch {
+            val pet = petService.findById(petId)
+            petName?.text = pet.name
+            petBreed?.text = pet.breed
+            infoPetName?.text = pet.name
+            infoPetSpecies?.text = pet.type
+            infoPetBreed?.text = pet.breed
+            infoPetGender?.text = pet.gender
+            infoPetBirthdate?.text = pet.birthDate.toString()
+        }
     }
 
 }

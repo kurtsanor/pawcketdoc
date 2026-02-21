@@ -20,4 +20,7 @@ interface PetDao {
 
     @Query("SELECT * FROM Pet WHERE userId = :userId")
     fun findAllByUserId(userId: Long): LiveData<List<Pet>>
+
+    @Query("SELECT * FROM Pet WHERE id =:id")
+    suspend fun findById(id: Long): Pet
 }
