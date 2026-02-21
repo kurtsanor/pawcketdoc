@@ -25,7 +25,7 @@
             android:layout_weight="4"
             android:layout_marginHorizontal="3dp"
             android:layout_marginBottom="15dp"
-            app:cardCornerRadius="20dp">
+            app:cardCornerRadius="15dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -40,6 +40,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/fullName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
@@ -56,15 +57,6 @@
                     android:fontFamily="@font/inter_regular"
                     android:textColor="#7E7E7E"
                     android:textAlignment="center"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="johndoe@gmail.com"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:textColor="#7E7E7E"
-                    android:textAlignment="center"
-                    />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -73,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="5"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="15dp"
             android:layout_marginBottom="15dp"
             app:cardElevation="2dp"
             app:cardMaxElevation="3dp"
@@ -124,13 +116,13 @@
             android:id="@+id/logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log Out"
-            android:backgroundTint="#f45b5b"
+            android:background="@drawable/button_3d_logout"
+            app:backgroundTint="@null"
             app:icon="@drawable/logout"
             app:iconGravity="textStart"
-            android:drawableTint="@color/white"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/inter_regular"/>
+            android:fontFamily="@font/inter_bold"
+            android:text="Log Out"
+            android:textColor="@color/white" />
     </LinearLayout>
 
 

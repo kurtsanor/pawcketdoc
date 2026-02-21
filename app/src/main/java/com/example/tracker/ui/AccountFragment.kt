@@ -7,10 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.service.UserService
+import kotlinx.coroutines.launch
 
 class AccountFragment : Fragment() {
+
+    private lateinit var db: AppDatabase
+    private lateinit var userService: UserService
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,6 +34,9 @@ class AccountFragment : Fragment() {
         requireActivity()
             .findViewById<TextView>(R.id.txtHeaderTitle)
             .text = "Account"
+
+        db = DatabaseProvider.getDatabase(requireContext())
+        userService = UserService(db.userDao())
 
         val buttonLogout = view.findViewById<TextView>(R.id.logout)
 
@@ -42,6 +54,21 @@ class AccountFragment : Fragment() {
         val changePassword = view.findViewById<TextView>(R.id.tvChangePassword)
         changePassword.setOnClickListener {
             findNavController().navigate(R.id.action_account_to_changePassword)
+        }
+
+        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+        loadUserProfile(userId)
+    }
+
+    private fun loadUserProfile(userId: Long) {
+        val fullName = view?.findViewById<TextView>(R.id.fullName)
+        lifecycleScope.launch {
+            val user = userService.findById(userId)
+            fullName?.text = buildString {
+                append(user.firstName)
+                append(" ")
+                append(user.surName)
+            }
         }
     }
 

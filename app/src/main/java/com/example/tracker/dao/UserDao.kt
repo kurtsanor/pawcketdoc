@@ -12,4 +12,7 @@ interface UserDao {
 
     @Query("SELECT * FROM User")
     suspend fun findAll(): List<User>
+
+    @Query("SELECT * FROM User WHERE id = :id")
+    suspend fun findById(id: Long): User
 }
