@@ -40,7 +40,7 @@ class GrowthAdapter(
         val growth = growthEntries[position]
         holder.weight.text = growth.weight.toString() + " kg"
         holder.height.text = growth.height.toString() + " cm"
-        holder.dateRecorded.text = DateFormatter.toShortMonthFormat(growth.dateRecorded)
+        holder.dateRecorded.text = DateFormatter.toShorterMonthFormat(growth.dateRecorded)
 
         holder.itemView.setOnClickListener { onClick(growth) }
     }

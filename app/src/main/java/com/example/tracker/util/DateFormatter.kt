@@ -19,4 +19,10 @@ object DateFormatter {
         val formatter = DateTimeFormatter.ofPattern("dd MMM, YYYY • hh:mm a", Locale.ENGLISH)
         return datetime.format(formatter)
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun toShorterMonthFormat(date: LocalDate): String {
+        val formatter = DateTimeFormatter.ofPattern("dd MMM", Locale.ENGLISH)
+        return date.format(formatter).uppercase()
+    }
 }

@@ -11,6 +11,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -18,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.toColorInt
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -55,9 +57,7 @@ class HomeFragment : Fragment() {
     private lateinit var db: AppDatabase
     private lateinit var appointmentService: AppointmentService
     private lateinit var medicationService: MedicationService
-
     private lateinit var recyclerView: RecyclerView
-
     private lateinit var appointments: LiveData<List<Appointment>>
 
     override fun onCreateView(
@@ -92,12 +92,48 @@ class HomeFragment : Fragment() {
             val appointmentEntries = appointmentService.getAppointmentCountsPerMonth(userId, yearNow)
             createLineChart(barChart, appointmentEntries)
         }
-
-        setupYearDropdown()
+        val spinner = view.findViewById<Spinner>(R.id.spinnerYear)
+        setupYearDropdown(spinner)
+        var isSpinnerReady = false
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (!isSpinnerReady) {
+                    isSpinnerReady = true
+                    return
+                }
+                lifecycleScope.launch {
+                    val selectedYear = parent?.getItemAtPosition(position).toString()
+                    filterChartByYear(userId, selectedYear, barChart)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewVaccinationHome)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         loadUpcomingAppointments(userId)
+    }
+
+    private suspend fun filterChartByYear(userId: Long, year: String, lineChart: LineChart) {
+        val filteredResults = appointmentService.getAppointmentCountsPerMonth(userId, year)
+
+        val entries = ArrayList<Entry>()
+        var index = 0f
+        for (entry in filteredResults) {
+            entries.add(Entry(index, entry.appointmentCount.toFloat()))
+            index++
+        }
+
+        val dataSet = lineChart.data?.getDataSetByIndex(0) as? LineDataSet
+        if (dataSet == null) {
+            createLineChart(lineChart, filteredResults)
+            return
+        }
+        dataSet.values = entries
+        lineChart.data.notifyDataChanged()
+        lineChart.notifyDataSetChanged()
+        lineChart.animateY(500, Easing.EaseInOutQuad)
+        lineChart.invalidate()
     }
 
     fun setupPlaceholders (appointments: List<Appointment>) {
@@ -124,15 +160,15 @@ class HomeFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun setupYearDropdown() {
-        val spinner = view?.findViewById<Spinner>(R.id.spinnerYear)
+    private fun setupYearDropdown(spinner: Spinner) {
         val currentYear = LocalDate.now().year
         val years = (2023..currentYear).map { it.toString() }
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        spinner?.adapter = adapter
+        spinner.adapter = adapter
+        spinner.setSelection(years.size - 1)
     }
 
 

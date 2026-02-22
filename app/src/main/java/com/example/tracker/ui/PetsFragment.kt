@@ -55,7 +55,6 @@ class PetsFragment : Fragment() {
         requireActivity()
             .findViewById<TextView>(R.id.txtHeaderTitle)
             .text = "My Pets"
-//        loadPets()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -94,7 +93,6 @@ class PetsFragment : Fragment() {
                     putLong("pet_id", pet.id)
                 }
                 findNavController().navigate(R.id.action_pets_to_petProfile, bundle)
-                Toast.makeText(requireContext(), "Clicked: ${pet.name}", Toast.LENGTH_SHORT).show()
             }
             setupPlaceholders(pets)
         }

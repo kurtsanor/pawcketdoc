@@ -1,5 +1,6 @@
 package com.example.tracker.ui
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_MATCH_ACTIVITY_CLOSE
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +18,7 @@ import com.example.tracker.R
 import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.service.PetService
+import com.example.tracker.util.DateFormatter
 import kotlinx.coroutines.launch
 
 class PetProfileFragment : Fragment() {
@@ -44,6 +47,7 @@ class PetProfileFragment : Fragment() {
         requireActivity().findViewById<View>(R.id.bottomNavigationView)?.visibility = View.VISIBLE
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -89,6 +93,7 @@ class PetProfileFragment : Fragment() {
         loadPetProfile(petId)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun loadPetProfile(petId: Long) {
         val petName = view?.findViewById<TextView>(R.id.petName)
         val petBreed = view?.findViewById<TextView>(R.id.petBreed)
@@ -98,6 +103,8 @@ class PetProfileFragment : Fragment() {
         val infoPetBreed = view?.findViewById<TextView>(R.id.infoPetBreed)
         val infoPetGender = view?.findViewById<TextView>(R.id.infoPetGender)
         val infoPetBirthdate = view?.findViewById<TextView>(R.id.infoPetBirthdate)
+        val headerGender = view?.findViewById<TextView>(R.id.genderHeader)
+        val headerBirthday = view?.findViewById<TextView>(R.id.birthdayHeader)
 
         lifecycleScope.launch {
             val pet = petService.findById(petId)
@@ -108,6 +115,11 @@ class PetProfileFragment : Fragment() {
             infoPetBreed?.text = pet.breed
             infoPetGender?.text = pet.gender
             infoPetBirthdate?.text = pet.birthDate.toString()
+            headerGender?.text = pet.gender
+            headerBirthday?.text = buildString {
+                append("Born\n")
+                append(DateFormatter.toShortMonthFormat(pet.birthDate))
+            }
         }
     }
 
