@@ -62,14 +62,15 @@ class AccountFragment : Fragment() {
 
     private fun loadUserProfile(userId: Long) {
         val fullName = view?.findViewById<TextView>(R.id.fullName)
-        lifecycleScope.launch {
-            val user = userService.findById(userId)
-            fullName?.text = buildString {
-                append(user.firstName)
-                append(" ")
-                append(user.surName)
+            val user = userService.findByIdLiveData(userId)
+            user.observe(viewLifecycleOwner) { user ->
+                fullName?.text = buildString {
+                    append(user.firstName)
+                    append(" ")
+                    append(user.surName)
+                }
             }
-        }
+
     }
 
     override fun onResume() {

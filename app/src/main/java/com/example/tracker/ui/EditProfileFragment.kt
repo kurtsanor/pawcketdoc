@@ -9,11 +9,23 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.service.UserService
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class EditProfileFragment : Fragment() {
+
+    private lateinit var db: AppDatabase
+    private lateinit var userService: UserService
+    private lateinit var etFirstName: TextInputEditText
+    private lateinit var etSurname: TextInputEditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity()
@@ -33,9 +45,16 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val etFirstName = view.findViewById<TextInputEditText>(R.id.etFirstName)
-        val etSurname = view.findViewById<TextInputEditText>(R.id.etSurname)
+        etFirstName = view.findViewById(R.id.etFirstName)
+        etSurname = view.findViewById(R.id.etSurname)
         val btnUpdateProfile = view.findViewById<Button>(R.id.btnUpdateProfile)
+
+        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+
+        db = DatabaseProvider.getDatabase(requireContext())
+        userService = UserService(db.userDao())
+
+        populateUserInfo(userId)
 
         btnUpdateProfile.setOnClickListener {
             if (etFirstName.text.isNullOrBlank()) {
@@ -51,9 +70,26 @@ class EditProfileFragment : Fragment() {
             } else {
                 etSurname.error = null
             }
-            Toast.makeText(context, "Profile Updated!", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                try {
+                    val oldUser = userService.findById(userId)
+                    val updatedUser= oldUser.copy(firstName = etFirstName.text.toString(), surName = etSurname.text.toString())
+                    userService.update(updatedUser)
+                    Toast.makeText(context, "Profile Updated!", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                } catch (e: Exception) {
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                }
 
-            findNavController().popBackStack()
+            }
+        }
+    }
+
+    fun populateUserInfo(userId: Long) {
+        lifecycleScope.launch {
+            val currentUser = userService.findById(userId)
+            etFirstName.setText(currentUser.firstName)
+            etSurname.setText(currentUser.surName)
         }
     }
 
