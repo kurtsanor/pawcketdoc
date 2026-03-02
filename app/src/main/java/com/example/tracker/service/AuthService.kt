@@ -47,4 +47,12 @@ class AuthService(
         // return user id if login is successful
         return credentials.userId
     }
+
+    suspend fun changeUserPassword(credentials: Credentials) {
+        credentialsDao.update(credentials)
+    }
+
+    suspend fun findCredentialsByUserId(userId: Long): Credentials {
+        return credentialsDao.findByUserId(userId)
+    }
 }

@@ -87,9 +87,14 @@ class EditProfileFragment : Fragment() {
 
     fun populateUserInfo(userId: Long) {
         lifecycleScope.launch {
-            val currentUser = userService.findById(userId)
-            etFirstName.setText(currentUser.firstName)
-            etSurname.setText(currentUser.surName)
+            try {
+                val currentUser = userService.findById(userId)
+                etFirstName.setText(currentUser.firstName)
+                etSurname.setText(currentUser.surName)
+            } catch (e: Exception) {
+                Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 

@@ -9,11 +9,21 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.tracker.R
+import com.example.tracker.database.AppDatabase
+import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.service.AuthService
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
+import org.mindrot.jbcrypt.BCrypt
+import java.lang.Exception
 
 class ChangePasswordFragment : Fragment() {
+    private lateinit var db: AppDatabase
+    private lateinit var authService: AuthService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity()
@@ -46,6 +56,11 @@ class ChangePasswordFragment : Fragment() {
         val etConfirmPassword = view.findViewById<TextInputEditText>(R.id.etConfirmPassword)
         val btnChangePassword = view.findViewById<Button>(R.id.btnChangePassword)
 
+        db = DatabaseProvider.getDatabase(requireContext())
+        authService = AuthService(db.userDao(),db.credentialsDao())
+
+        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+
         btnChangePassword.setOnClickListener {
             val current = etCurrentPassword.text.toString()
             val new = etNewPassword.text.toString()
@@ -69,9 +84,24 @@ class ChangePasswordFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Success
-            Toast.makeText(context, "Password Changed Successfully!", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            lifecycleScope.launch {
+                try {
+                    val oldCredentials = authService.findCredentialsByUserId(userId)
+                    val oldPasswordMatches = BCrypt.checkpw(etCurrentPassword.text.toString(), oldCredentials.password)
+                    if (!oldPasswordMatches) {
+                        etCurrentPassword.error = "Incorrect current password"
+                        return@launch
+                    }
+                    val updatedPassword = oldCredentials.copy(password = BCrypt.hashpw(etNewPassword.text.toString(),
+                        BCrypt.gensalt()))
+                    authService.changeUserPassword(updatedPassword)
+                    Toast.makeText(context, "Password Changed Successfully!", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                } catch (e: Exception) {
+                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
     }
 
