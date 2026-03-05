@@ -36,10 +36,9 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/bottomSheetNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Buddy"
+                android:text="Vaccination"
                 android:textSize="14sp"
                 android:fontFamily="@font/inter_regular"
                 android:textColor="#929292" />
@@ -75,7 +74,7 @@
 
     <!-- Additional details -->
     <TextView
-        android:id="@+id/bottomSheetAdditional"
+        android:id="@+id/bottomSheetNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Additional information about the vaccine"

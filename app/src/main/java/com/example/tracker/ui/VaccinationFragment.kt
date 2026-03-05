@@ -93,7 +93,7 @@ class VaccinationFragment : Fragment() {
 
         vaccinationList.observe(viewLifecycleOwner) { vaccinations ->
             recyclerView.adapter = VaccinationAdapter(vaccinations) { vaccination ->
-                val bottomSheet = VaccinationDetailsBottomSheet()
+                val bottomSheet = VaccinationDetailsBottomSheet.newInstance(vaccination)
                 bottomSheet.show(parentFragmentManager, "VaccinationDetailsBottomSheet")
             }
             setupPlaceholders(vaccinations)
