@@ -113,7 +113,7 @@ class AppointmentFragment : Fragment() {
         appointments = appointmentService.findAllByPetId(petId)
         appointments.observe(viewLifecycleOwner) { appointments ->
             recyclerView.adapter = AppointmentAdapter(appointments) { appointment ->
-                val bottomSheet = AppointmentDetailsBottomSheet()
+                val bottomSheet = AppointmentDetailsBottomSheet.newInstance(appointment)
                 bottomSheet.show(parentFragmentManager, "AppointmentDetailsBottomSheet")
             }
             setupPlaceholders(appointments)
