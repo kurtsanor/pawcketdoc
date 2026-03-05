@@ -2,12 +2,15 @@ package com.example.tracker.ui
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -29,6 +32,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.time.LocalDate
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.TooltipCompat
 import androidx.lifecycle.LiveData
@@ -36,6 +40,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
+import com.example.tracker.dto.AppointmentMonthCount
+import com.example.tracker.dto.GrowthProgress
 import com.example.tracker.model.Vaccination
 import com.example.tracker.service.GrowthService
 import com.google.android.material.textfield.TextInputEditText
@@ -167,13 +173,69 @@ class GrowthFragment : Fragment() {
         notesLayout.setEndIconTooltip("Any notes e.g personality change etc")
 
         val barChart = view.findViewById<LineChart>(R.id.barChart)
-        createLineChart(barChart)
+        val yearNow = LocalDate.now().year.toString()
+        val weightProgress = growthService.findWeightProgressByYear(petId, yearNow)
+        weightProgress.observe(viewLifecycleOwner){ growthProgresses ->
+            createLineChart(barChart, growthProgresses)
+        }
+
+        val spinner = view.findViewById<Spinner>(R.id.spinnerYear)
+        setupYearDropdown(spinner)
+        var isSpinnerReady = false
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (!isSpinnerReady) {
+                    isSpinnerReady = true
+                    return
+                }
+                lifecycleScope.launch {
+                    val selectedYear = parent?.getItemAtPosition(position).toString()
+                    filterChartByYear(petId, selectedYear, barChart)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewGrowth)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         loadGrowthEntries(petId)
         setupSwipeHandler()
+    }
+
+    private fun filterChartByYear(petId: Long, year: String, lineChart: LineChart) {
+        val filteredResults = growthService.findWeightProgressByYear(petId, year)
+        filteredResults.observe(viewLifecycleOwner) { growthProgresses ->
+            val entries = ArrayList<Entry>()
+            var index = 0f
+            for (entry in growthProgresses) {
+                entries.add(Entry(index, entry.averageWeight))
+                index++
+            }
+
+            val dataSet = lineChart.data?.getDataSetByIndex(0) as? LineDataSet
+            if (dataSet == null) {
+                createLineChart(lineChart, growthProgresses)
+                return@observe
+            }
+            dataSet.values = entries
+            lineChart.data.notifyDataChanged()
+            lineChart.notifyDataSetChanged()
+            lineChart.animateY(500, Easing.EaseInOutQuad)
+            lineChart.invalidate()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setupYearDropdown(spinner: Spinner) {
+        val currentYear = LocalDate.now().year
+        val years = (2023..currentYear).map { it.toString() }
+
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, years)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spinner.adapter = adapter
+        spinner.setSelection(years.size - 1)
     }
 
     fun setupPlaceholders (growthList: List<Growth>) {
@@ -253,63 +315,68 @@ class GrowthFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun createLineChart(lineChart: LineChart) {
-        // 1. Change BarEntry to Entry
+    private fun createLineChart(lineChart: LineChart, weightProgress: List<GrowthProgress>) {
         val entries = ArrayList<Entry>()
-        entries.add(Entry(0f, 9f))
-        entries.add(Entry(1f, 10f))
-        entries.add(Entry(2f, 8f))
-        entries.add(Entry(3f, 7f))
+        var index = 0f
+        for (entry in weightProgress) {
+            entries.add(Entry(index, entry.averageWeight))
+            index++
+        }
 
-        // 2. Change BarDataSet to LineDataSet
-        val dataSet = LineDataSet(entries, "Pets")
+        val dataSet = LineDataSet(entries, "Weight Progress")
 
-        // Styling the line
-        dataSet.color = "#2C9270".toColorInt() // Line color
-        dataSet.setCircleColor("#2C9270".toColorInt()) // Dot color
+        val accentColor = "#4da972".toColorInt()
+
+        dataSet.color = accentColor
+        dataSet.setCircleColor(accentColor)
+        dataSet.circleHoleColor = Color.WHITE
         dataSet.lineWidth = 3f
         dataSet.circleRadius = 5f
         dataSet.setDrawCircleHole(true)
-        dataSet.valueTextSize = 12f
+        dataSet.setDrawValues(false) // remove values beside dots
+        dataSet.setDrawCircles(false)
 
-        // 3. Modern Look: Smoothing and Filling
-        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER // Makes the line curved
+        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        dataSet.cubicIntensity = 0.15f
+
         dataSet.setDrawFilled(true)
-        dataSet.fillColor = "#A7D8C3".toColorInt()
-        dataSet.fillAlpha = 100 // Transparency (0-255)
+        dataSet.fillColor = accentColor
+        dataSet.fillAlpha = 35
 
-        // 4. Change BarData to LineData
         val lineData = LineData(dataSet)
         lineChart.data = lineData
 
-        // 5. Chart Configuration
         lineChart.description.isEnabled = false
         lineChart.legend.isEnabled = false
 
-        // Remove grid lines and axes lines
-        lineChart.xAxis.setDrawGridLines(false)
-        lineChart.axisLeft.setDrawGridLines(false)
-        lineChart.axisRight.setDrawGridLines(false)
+        // X axis
+        lineChart.xAxis.setDrawGridLines(true)
+        lineChart.xAxis.gridColor = Color.parseColor("#E0E0E0")
+        lineChart.xAxis.gridLineWidth = 0.5f
         lineChart.xAxis.setDrawAxisLine(false)
+
+        // Left axis (values on the left)
+        lineChart.axisLeft.isEnabled = true
+        lineChart.axisLeft.setDrawGridLines(true)
+        lineChart.axisLeft.gridColor = Color.parseColor("#E0E0E0")
+        lineChart.axisLeft.gridLineWidth = 0.5f
         lineChart.axisLeft.setDrawAxisLine(false)
+        lineChart.axisLeft.textColor = Color.parseColor("#757575")
+        lineChart.axisLeft.granularity = 1f
+        lineChart.axisLeft.setDrawZeroLine(false)
+
+        // Disable right axis
         lineChart.axisRight.isEnabled = false
 
-        // This removes the numbers/labels on the left side
-        lineChart.axisLeft.isEnabled = false
+        lineChart.animateY(800, Easing.EaseInOutQuad)
 
-        // This removes the actual line on the left side (optional, if not already gone)
-        lineChart.axisLeft.setDrawAxisLine(false)
-
-        // --- ANIMATION ---
-        lineChart.animateY(700, Easing.EaseInOutQuad) // Smooth entrance animation
-
-        // X-Axis Labels
-        val labels = listOf("Jan", "Feb", "Mar", "Apr")
+        val labels = listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
         val xAxis = lineChart.xAxis
         xAxis.valueFormatter = IndexAxisValueFormatter(labels)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.granularity = 1f
+        xAxis.textColor = Color.parseColor("#757575")
 
-        lineChart.invalidate() // Refresh
+        lineChart.invalidate()
     }
 }
