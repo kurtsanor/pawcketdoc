@@ -253,7 +253,7 @@ class GrowthFragment : Fragment() {
         growthList = growthService.findAllByPetId(petId)
         growthList.observe(viewLifecycleOwner) { growths ->
             recyclerView.adapter = GrowthAdapter(growths) { growth ->
-                val bottomSheet = GrowthDetailsBottomSheet()
+                val bottomSheet = GrowthDetailsBottomSheet.newInstance(growth)
                 bottomSheet.show(parentFragmentManager, "GrowthDetailsBottomSheet")
             }
             setupPlaceholders(growths)
