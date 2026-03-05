@@ -101,7 +101,7 @@ class MedicalHistoryFragment : Fragment() {
         medicalRecords = medicalRecordService.findAllByPetId(petId)
         medicalRecords.observe(viewLifecycleOwner) { medicalRecords ->
             recyclerView.adapter = MedicalRecordAdapter(medicalRecords) { record ->
-                val bottomSheet = MedicalRecordBottomSheet()
+                val bottomSheet = MedicalRecordBottomSheet.newInstance(record)
                 bottomSheet.show(parentFragmentManager, "MedicalDetailsBottomSheet")
             }
             setupPlaceholders(medicalRecords)

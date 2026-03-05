@@ -106,7 +106,7 @@ class MedicationFragment : Fragment() {
         medications = medicationService.findAllByPetId(petId)
         medications.observe(viewLifecycleOwner) { medications ->
             recyclerView.adapter = MedicationAdapter(medications, {medication ->
-                val bottomSheet = MedicationDetailsBottomSheet()
+                val bottomSheet = MedicationDetailsBottomSheet.newInstance(medication)
                 bottomSheet.show(parentFragmentManager, "MedicationDetailsBottomSheet")
             })
             setupPlaceholders(medications)
