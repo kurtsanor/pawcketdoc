@@ -22,6 +22,11 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -31,6 +36,8 @@ class AppointmentFormFragment : Fragment() {
 
     private lateinit var db: AppDatabase
     private lateinit var appointmentService: AppointmentService
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,9 +65,11 @@ class AppointmentFormFragment : Fragment() {
         subtitle.visibility = View.VISIBLE
 
         db = DatabaseProvider.getDatabase(requireContext())
-        appointmentService = AppointmentService(db.appointmentDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        appointmentService = AppointmentService(db.appointmentDao(), firebaseFirestore, firebaseAuth)
 
-        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+        val petId = arguments?.getString("pet_id")!!
 
         val etAppointmentTitle = view.findViewById<TextInputEditText>(R.id.etAppointmentTitle)
         val etAppointmentLocation = view.findViewById<TextInputEditText>(R.id.etAppointmentLocation)

@@ -14,9 +14,9 @@ import java.time.LocalDate
 )],
     indices = [Index(value = ["userId"])])
 data class Pet(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
-    val userId: Long,
+    @PrimaryKey
+    val id: String = "",
+    val userId: String,
     val name: String,
     val type: String,
     val breed: String,

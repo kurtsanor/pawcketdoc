@@ -26,6 +26,11 @@ import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.model.Pet
 import com.example.tracker.model.Vaccination
 import com.example.tracker.service.VaccinationService
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.coroutines.launch
@@ -38,6 +43,8 @@ class VaccinationFragment : Fragment() {
     private lateinit var vaccinationService: VaccinationService
     private lateinit var recyclerView: RecyclerView
     private lateinit var vaccinationList: LiveData<List<Vaccination>>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +72,9 @@ class VaccinationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        vaccinationService = VaccinationService(db.vaccinationDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        vaccinationService = VaccinationService(db.vaccinationDao(), firebaseFirestore, firebaseAuth)
 
         val calendarView = view.findViewById< MaterialCalendarView>(R.id.calendarView)
         val today = CalendarDay.today()
@@ -77,10 +86,10 @@ class VaccinationFragment : Fragment() {
         val buttonAdd = view.findViewById<Button>(R.id.buttonAddVaccine)
 
         val bundle = Bundle().apply {
-            putLong("pet_id", arguments?.getLong("pet_id", -1L) ?: -1L)
+            putString("pet_id", arguments?.getString("pet_id"))
         }
 
-        loadVaccinations(bundle.getLong("pet_id"))
+        loadVaccinations(bundle.getString("pet_id")!!)
         setupSwipeHandler()
 
         buttonAdd.setOnClickListener {
@@ -88,7 +97,7 @@ class VaccinationFragment : Fragment() {
         }
     }
 
-    fun loadVaccinations(petId: Long) {
+    fun loadVaccinations(petId: String) {
         vaccinationList = vaccinationService.findAllByPetId(petId)
 
         vaccinationList.observe(viewLifecycleOwner) { vaccinations ->

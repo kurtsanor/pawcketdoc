@@ -23,12 +23,21 @@ import com.example.tracker.service.AuthService
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
     private lateinit var authService: AuthService
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -36,10 +45,23 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
+        db = DatabaseProvider.getDatabase(this)
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        authService = AuthService(db.userDao(), db.credentialsDao(), firebaseAuth, firebaseFirestore)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(0, 0, 0, 0)
             insets
+        }
+
+        val uId = firebaseAuth.currentUser?.uid
+
+        if (!uId.isNullOrBlank()) {
+            val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
+            startActivity(homePage)
+            finish()
         }
 
         val buttonSignIn = findViewById<Button>(R.id.buttonSignIn)
@@ -88,16 +110,6 @@ class MainActivity : AppCompatActivity() {
                     false
                 }
 
-                // Combined validation (length + rules)
-//                !(pwd.length >= 4 && passwordPattern.matches(pwd)) -> {
-//                    password.error = "Password must be at least 8 characters and contain at least:\n" +
-//                            "- 1 uppercase\n" +
-//                            "- 1 lowercase\n" +
-//                            "- 1 number\n" +
-//                            "- 1 special character"
-//                    false
-//                }
-
                 else -> {
                     password.error = null
                     true
@@ -112,9 +124,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        db = DatabaseProvider.getDatabase(this)
-        authService = AuthService(db.userDao(), db.credentialsDao())
-
         buttonSignIn.setOnClickListener {
             if (!emailValidation() || !passwordValidation()) return@setOnClickListener
             lifecycleScope.launch {
@@ -123,14 +132,30 @@ class MainActivity : AppCompatActivity() {
                         email.text.toString(),
                         password.text.toString()
                     )
-                    val userId = authService.login(loginRequest)
+                    authService.login(loginRequest)
+                    Toast.makeText(this@MainActivity, "Login Successful", Toast.LENGTH_LONG).show()
+
                     val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
-                    homePage.putExtra("USER_ID", userId)
                     finish()
                     startActivity(homePage)
-                } catch (e: RuntimeException) {
+                }  catch (e: FirebaseNetworkException) {
+                    Toast.makeText(this@MainActivity, "No Internet Connection", Toast.LENGTH_LONG).show()
+
+                } catch (e: FirebaseAuthInvalidCredentialsException) {
+                    Toast.makeText(this@MainActivity, "Incorrect Credentials", Toast.LENGTH_LONG).show()
+
+                } catch (e: Exception) {
                     Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
                 }
+            }
+        }
+
+        buttonGoogleLogin.setOnClickListener {
+            try {
+                val currentUser = firebaseAuth.currentUser?.email
+                Toast.makeText(this@MainActivity, currentUser.toString(), Toast.LENGTH_LONG).show()
+            } catch (e: Exception) {
+                Toast.makeText(this@MainActivity, e.toString(), Toast.LENGTH_LONG).show()
             }
         }
 

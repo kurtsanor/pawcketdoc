@@ -46,6 +46,11 @@ import com.example.tracker.model.Vaccination
 import com.example.tracker.service.GrowthService
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 import com.google.android.material.R as MaterialR
@@ -57,6 +62,8 @@ class GrowthFragment : Fragment() {
     private lateinit var growthService: GrowthService
     private lateinit var recyclerView: RecyclerView
     private lateinit var growthList: LiveData<List<Growth>>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -85,9 +92,11 @@ class GrowthFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        growthService = GrowthService(db.growthDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        growthService = GrowthService(db.growthDao(), firebaseFirestore, firebaseAuth)
 
-        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+        val petId = arguments?.getString("pet_id")!!
 
         val weightLayout = view.findViewById<TextInputLayout>(R.id.weightLayout)
         val heightLayout = view.findViewById<TextInputLayout>(R.id.heightLayout)
@@ -203,7 +212,7 @@ class GrowthFragment : Fragment() {
         setupSwipeHandler()
     }
 
-    private fun filterChartByYear(petId: Long, year: String, lineChart: LineChart) {
+    private fun filterChartByYear(petId: String, year: String, lineChart: LineChart) {
         val filteredResults = growthService.findWeightProgressByYear(petId, year)
         filteredResults.observe(viewLifecycleOwner) { growthProgresses ->
             val entries = ArrayList<Entry>()
@@ -249,7 +258,7 @@ class GrowthFragment : Fragment() {
         }
     }
 
-    private fun loadGrowthEntries(petId: Long) {
+    private fun loadGrowthEntries(petId: String) {
         growthList = growthService.findAllByPetId(petId)
         growthList.observe(viewLifecycleOwner) { growths ->
             recyclerView.adapter = GrowthAdapter(growths) { growth ->

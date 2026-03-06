@@ -13,12 +13,18 @@ import com.example.tracker.R
 import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.service.UserService
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 
 class AccountFragment : Fragment() {
 
     private lateinit var db: AppDatabase
     private lateinit var userService: UserService
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +42,13 @@ class AccountFragment : Fragment() {
             .text = "Account"
 
         db = DatabaseProvider.getDatabase(requireContext())
+        firebaseAuth = Firebase.auth
         userService = UserService(db.userDao())
 
         val buttonLogout = view.findViewById<TextView>(R.id.logout)
 
         buttonLogout.setOnClickListener {
+            firebaseAuth.signOut()
             requireActivity().finish()
             val loginPage = Intent(requireContext(), MainActivity:: class.java)
             startActivity(loginPage)
@@ -56,11 +64,11 @@ class AccountFragment : Fragment() {
             findNavController().navigate(R.id.action_account_to_changePassword)
         }
 
-        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+        val userId = firebaseAuth.currentUser?.uid!!
         loadUserProfile(userId)
     }
 
-    private fun loadUserProfile(userId: Long) {
+    private fun loadUserProfile(userId: String) {
         val fullName = view?.findViewById<TextView>(R.id.fullName)
             val user = userService.findByIdLiveData(userId)
             user.observe(viewLifecycleOwner) { user ->

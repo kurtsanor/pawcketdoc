@@ -16,11 +16,11 @@ interface PetDao {
     suspend fun update(pet: Pet)
 
     @Query("DELETE FROM Pet WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: String)
 
     @Query("SELECT * FROM Pet WHERE userId = :userId")
-    fun findAllByUserId(userId: Long): LiveData<List<Pet>>
+    fun findAllByUserId(userId: String): LiveData<List<Pet>>
 
     @Query("SELECT * FROM Pet WHERE id =:id")
-    suspend fun findById(id: Long): Pet
+    suspend fun findById(id: String): Pet
 }

@@ -5,11 +5,16 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import com.example.tracker.dao.PetDao
 import com.example.tracker.model.Pet
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import java.lang.RuntimeException
 import java.time.LocalDate
 
-class PetService(private val petDao: PetDao) {
-    fun findAllByUserId(userId: Long): LiveData<List<Pet>>  {
+class PetService(
+    private val petDao: PetDao,
+    private val firebaseFirestore: FirebaseFirestore
+) {
+    fun findAllByUserId(userId: String): LiveData<List<Pet>>  {
         return petDao.findAllByUserId(userId)
     }
 
@@ -21,7 +26,19 @@ class PetService(private val petDao: PetDao) {
         if (pet.birthDate.isAfter(LocalDate.now())) {
             throw RuntimeException("Birthday cannot be in the future")
         }
-        petDao.insert(pet)
+        val petDocumentRef = firebaseFirestore.collection("pets").document()
+        val id = petDocumentRef.id
+
+        petDocumentRef.set(mapOf(
+            "userId" to pet.userId,
+            "name" to pet.name,
+            "type" to pet.type,
+            "breed" to pet.breed,
+            "gender" to pet.gender,
+            "birthDate" to pet.birthDate.toString()
+        )).await()
+
+        petDao.insert(pet.copy(id = id))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -35,14 +52,19 @@ class PetService(private val petDao: PetDao) {
         petDao.update(pet)
     }
 
-    suspend fun deleteById(id: Long) {
-        if (id < 0) {
+    suspend fun deleteById(id: String) {
+        if (id.isBlank()) {
             throw RuntimeException("Invalid id")
         }
+        firebaseFirestore.collection("pets")
+            .document(id)
+            .delete()
+            .await()
+
         petDao.deleteById(id)
     }
 
-    suspend fun findById(id: Long): Pet {
+    suspend fun findById(id: String): Pet {
         return petDao.findById(id)
     }
 

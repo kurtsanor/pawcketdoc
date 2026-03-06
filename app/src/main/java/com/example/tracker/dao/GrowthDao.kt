@@ -13,10 +13,10 @@ interface GrowthDao {
     suspend fun insert(growth: Growth)
 
     @Query("SELECT * FROM Growth WHERE petId = :petId")
-    fun findAllByPetId(petId: Long): LiveData<List<Growth>>
+    fun findAllByPetId(petId: String): LiveData<List<Growth>>
 
     @Query("DELETE FROM Growth WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: String)
 
     @Query("""
         SELECT strftime('%m', g.dateRecorded) AS month, AVG(g.weight) AS averageWeight
@@ -25,5 +25,5 @@ interface GrowthDao {
         GROUP BY month
         ORDER BY month
         """)
-    fun findWeightProgressByYear(petId: Long, year: String): LiveData<List<GrowthProgress>>
+    fun findWeightProgressByYear(petId: String, year: String): LiveData<List<GrowthProgress>>
 }

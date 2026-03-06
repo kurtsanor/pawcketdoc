@@ -15,9 +15,9 @@ import java.time.LocalDateTime
 )],
     indices = [Index(value = ["petId"])])
 data class Appointment(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
-    val petId: Long,
+    @PrimaryKey
+    val id: String = "",
+    val petId: String,
     val title: String,
     val notes: String,
     val location: String,

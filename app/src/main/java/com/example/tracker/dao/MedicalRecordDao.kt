@@ -12,8 +12,8 @@ interface MedicalRecordDao {
     suspend fun insert(medicalRecord: MedicalRecord)
 
     @Query("SELECT * FROM MedicalRecord WHERE petId = :petId")
-    fun findAllByPetId(petId: Long): LiveData<List<MedicalRecord>>
+    fun findAllByPetId(petId: String): LiveData<List<MedicalRecord>>
 
     @Query("DELETE FROM MedicalRecord WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: String)
 }

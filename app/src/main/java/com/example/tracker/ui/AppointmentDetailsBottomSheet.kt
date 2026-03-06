@@ -19,8 +19,8 @@ class AppointmentDetailsBottomSheet : BottomSheetDialogFragment() {
         fun newInstance(appointment: Appointment): AppointmentDetailsBottomSheet {
             return AppointmentDetailsBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putLong("id", appointment.id)
-                    putLong("petId", appointment.petId)
+                    putString("id", appointment.id)
+                    putString("petId", appointment.petId)
                     putString("title", appointment.title)
                     putString("notes", appointment.notes)
                     putString("location", appointment.location)

@@ -30,7 +30,7 @@ import com.example.tracker.util.Converters
     User::class,
     Vaccination::class,
     Credentials::class,
-], version = 4)
+], version = 10)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun appointmentDao(): AppointmentDao

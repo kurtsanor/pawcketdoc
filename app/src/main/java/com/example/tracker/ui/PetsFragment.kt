@@ -31,6 +31,11 @@ import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.model.Pet
 import com.example.tracker.service.PetService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 import java.time.LocalDate
@@ -41,6 +46,8 @@ class PetsFragment : Fragment() {
     private lateinit var petService: PetService
     private lateinit var recyclerView: RecyclerView
     private lateinit var petList: LiveData<List<Pet>>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,7 +72,9 @@ class PetsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        petService = PetService(db.petDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        petService = PetService(db.petDao(), firebaseFirestore)
 
         val fabAddPet = view.findViewById<FloatingActionButton>(R.id.fab_add_pet)
         fabAddPet.setOnClickListener {
@@ -75,7 +84,7 @@ class PetsFragment : Fragment() {
         setupSwipeHandler()
     }
 
-    suspend fun deleteById(id: Long) {
+    suspend fun deleteById(id: String) {
             try {
                 petService.deleteById(id)
             } catch (e: RuntimeException) {
@@ -84,13 +93,13 @@ class PetsFragment : Fragment() {
     }
 
     fun loadPets() {
-        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
-        petList = petService.findAllByUserId(userId)
+        val currentUser = firebaseAuth.currentUser?.uid!!
+        petList = petService.findAllByUserId(currentUser)
 
         petList.observe(viewLifecycleOwner){ pets ->
             recyclerView.adapter = PetAdapter(pets) { pet ->
                 val bundle = Bundle().apply {
-                    putLong("pet_id", pet.id)
+                    putString("pet_id", pet.id)
                 }
                 findNavController().navigate(R.id.action_pets_to_petProfile, bundle)
             }
@@ -126,6 +135,9 @@ class PetsFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 val pet = petList.value?.get(position)
 
+                if (pet == null) {
+                    return
+                }
 
                 // Show confirmation dialog
                 AlertDialog.Builder(requireContext())
@@ -134,7 +146,7 @@ class PetsFragment : Fragment() {
                     .setPositiveButton("Yes") { dialog, _ ->
                         lifecycleScope.launch {
                             try {
-                                deleteById(pet?.id ?: 0)
+                                deleteById(pet.id)
 
                                 // User confirmed, remove pet from list then update adapter
 //                                petList.removeAt(position)

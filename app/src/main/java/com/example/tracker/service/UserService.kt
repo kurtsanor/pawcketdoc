@@ -9,7 +9,7 @@ class UserService(private val userDao: UserDao) {
         return userDao.findById(id)
     }
 
-    fun findByIdLiveData(id: Long): LiveData<User>  {
+    fun findByIdLiveData(id: String): LiveData<User>  {
         return userDao.findByIdLiveData(id)
     }
 

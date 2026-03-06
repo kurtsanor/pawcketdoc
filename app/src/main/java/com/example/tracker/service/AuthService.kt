@@ -8,44 +8,42 @@ import com.example.tracker.dto.LoginRequest
 import com.example.tracker.dto.SignUpRequest
 import com.example.tracker.model.Credentials
 import com.example.tracker.model.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import org.mindrot.jbcrypt.BCrypt
 import java.lang.RuntimeException
 
 class AuthService(
     private val userDao: UserDao,
-    private val credentialsDao: CredentialsDao
+    private val credentialsDao: CredentialsDao,
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseFirestore: FirebaseFirestore
 ) {
 
     suspend fun register(signUpRequest: SignUpRequest) {
-        val emailExists = credentialsDao.existsEmail(signUpRequest.email) != null
-        if (emailExists) {
-            throw RuntimeException("Email already exists")
-        }
+        val result = firebaseAuth.createUserWithEmailAndPassword(signUpRequest.email, signUpRequest.password).await()
+        val uid = result.user?.uid!!
+
+        firebaseFirestore.collection("users")
+            .document(uid)
+            .set(mapOf(
+                "uid" to uid,
+                "firstName" to signUpRequest.firstName,
+                "lastName" to signUpRequest.surName
+            )).await()
+
+        // insert to room as well
         val user = User(
+            id = uid,
             firstName = signUpRequest.firstName,
             surName = signUpRequest.surName
         )
-        val generatedId = userDao.insert(user)
-
-        val credentials = Credentials(
-            userId = generatedId,
-            email = signUpRequest.email,
-            password = BCrypt.hashpw(signUpRequest.password, BCrypt.gensalt())
-        )
-        credentialsDao.insert(credentials)
+        userDao.insert(user)
     }
 
-    suspend fun login(loginRequest: LoginRequest): Long? {
-        val credentials: Credentials? = credentialsDao.findByEmail(loginRequest.email)
-        if (credentials == null) {
-            throw RuntimeException("Invalid email or password")
-        }
-        val isValidCredentials = BCrypt.checkpw(loginRequest.password, credentials.password)
-        if (!isValidCredentials) {
-            throw RuntimeException("Invalid email or password")
-        }
-        // return user id if login is successful
-        return credentials.userId
+    suspend fun login(loginRequest: LoginRequest) {
+        firebaseAuth.signInWithEmailAndPassword(loginRequest.email, loginRequest.password).await()
     }
 
     suspend fun changeUserPassword(credentials: Credentials) {

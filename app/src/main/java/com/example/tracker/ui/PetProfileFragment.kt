@@ -19,12 +19,19 @@ import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.service.PetService
 import com.example.tracker.util.DateFormatter
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 
 class PetProfileFragment : Fragment() {
 
     private lateinit var db: AppDatabase
     private lateinit var petService: PetService
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,12 +59,14 @@ class PetProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        petService = PetService(db.petDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        petService = PetService(db.petDao(), firebaseFirestore)
 
-        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+        val petId = arguments?.getString("pet_id")!!
 
         val bundle = Bundle().apply {
-            putLong("pet_id", petId)
+            putString("pet_id", petId)
         }
 
         val buttonVaccination = view.findViewById< Button>(R.id.buttonVaccination)
@@ -94,7 +103,7 @@ class PetProfileFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun loadPetProfile(petId: Long) {
+    fun loadPetProfile(petId: String) {
         val petName = view?.findViewById<TextView>(R.id.petName)
         val petBreed = view?.findViewById<TextView>(R.id.petBreed)
 

@@ -22,6 +22,11 @@ import com.example.tracker.model.Pet
 import com.example.tracker.service.PetService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 import java.text.SimpleDateFormat
@@ -34,6 +39,9 @@ class PetFormActivityFragment : Fragment() {
 
     private lateinit var db: AppDatabase
     private lateinit var petService: PetService
+
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +74,9 @@ class PetFormActivityFragment : Fragment() {
         setupGenderDropdown(view)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        petService = PetService(db.petDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        petService = PetService(db.petDao(), firebaseFirestore)
 
         val petName = view.findViewById<TextInputEditText>(R.id.etPetName)
         val petType = view.findViewById<TextInputEditText>(R.id.etPetType)
@@ -111,7 +121,7 @@ class PetFormActivityFragment : Fragment() {
             lifecycleScope.launch {
                 val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
                 val newPet = Pet(
-                    userId = requireActivity().intent.getLongExtra("USER_ID", -1L),
+                    userId = firebaseAuth.currentUser?.uid!!,
                     name = petName.text.toString(),
                     type = petType.text.toString(),
                     breed = petBreed.text.toString(),

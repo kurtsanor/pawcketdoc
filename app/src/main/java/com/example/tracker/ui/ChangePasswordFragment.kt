@@ -16,6 +16,11 @@ import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.service.AuthService
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import org.mindrot.jbcrypt.BCrypt
 import java.lang.Exception
@@ -23,6 +28,9 @@ import java.lang.Exception
 class ChangePasswordFragment : Fragment() {
     private lateinit var db: AppDatabase
     private lateinit var authService: AuthService
+    private lateinit var firebaseAuth: FirebaseAuth
+
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +65,9 @@ class ChangePasswordFragment : Fragment() {
         val btnChangePassword = view.findViewById<Button>(R.id.btnChangePassword)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        authService = AuthService(db.userDao(),db.credentialsDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        authService = AuthService(db.userDao(), db.credentialsDao(), firebaseAuth, firebaseFirestore)
 
         val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
 

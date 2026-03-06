@@ -17,6 +17,11 @@ import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.dto.SignUpRequest
 import com.example.tracker.service.AuthService
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 
@@ -24,6 +29,10 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
     private lateinit var authService: AuthService
+
+    private lateinit var firebaseAuth: FirebaseAuth
+
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +78,10 @@ class SignUpActivity : AppCompatActivity() {
                     password.error = "Required field"
                     false
                 }
+                password.text.toString().length < 6 -> {
+                    password.error = "Must be at least 6 characters"
+                    false
+                }
                 confirmPassword.text.toString() != password.text.toString() -> {
                     confirmPassword.error = "Passwords do not match"
                     false
@@ -85,7 +98,9 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         db = DatabaseProvider.getDatabase(this)
-        authService = AuthService(db.userDao(), db.credentialsDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        authService = AuthService(db.userDao(), db.credentialsDao(), firebaseAuth, firebaseFirestore)
 
         val buttonSignup = findViewById<Button>(R.id.buttonSignUp)
         buttonSignup.setOnClickListener {
@@ -101,7 +116,7 @@ class SignUpActivity : AppCompatActivity() {
                     authService.register(signupRequest)
                     Toast.makeText(this@SignUpActivity, "Account has been created", Toast.LENGTH_LONG).show()
                     finish()
-                } catch (e: RuntimeException) {
+                } catch (e: Exception) {
                     Toast.makeText(this@SignUpActivity, e.message, Toast.LENGTH_LONG).show()
                 }
             }

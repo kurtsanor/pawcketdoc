@@ -20,6 +20,11 @@ import com.example.tracker.model.Medication
 import com.example.tracker.service.MedicationService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -31,6 +36,8 @@ class MedicationFormFragment : Fragment() {
 
     private lateinit var db: AppDatabase
     private lateinit var medicationService: MedicationService
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,9 +68,11 @@ class MedicationFormFragment : Fragment() {
         subtitle.visibility = View.VISIBLE
 
         db = DatabaseProvider.getDatabase(requireContext())
-        medicationService = MedicationService(db.medicationDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        medicationService = MedicationService(db.medicationDao(), firebaseFirestore, firebaseAuth)
 
-        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+        val petId = arguments?.getString("pet_id")!!
 
         val etMedicationName = view.findViewById<TextInputEditText>(R.id.etMedicationName)
         val etDosage = view.findViewById<TextInputEditText>(R.id.etDosage)

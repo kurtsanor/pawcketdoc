@@ -1,10 +1,12 @@
 package com.example.tracker.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.example.tracker.R
 import com.example.tracker.model.Medication
 import com.example.tracker.util.DateFormatter
@@ -13,11 +15,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class MedicationDetailsBottomSheet : BottomSheetDialogFragment() {
 
     companion object {
+        @RequiresApi(Build.VERSION_CODES.O)
         fun newInstance(medication: Medication): MedicationDetailsBottomSheet {
             return MedicationDetailsBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putLong("id", medication.id)
-                    putLong("petId", medication.petId)
+                    putString("id", medication.id)
+                    putString("petId", medication.petId)
                     putString("name", medication.name)
                     putString("dosage", medication.dosage)
                     putString("frequency", medication.frequency)

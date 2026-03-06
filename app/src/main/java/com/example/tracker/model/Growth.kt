@@ -14,9 +14,9 @@ import java.time.LocalDate
 )],
     indices = [Index(value = ["petId"])])
 data class Growth(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
-    val petId: Long,
+    @PrimaryKey
+    val id: String = "",
+    val petId: String,
     val weight: Float,
     val height: Float,
     val notes: String,

@@ -12,8 +12,8 @@ interface VaccinationDao {
     suspend fun insert(vaccination: Vaccination)
 
     @Query("SELECT * FROM Vaccination WHERE petId = :petId")
-    fun findAllByPetId(petId: Long): LiveData<List<Vaccination>>
+    fun findAllByPetId(petId: String): LiveData<List<Vaccination>>
 
     @Query("DELETE FROM Vaccination WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: String)
 }

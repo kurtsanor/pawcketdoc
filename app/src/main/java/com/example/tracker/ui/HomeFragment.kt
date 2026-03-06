@@ -1,5 +1,6 @@
 package com.example.tracker.ui
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
@@ -47,6 +48,11 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -59,6 +65,8 @@ class HomeFragment : Fragment() {
     private lateinit var medicationService: MedicationService
     private lateinit var recyclerView: RecyclerView
     private lateinit var appointments: LiveData<List<Appointment>>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,11 +84,21 @@ class HomeFragment : Fragment() {
 
         headerTitle.text = "Dashboard"
 
-        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
-
         db = DatabaseProvider.getDatabase(requireContext())
-        appointmentService = AppointmentService(db.appointmentDao())
-        medicationService = MedicationService(db.medicationDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        appointmentService = AppointmentService(db.appointmentDao(), firebaseFirestore, firebaseAuth)
+        medicationService = MedicationService(db.medicationDao(), firebaseFirestore, firebaseAuth)
+
+        val userId = firebaseAuth.currentUser?.uid
+
+        if (userId.isNullOrBlank()) {
+            firebaseAuth.signOut()
+            val intent = Intent(requireContext(), MainActivity:: class.java)
+            startActivity(intent)
+            requireActivity().finish()
+            return
+        }
 
         val donutChart = view.findViewById<PieChart>(R.id.donutChart)
         val barChart = view.findViewById<LineChart>(R.id.barChart)
@@ -114,7 +132,7 @@ class HomeFragment : Fragment() {
         loadUpcomingAppointments(userId)
     }
 
-    private suspend fun filterChartByYear(userId: Long, year: String, lineChart: LineChart) {
+    private suspend fun filterChartByYear(userId: String, year: String, lineChart: LineChart) {
         val filteredResults = appointmentService.getAppointmentCountsPerMonth(userId, year)
 
         val entries = ArrayList<Entry>()
@@ -148,7 +166,7 @@ class HomeFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun loadUpcomingAppointments(userId: Long) {
+    private fun loadUpcomingAppointments(userId: String) {
         appointments = appointmentService.findUpcomingByUserId(userId)
         appointments.observe(viewLifecycleOwner) { appointments ->
             recyclerView.adapter = AppointmentAdapter(appointments) { appointment ->

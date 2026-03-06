@@ -14,15 +14,15 @@ interface MedicationDao {
     suspend fun insert(medication: Medication)
 
     @Query("SELECT * FROM Medication WHERE petId = :petId")
-    fun findAllByPetId(petId: Long): LiveData<List<Medication>>
+    fun findAllByPetId(petId: String): LiveData<List<Medication>>
 
     @Query("DELETE FROM Medication WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: String)
 
     @Query("""SELECT p.name AS petName, COUNT(m.id) AS medicationCount
         FROM Pet p LEFT JOIN Medication m ON p.id = m.petId
         AND :today BETWEEN m.startDate AND m.endDate 
         WHERE p.userId = :userId GROUP BY p.id
     """)
-    suspend fun findActiveMedicationCountsByUserId(userId: Long, today: LocalDate): List<PetMedicationCount>
+    suspend fun findActiveMedicationCountsByUserId(userId: String, today: LocalDate): List<PetMedicationCount>
 }

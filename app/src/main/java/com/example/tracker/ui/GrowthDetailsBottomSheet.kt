@@ -19,8 +19,8 @@ class GrowthDetailsBottomSheet : BottomSheetDialogFragment() {
         fun newInstance(growth: Growth): GrowthDetailsBottomSheet {
             return GrowthDetailsBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putLong("id", growth.id)
-                    putLong("petId", growth.petId)
+                    putString("id", growth.id)
+                    putString("petId", growth.petId)
                     putFloat("weight", growth.weight)
                     putFloat("height", growth.height)
                     putString("notes", growth.notes)

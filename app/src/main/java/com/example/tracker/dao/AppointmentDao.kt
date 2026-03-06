@@ -19,22 +19,22 @@ interface AppointmentDao {
     suspend fun update(appointment: Appointment)
 
     @Query("DELETE FROM Appointment WHERE id = :id")
-    suspend fun deleteById(id: Long)
+    suspend fun deleteById(id: String)
 
     @Query("SELECT * FROM Appointment WHERE petId = :petId")
-    fun findAllByPetId(petId: Long): LiveData<List<Appointment>>
+    fun findAllByPetId(petId: String): LiveData<List<Appointment>>
 
     @Query("""SELECT a.* FROM Pet p
             JOIN User u ON p.userId = u.id
             JOIN Appointment a ON p.id = a.petId
             WHERE u.id = :userId""")
-    suspend fun findAllByUserId(userId: Long): List<Appointment>
+    suspend fun findAllByUserId(userId: String): List<Appointment>
 
     @Query("""SELECT a.* FROM Pet p
             JOIN User u ON p.userId = u.id
             JOIN Appointment a ON p.id = a.petId
             WHERE u.id = :userId AND a.datetime >= :now""")
-    fun findUpcomingByUserId(userId: Long, now: LocalDateTime): LiveData<List<Appointment>>
+    fun findUpcomingByUserId(userId: String, now: LocalDateTime): LiveData<List<Appointment>>
 
     @Query("""
         SELECT strftime('%m', a.datetime) AS month, COUNT(*) AS appointmentCount
@@ -45,5 +45,5 @@ interface AppointmentDao {
         GROUP BY month
         ORDER BY month
     """)
-    suspend fun getAppointmentCountsPerMonth(userId: Long, year: String): List<AppointmentMonthCount>
+    suspend fun getAppointmentCountsPerMonth(userId: String, year: String): List<AppointmentMonthCount>
 }

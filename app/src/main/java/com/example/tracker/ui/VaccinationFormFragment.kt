@@ -20,6 +20,11 @@ import com.example.tracker.model.Vaccination
 import com.example.tracker.service.VaccinationService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -32,6 +37,8 @@ class VaccinationFormFragment : Fragment() {
 
     private lateinit var db: AppDatabase
     private lateinit var vaccinationService: VaccinationService
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +66,9 @@ class VaccinationFormFragment : Fragment() {
         setupDatePicker(view)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        vaccinationService = VaccinationService(db.vaccinationDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        vaccinationService = VaccinationService(db.vaccinationDao(), firebaseFirestore, firebaseAuth)
 
         val etVaccineName = view.findViewById<TextInputEditText>(R.id.etVaccineName)
         val etAdministeredDate = view.findViewById<TextInputEditText>(R.id.etAdministeredDate)
@@ -97,7 +106,7 @@ class VaccinationFormFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val petId = arguments?.getLong("pet_id", -1L)
+            val petId = arguments?.getString("pet_id")
 
             if (petId == null) {
                 Toast.makeText(context, "Missing pet ID", Toast.LENGTH_SHORT).show()
@@ -116,10 +125,9 @@ class VaccinationFormFragment : Fragment() {
                     vaccinationService.insert(newVaccination)
                     Toast.makeText(requireContext(), "Record has been added", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
-                } catch (e: RuntimeException) {
+                } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                 }
-
             }
         }
     }

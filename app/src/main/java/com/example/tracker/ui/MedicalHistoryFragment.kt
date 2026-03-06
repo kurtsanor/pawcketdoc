@@ -28,6 +28,11 @@ import com.example.tracker.model.MedicalRecord
 import com.example.tracker.model.Vaccination
 import com.example.tracker.service.MedicalRecordService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 import java.time.LocalDate
@@ -38,6 +43,8 @@ class MedicalHistoryFragment : Fragment() {
     private lateinit var medicalRecordService: MedicalRecordService
     private lateinit var recyclerView: RecyclerView
     private lateinit var medicalRecords: LiveData<List<MedicalRecord>>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,9 +72,11 @@ class MedicalHistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        medicalRecordService = MedicalRecordService(db.medicalRecordDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        medicalRecordService = MedicalRecordService(db.medicalRecordDao(), firebaseFirestore, firebaseAuth)
 
-        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+        val petId = arguments?.getString("pet_id")!!
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewMedical)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -75,7 +84,7 @@ class MedicalHistoryFragment : Fragment() {
         val fabAddMedical = view.findViewById<FloatingActionButton>(R.id.fab_add_medical)
 
         val bundle = Bundle().apply {
-            putLong("pet_id", petId)
+            putString("pet_id", petId)
         }
 
         fabAddMedical.setOnClickListener {
@@ -97,7 +106,7 @@ class MedicalHistoryFragment : Fragment() {
         }
     }
 
-    fun loadMedicalRecords(petId: Long) {
+    fun loadMedicalRecords(petId: String) {
         medicalRecords = medicalRecordService.findAllByPetId(petId)
         medicalRecords.observe(viewLifecycleOwner) { medicalRecords ->
             recyclerView.adapter = MedicalRecordAdapter(medicalRecords) { record ->

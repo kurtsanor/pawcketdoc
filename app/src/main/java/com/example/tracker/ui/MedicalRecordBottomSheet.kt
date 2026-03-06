@@ -19,8 +19,8 @@ class MedicalRecordBottomSheet : BottomSheetDialogFragment() {
         fun newInstance(medicalRecord: MedicalRecord): MedicalRecordBottomSheet {
             return MedicalRecordBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putLong("id", medicalRecord.id)
-                    putLong("petId", medicalRecord.petId)
+                    putString("id", medicalRecord.id)
+                    putString("petId", medicalRecord.petId)
                     putString("title", medicalRecord.title)
                     putString("date", medicalRecord.date.toString())
                     putString("diagnosis", medicalRecord.diagnosis)

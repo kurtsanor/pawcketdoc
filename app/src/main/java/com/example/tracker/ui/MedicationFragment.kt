@@ -30,6 +30,11 @@ import com.example.tracker.model.Medication
 import com.example.tracker.service.AppointmentService
 import com.example.tracker.service.MedicationService
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 import java.time.LocalDate
@@ -40,6 +45,8 @@ class MedicationFragment : Fragment() {
     private lateinit var medicationService: MedicationService
     private lateinit var recyclerView: RecyclerView
     private lateinit var medications: LiveData<List<Medication>>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,9 +78,11 @@ class MedicationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        medicationService = MedicationService(db.medicationDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        medicationService = MedicationService(db.medicationDao(), firebaseFirestore, firebaseAuth)
 
-        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+        val petId = arguments?.getString("pet_id")!!
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewMedications)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -81,7 +90,7 @@ class MedicationFragment : Fragment() {
         val fabAdd = view.findViewById<FloatingActionButton>(R.id.fab_add_medication)
 
         val bundle = Bundle().apply {
-            putLong("pet_id", petId)
+            putString("pet_id", petId)
         }
 
         fabAdd.setOnClickListener {
@@ -102,7 +111,7 @@ class MedicationFragment : Fragment() {
         }
     }
 
-    fun loadMedications(petId: Long) {
+    fun loadMedications(petId: String) {
         medications = medicationService.findAllByPetId(petId)
         medications.observe(viewLifecycleOwner) { medications ->
             recyclerView.adapter = MedicationAdapter(medications, {medication ->
@@ -145,7 +154,9 @@ class MedicationFragment : Fragment() {
                                 medicationService.deleteById(medication.id)
                                 Toast.makeText(requireContext(), "${medication?.name} deleted", Toast.LENGTH_SHORT).show()
                                 dialog.dismiss()
-                            } catch (e: RuntimeException) {}
+                            } catch (e: RuntimeException) {
+                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                            }
                         }
 
                     }

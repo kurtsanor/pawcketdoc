@@ -19,7 +19,7 @@ interface UserDao {
     suspend fun findAll(): List<User>
 
     @Query("SELECT * FROM User WHERE id = :id")
-    fun findByIdLiveData(id: Long): LiveData<User>
+    fun findByIdLiveData(id: String): LiveData<User>
 
     @Query("SELECT * FROM User WHERE id = :id")
     suspend fun findById(id: Long): User

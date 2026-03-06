@@ -30,6 +30,11 @@ import com.example.tracker.model.Appointment
 import com.example.tracker.model.MedicalRecord
 import com.example.tracker.service.AppointmentService
 import com.example.tracker.service.MedicalRecordService
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import kotlinx.coroutines.launch
@@ -42,6 +47,8 @@ class AppointmentFragment : Fragment() {
     private lateinit var appointmentService: AppointmentService
     private lateinit var recyclerView: RecyclerView
     private lateinit var appointments: LiveData<List<Appointment>>
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,9 +84,11 @@ class AppointmentFragment : Fragment() {
         calendarView.setDateSelected(today, true)
 
         db = DatabaseProvider.getDatabase(requireContext())
-        appointmentService = AppointmentService(db.appointmentDao())
+        firebaseAuth = Firebase.auth
+        firebaseFirestore = Firebase.firestore
+        appointmentService = AppointmentService(db.appointmentDao(), firebaseFirestore, firebaseAuth)
 
-        val petId = arguments?.getLong("pet_id", -1L) ?: -1L
+        val petId = arguments?.getString("pet_id")!!
 
         recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewAppointments)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -87,7 +96,7 @@ class AppointmentFragment : Fragment() {
         val buttonAdd = view.findViewById<Button>(R.id.buttonAddAppointment)
 
         val bundle = Bundle().apply {
-            putLong("pet_id", petId)
+            putString("pet_id", petId)
         }
 
         buttonAdd.setOnClickListener {
@@ -109,7 +118,7 @@ class AppointmentFragment : Fragment() {
         }
     }
 
-    fun loadAppointments(petId: Long) {
+    fun loadAppointments(petId: String) {
         appointments = appointmentService.findAllByPetId(petId)
         appointments.observe(viewLifecycleOwner) { appointments ->
             recyclerView.adapter = AppointmentAdapter(appointments) { appointment ->
@@ -152,7 +161,9 @@ class AppointmentFragment : Fragment() {
                                 appointmentService.deleteById(appointment.id)
                                 Toast.makeText(requireContext(), "${appointment?.title} deleted", Toast.LENGTH_SHORT).show()
                                 dialog.dismiss()
-                            } catch (e: RuntimeException) {}
+                            } catch (e: Exception) {
+                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                            }
                         }
 
                     }

@@ -20,8 +20,8 @@ class VaccinationDetailsBottomSheet : BottomSheetDialogFragment() {
         fun newInstance(vaccination: Vaccination): VaccinationDetailsBottomSheet {
             return VaccinationDetailsBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putLong("id", vaccination.id)
-                    putLong("petId", vaccination.petId)
+                    putString("id", vaccination.id)
+                    putString("petId", vaccination.petId)
                     putString("name", vaccination.name)
                     putString("notes", vaccination.notes)
                     putString("administeredDate", vaccination.administeredDate.toString())
