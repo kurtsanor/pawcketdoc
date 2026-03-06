@@ -44,6 +44,11 @@ class MedicationService(
     }
 
     suspend fun deleteById(id: String) {
+        firebaseFirestore.collection("medications")
+            .document(id)
+            .delete()
+            .await()
+
         medicationDao.deleteById(id)
     }
 
