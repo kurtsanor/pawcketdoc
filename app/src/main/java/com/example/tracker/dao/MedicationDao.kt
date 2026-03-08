@@ -3,6 +3,7 @@ package com.example.tracker.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tracker.dto.PetMedicationCount
 import com.example.tracker.model.Medication
@@ -10,8 +11,11 @@ import java.time.LocalDate
 
 @Dao
 interface MedicationDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(medication: Medication)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(medications: List<Medication>)
 
     @Query("SELECT * FROM Medication WHERE petId = :petId")
     fun findAllByPetId(petId: String): LiveData<List<Medication>>

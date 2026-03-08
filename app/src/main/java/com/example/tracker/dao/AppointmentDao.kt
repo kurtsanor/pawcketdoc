@@ -3,6 +3,7 @@ package com.example.tracker.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.tracker.dto.AppointmentMonthCount
@@ -12,8 +13,11 @@ import java.time.LocalDateTime
 
 @Dao
 interface AppointmentDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(appointment: Appointment)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(appointments: List<Appointment>)
 
     @Update
     suspend fun update(appointment: Appointment)

@@ -36,15 +36,6 @@ class LayoutActivity : AppCompatActivity() {
 
         navBar.setupWithNavController(navController)
 
-//        navBar.setOnItemSelectedListener { item ->
-//            val popped = navController.popBackStack(item.itemId, inclusive = false)
-//            if (!popped) {
-//                navController.navigate(item.itemId)
-//            }
-//            true
-//        }
-
-
         backBtn.setOnClickListener {
             navController.popBackStack()
         }

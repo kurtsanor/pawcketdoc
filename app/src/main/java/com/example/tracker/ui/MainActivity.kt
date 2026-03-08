@@ -1,13 +1,18 @@
 package com.example.tracker.ui
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
@@ -20,6 +25,7 @@ import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.dto.LoginRequest
 import com.example.tracker.model.User
 import com.example.tracker.service.AuthService
+import com.example.tracker.service.SyncService
 import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 import com.google.android.material.textfield.TextInputEditText
@@ -38,7 +44,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var authService: AuthService
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var syncService: SyncService
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -49,6 +57,15 @@ class MainActivity : AppCompatActivity() {
         firebaseAuth = Firebase.auth
         firebaseFirestore = Firebase.firestore
         authService = AuthService(db.userDao(), db.credentialsDao(), firebaseAuth, firebaseFirestore)
+        syncService = SyncService(
+            firebaseFirestore,
+            db.userDao(),
+            db.petDao(),
+            db.appointmentDao(),
+            db.medicationDao(),
+            db.growthDao(),
+            db.vaccinationDao(),
+            db.medicalRecordDao())
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -68,17 +85,25 @@ class MainActivity : AppCompatActivity() {
         val email = findViewById<TextInputEditText>(R.id.emailField)
         val password = findViewById<TextInputEditText>(R.id.passwordField)
         val buttonGoogleLogin = findViewById<Button>(R.id.buttonGoogleLogin)
+        val progressSignIn = findViewById<ProgressBar>(R.id.progressSignIn)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                buttonSignIn.text = ""          // hide text
+                buttonSignIn.isEnabled = false  // prevent double click
+                progressSignIn.visibility = View.VISIBLE
+            } else {
+                buttonSignIn.text = "Sign In"
+                buttonSignIn.isEnabled = true
+                progressSignIn.visibility = View.GONE
+            }
+        }
 
         email.addTextChangedListener {
             if (!Patterns.EMAIL_ADDRESS.matcher(it.toString()).matches()) {
                 email.error = "Invalid email format!"
             }
         }
-
-        // Password format preset.
-        val passwordPattern = Regex(
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$"
-        )
 
         // Validates email if input is a valid email address.
         fun emailValidation(): Boolean {
@@ -125,6 +150,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonSignIn.setOnClickListener {
+            setLoading(true)
             if (!emailValidation() || !passwordValidation()) return@setOnClickListener
             lifecycleScope.launch {
                 try {
@@ -133,19 +159,27 @@ class MainActivity : AppCompatActivity() {
                         password.text.toString()
                     )
                     authService.login(loginRequest)
-                    Toast.makeText(this@MainActivity, "Login Successful", Toast.LENGTH_LONG).show()
+
+                    val userId = firebaseAuth.currentUser?.uid!!
+
+                    // sync all data of user from firebase to room
+                    syncService.syncAll(userId)
 
                     val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
                     finish()
                     startActivity(homePage)
-                }  catch (e: FirebaseNetworkException) {
+                } catch (e: FirebaseNetworkException) {
                     Toast.makeText(this@MainActivity, "No Internet Connection", Toast.LENGTH_LONG).show()
 
                 } catch (e: FirebaseAuthInvalidCredentialsException) {
                     Toast.makeText(this@MainActivity, "Incorrect Credentials", Toast.LENGTH_LONG).show()
 
                 } catch (e: Exception) {
+                    Log.d("error", e.message.toString())
                     Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+                }
+                finally {
+                    setLoading(false)
                 }
             }
         }
@@ -160,8 +194,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
-
     }
+
 
 }

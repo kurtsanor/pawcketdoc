@@ -30,7 +30,7 @@ class AuthService(
             .set(mapOf(
                 "uid" to uid,
                 "firstName" to signUpRequest.firstName,
-                "lastName" to signUpRequest.surName
+                "surName" to signUpRequest.surName
             )).await()
 
         // insert to room as well

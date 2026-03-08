@@ -3,14 +3,18 @@ package com.example.tracker.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.tracker.dto.GrowthProgress
 import com.example.tracker.model.Growth
 
 @Dao
 interface GrowthDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(growth: Growth)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(growths: List<Growth>)
 
     @Query("SELECT * FROM Growth WHERE petId = :petId")
     fun findAllByPetId(petId: String): LiveData<List<Growth>>

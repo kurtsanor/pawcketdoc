@@ -121,18 +121,32 @@
                 android:maxLines="1"
                 android:textSize="14sp"
                 android:background="@drawable/rounded_edit_text"/>
-
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/buttonSignIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_3d"
-            app:backgroundTint="@null"
-            android:fontFamily="@font/inter_bold"
-            android:text="Sign In"
-            android:textColor="@color/white" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/buttonSignIn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_3d"
+                        app:backgroundTint="@null"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Sign In"
+
+                        android:textColor="@color/white" />
+
+                    <ProgressBar
+                        android:id="@+id/progressSignIn"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/white"
+                        android:visibility="gone" />
+
+                </FrameLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -188,7 +202,6 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>
 

@@ -3,14 +3,18 @@ package com.example.tracker.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.tracker.model.Pet
 
 @Dao
 interface PetDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(pet: Pet)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(pets: List<Pet>)
 
     @Update
     suspend fun update(pet: Pet)
