@@ -46,8 +46,9 @@ class AuthService(
         firebaseAuth.signInWithEmailAndPassword(loginRequest.email, loginRequest.password).await()
     }
 
-    suspend fun changeUserPassword(credentials: Credentials) {
-        credentialsDao.update(credentials)
+    suspend fun changeUserPassword(newPassword: String) {
+        val user = firebaseAuth.currentUser!!
+        user.updatePassword(newPassword).await()
     }
 
     suspend fun findCredentialsByUserId(userId: Long): Credentials {

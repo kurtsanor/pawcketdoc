@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -17,11 +18,16 @@ import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.service.AuthService
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.mindrot.jbcrypt.BCrypt
 import java.lang.Exception
 
@@ -69,7 +75,19 @@ class ChangePasswordFragment : Fragment() {
         firebaseFirestore = Firebase.firestore
         authService = AuthService(db.userDao(), db.credentialsDao(), firebaseAuth, firebaseFirestore)
 
-        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+        val progress = view.findViewById<ProgressBar>(R.id.progress)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                btnChangePassword.text = ""          // hide text
+                btnChangePassword.isEnabled = false  // prevent double click
+                progress.visibility = View.VISIBLE
+            } else {
+                btnChangePassword.text = "Change Password"
+                btnChangePassword.isEnabled = true
+                progress.visibility = View.GONE
+            }
+        }
 
         btnChangePassword.setOnClickListener {
             val current = etCurrentPassword.text.toString()
@@ -96,19 +114,27 @@ class ChangePasswordFragment : Fragment() {
 
             lifecycleScope.launch {
                 try {
-                    val oldCredentials = authService.findCredentialsByUserId(userId)
-                    val oldPasswordMatches = BCrypt.checkpw(etCurrentPassword.text.toString(), oldCredentials.password)
-                    if (!oldPasswordMatches) {
-                        etCurrentPassword.error = "Incorrect current password"
-                        return@launch
-                    }
-                    val updatedPassword = oldCredentials.copy(password = BCrypt.hashpw(etNewPassword.text.toString(),
-                        BCrypt.gensalt()))
-                    authService.changeUserPassword(updatedPassword)
+                    setLoading(true)
+                    val currentPassword = etCurrentPassword.text.toString()
+                    val user = firebaseAuth.currentUser
+                    val credential = EmailAuthProvider.getCredential(user?.email!!, currentPassword)
+
+                    user.reauthenticate(credential).await()
+
+                    val newPassword = etNewPassword.text.toString()
+                    authService.changeUserPassword(newPassword)
                     Toast.makeText(context, "Password Changed Successfully!", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
+                } catch (e: FirebaseAuthRecentLoginRequiredException) {
+                    Toast.makeText(context, "Please log in again before changing your password", Toast.LENGTH_SHORT).show()
+                } catch (e: FirebaseAuthInvalidCredentialsException) {
+                    Toast.makeText(context, "Current password is incorrect", Toast.LENGTH_SHORT).show()
+                } catch (e: FirebaseAuthWeakPasswordException) {
+                    Toast.makeText(context, "New password is too weak", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
-                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Something went wrong: ${e.message}", Toast.LENGTH_SHORT).show()
+                } finally {
+                    setLoading(false)
                 }
 
             }
