@@ -15,6 +15,7 @@ import com.example.pawcketdoc.R
 import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.service.AuthService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.auth.EmailAuthProvider
@@ -121,16 +122,36 @@ class ChangePasswordFragment : Fragment() {
 
                     val newPassword = etNewPassword.text.toString()
                     authService.changeUserPassword(newPassword)
-                    Toast.makeText(context, "Password Changed Successfully!", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Your Password has been updated"
+                    )
                     findNavController().popBackStack()
                 } catch (e: FirebaseAuthRecentLoginRequiredException) {
-                    Toast.makeText(context, "Please log in again before changing your password", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Session Expired",
+                        message = "Please log in again"
+                    )
                 } catch (e: FirebaseAuthInvalidCredentialsException) {
-                    Toast.makeText(context, "Current password is incorrect", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = "Current password is incorrect"
+                    )
                 } catch (e: FirebaseAuthWeakPasswordException) {
-                    Toast.makeText(context, "New password is too weak", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = "New Password is too weak"
+                    )
                 } catch (e: Exception) {
-                    Toast.makeText(context, "Something went wrong: ${e.message}", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = "Something went wrong"
+                    )
                 } finally {
                     setLoading(false)
                 }

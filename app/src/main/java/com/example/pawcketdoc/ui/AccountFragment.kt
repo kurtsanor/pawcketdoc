@@ -14,6 +14,7 @@ import com.example.pawcketdoc.R
 import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.service.UserService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -76,7 +77,11 @@ class AccountFragment : Fragment() {
             val user = userService.findByIdLiveData(userId)
             user.observe(viewLifecycleOwner) { user ->
                 if (user == null) {
-                    Toast.makeText(requireContext(), "Session Expired. Please login again", Toast.LENGTH_LONG).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Session Expired",
+                        message = "Please log in again"
+                    )
                     return@observe
                 }
                 fullName?.text = buildString {
@@ -87,7 +92,11 @@ class AccountFragment : Fragment() {
             }
         } catch (e: Exception) {
             Log.d("error", e.toString())
-            Toast.makeText(requireContext(), "Session Expired. Please login again", Toast.LENGTH_LONG).show()
+            SnackbarUtil.showError(
+                view = requireView(),
+                title = "Session Expired",
+                message = "Please log in again"
+            )
         }
 
     }

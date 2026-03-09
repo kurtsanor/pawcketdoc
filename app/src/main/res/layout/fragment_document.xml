@@ -1,166 +1,292 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.DocumentsFragment">
+    android:background="@color/secondary">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/secondary"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="12dp"
+        android:clipToPadding="false">
 
-        <!-- Search Bar -->
-        <SearchView
-            style="@style/Widget.AppCompat.SearchView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/search_bar_design"
-            android:queryHint="Search documents..."
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="#FFFFFF" />
+            android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            app:cardCornerRadius="20dp"
-            android:layout_marginBottom="20dp"
-            app:cardElevation="2dp"
-            app:cardMaxElevation="3dp"
-            app:cardPreventCornerOverlap="true"
-            android:layout_marginHorizontal="3dp"
-            >
-            <LinearLayout
+            <!-- Doc Item 1 -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <!--Appointment Header-->
-                <TextView
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Uploaded Files"
-                    android:layout_marginVertical="15dp"
-                    android:textSize="20sp"
-                    android:fontFamily="sans-serif-condensed-light"
-                    android:layout_marginStart="15dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:orientation="horizontal"
+                    android:padding="14dp"
+                    android:gravity="center_vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="@color/light_accent"
+                        android:layout_marginEnd="14dp">
 
-                <!--Appointment Schedule Item-->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-
-                    app:contentPadding="10dp"
-                    app:cardElevation="0dp"
-                    app:cardMaxElevation="0dp"
-                    app:cardPreventCornerOverlap="true"
-                    android:layout_marginHorizontal="3dp">
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/docfile"
+                             />
+                    </androidx.cardview.widget.CardView>
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="8dp"
-                            android:layout_marginRight="8dp">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/file"
-                                android:background="#69F0AE"
-                                />
-                        </androidx.cardview.widget.CardView>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="7"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Vaccination Record"
-                                android:textSize="14sp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Proof of vaccines recieved"
-                                android:textSize="11sp"
-                                android:textColor="@color/black"
-                                />
-                        </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="vertical">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mar 03, 2025"
+                            android:text="Vaccination Certificate"
+                            android:fontFamily="@font/inter_semibold"
+                            android:textSize="15sp"
+                            android:textColor="@color/black" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="PawCare Clinic"
+                            android:fontFamily="@font/inter_regular"
                             android:textSize="12sp"
-                            android:textColor="@color/black"
-                            android:gravity="end" />
+                            android:textColor="#888888" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center_vertical">
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="6dp"
+                                app:cardElevation="0dp"
+                                android:backgroundTint="@color/light_accent"
+                                android:layout_marginEnd="8dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Certificate"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/accent"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="3dp" />
+                            </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Jan 15, 2026"
+                                android:fontFamily="@font/inter_regular"
+                                android:textSize="11sp"
+                                android:textColor="#AAAAAA" />
+                        </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <!--Appointment Schedule Item-->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/add"
+                        android:alpha="0.4" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-                    app:contentPadding="10dp"
-                    app:cardElevation="0dp"
-                    app:cardMaxElevation="0dp"
-                    app:cardPreventCornerOverlap="true"
-                    android:layout_marginHorizontal="3dp">
+            <!-- Doc Item 2 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="14dp"
+                    android:gravity="center_vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="#E3F2FD"
+                        android:layout_marginEnd="14dp">
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/docfile"
+                             />
+                    </androidx.cardview.widget.CardView>
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="8dp"
-                            android:layout_marginRight="8dp">
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:src="@drawable/file"
-                                android:background="#8C9EFF"
-                                />
-                        </androidx.cardview.widget.CardView>
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_weight="7"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Prescription Sheets"
-                                android:textSize="14sp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="List of medications"
-                                android:textSize="11sp"
-                                android:textColor="@color/black"
-                                />
-                        </LinearLayout>
+                        android:layout_weight="1"
+                        android:orientation="vertical">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mar 03, 2025"
+                            android:text="Blood Test Results"
+                            android:fontFamily="@font/inter_semibold"
+                            android:textSize="15sp"
+                            android:textColor="@color/black" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="VetLab PH"
+                            android:fontFamily="@font/inter_regular"
                             android:textSize="12sp"
-                            android:textColor="@color/black"
-                            android:gravity="end" />
+                            android:textColor="#888888" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center_vertical">
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="6dp"
+                                app:cardElevation="0dp"
+                                android:backgroundTint="#E3F2FD"
+                                android:layout_marginEnd="8dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Lab Result"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:textSize="11sp"
+                                    android:textColor="#2196F3"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="3dp" />
+                            </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Feb 3, 2026"
+                                android:fontFamily="@font/inter_regular"
+                                android:textSize="11sp"
+                                android:textColor="#AAAAAA" />
+                        </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </LinearLayout>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/paper"
+                        android:alpha="0.4" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Doc Item 3 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="1dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="14dp"
+                    android:gravity="center_vertical">
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp"
+                        android:backgroundTint="#FFF3E0"
+                        android:layout_marginEnd="14dp">
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/docfile"
+                             />
+                    </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Deworming Record"
+                            android:fontFamily="@font/inter_semibold"
+                            android:textSize="15sp"
+                            android:textColor="@color/black" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Happy Paws Vet"
+                            android:fontFamily="@font/inter_regular"
+                            android:textSize="12sp"
+                            android:textColor="#888888" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center_vertical">
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="6dp"
+                                app:cardElevation="0dp"
+                                android:backgroundTint="#FFF3E0"
+                                android:layout_marginEnd="8dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Prescription"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:textSize="11sp"
+                                    android:textColor="#FF9800"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="3dp" />
+                            </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mar 1, 2026"
+                                android:fontFamily="@font/inter_regular"
+                                android:textSize="11sp"
+                                android:textColor="#AAAAAA" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/paper"
+                        android:alpha="0.4" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddDocument"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/accent"
+        app:tint="@color/white" />
+
 </FrameLayout>

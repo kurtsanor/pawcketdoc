@@ -15,6 +15,7 @@ import com.example.pawcketdoc.R
 import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.service.UserService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -100,10 +101,18 @@ class EditProfileFragment : Fragment() {
                     val oldUser = userService.findById(userId)
                     val updatedUser= oldUser.copy(firstName = etFirstName.text.toString(), surName = etSurname.text.toString())
                     userService.update(updatedUser)
-                    Toast.makeText(context, "Profile Updated!", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Profile has been updated"
+                    )
                     findNavController().popBackStack()
                 } catch (e: Exception) {
-                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = e.message.toString()
+                    )
                 } finally {
                     setLoading(false)
                 }
@@ -119,7 +128,11 @@ class EditProfileFragment : Fragment() {
                 etFirstName.setText(currentUser.firstName)
                 etSurname.setText(currentUser.surName)
             } catch (e: Exception) {
-                Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                SnackbarUtil.showError(
+                    view = requireView(),
+                    title = "Auth Error",
+                    message = "Please log in again"
+                )
             }
 
         }
