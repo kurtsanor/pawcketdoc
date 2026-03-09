@@ -142,7 +142,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         val signUp = findViewById<TextView>(R.id.textViewSignUp)
         signUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity:: class.java)
@@ -150,10 +149,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonSignIn.setOnClickListener {
-            setLoading(true)
             if (!emailValidation() || !passwordValidation()) return@setOnClickListener
             lifecycleScope.launch {
                 try {
+                    setLoading(true)
                     val loginRequest = LoginRequest(
                         email.text.toString(),
                         password.text.toString()

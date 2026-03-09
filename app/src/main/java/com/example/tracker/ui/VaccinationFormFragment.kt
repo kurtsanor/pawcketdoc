@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -74,6 +75,19 @@ class VaccinationFormFragment : Fragment() {
         val etAdministeredDate = view.findViewById<TextInputEditText>(R.id.etAdministeredDate)
         val buttonSaveVaccination = view.findViewById<Button>(R.id.btnSaveVaccination)
         val etNotes = view.findViewById<TextInputEditText>(R.id.etVaccineNotes)
+        val progress = view.findViewById<ProgressBar>(R.id.progress)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                buttonSaveVaccination.text = ""          // hide text
+                buttonSaveVaccination.isEnabled = false  // prevent double click
+                progress.visibility = View.VISIBLE
+            } else {
+                buttonSaveVaccination.text = "Save Record"
+                buttonSaveVaccination.isEnabled = true
+                progress.visibility = View.GONE
+            }
+        }
 
         buttonSaveVaccination.setOnClickListener {
             if (etVaccineName.text.isNullOrBlank()) {
@@ -122,11 +136,14 @@ class VaccinationFormFragment : Fragment() {
                     administeredDate = LocalDate.parse(etAdministeredDate.text.toString(), formatter)
                 )
                 try {
+                    setLoading(true)
                     vaccinationService.insert(newVaccination)
                     Toast.makeText(requireContext(), "Record has been added", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                } finally {
+                    setLoading(false)
                 }
             }
         }

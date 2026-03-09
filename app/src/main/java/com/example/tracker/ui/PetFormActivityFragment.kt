@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -23,6 +24,7 @@ import com.example.tracker.service.PetService
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -73,6 +75,7 @@ class PetFormActivityFragment : Fragment() {
         setupDatePicker(view)
         setupGenderDropdown(view)
 
+
         db = DatabaseProvider.getDatabase(requireContext())
         firebaseAuth = Firebase.auth
         firebaseFirestore = Firebase.firestore
@@ -85,6 +88,21 @@ class PetFormActivityFragment : Fragment() {
         val petBirthdate = view.findViewById<TextInputEditText>(R.id.etBirthDate)
 
         val buttonAddPet = view.findViewById<Button>(R.id.buttonAddPet)
+        val progress = view.findViewById<ProgressBar>(R.id.progress)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                buttonAddPet.text = ""          // hide text
+                buttonAddPet.isEnabled = false  // prevent double click
+                progress.visibility = View.VISIBLE
+            } else {
+                buttonAddPet.text = "Add to Pets"
+                buttonAddPet.isEnabled = true
+                progress.visibility = View.GONE
+            }
+        }
+
+
         buttonAddPet.setOnClickListener {
             if (petName.text.isNullOrBlank()) {
                 petName.error = "Pet name is required"
@@ -129,12 +147,19 @@ class PetFormActivityFragment : Fragment() {
                     birthDate = LocalDate.parse(petBirthdate.text.toString(), formatter)
                 )
                 try {
+                    setLoading(true)
                     petService.insert(newPet)
                     Toast.makeText(requireContext(), "Pet has been added", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 } catch (e: RuntimeException) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                 }
+                catch (e: FirebaseNetworkException) {
+                    Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
+                } finally {
+                    setLoading(false)
+                }
+
             }
         }
     }

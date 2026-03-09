@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -77,6 +78,20 @@ class AppointmentFormFragment : Fragment() {
         val etAppointmentNotes = view.findViewById<TextInputEditText>(R.id.etAppointmentNotes)
         val buttonSaveAppointment = view.findViewById<Button>(R.id.btnSaveAppointment)
 
+        val progress = view.findViewById<ProgressBar>(R.id.progress)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                buttonSaveAppointment.text = ""          // hide text
+                buttonSaveAppointment.isEnabled = false  // prevent double click
+                progress.visibility = View.VISIBLE
+            } else {
+                buttonSaveAppointment.text = "Schedule Appointment"
+                buttonSaveAppointment.isEnabled = true
+                progress.visibility = View.GONE
+            }
+        }
+
         buttonSaveAppointment.setOnClickListener {
             if (etAppointmentTitle.text.isNullOrBlank()) {
                 etAppointmentTitle.error = "Appointment title is required"
@@ -127,11 +142,14 @@ class AppointmentFormFragment : Fragment() {
 
             lifecycleScope.launch {
                 try {
+                    setLoading(true)
                     appointmentService.insert(newAppointment)
                     Toast.makeText(context, "Appointment set!", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 } catch (e: Exception) {
                     Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                } finally {
+                    setLoading(false)
                 }
             }
         }

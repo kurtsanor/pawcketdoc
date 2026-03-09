@@ -2,7 +2,9 @@ package com.example.tracker.ui
 
 import android.os.Bundle
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -48,11 +50,26 @@ class SignUpActivity : AppCompatActivity() {
             finish()
         }
 
+        val buttonSignup = findViewById<Button>(R.id.buttonSignUp)
+        val progressSignUp = findViewById<ProgressBar>(R.id.progressSignUp)
+
         val firstName = findViewById<TextInputEditText>(R.id.textViewFirstName)
         val surName = findViewById<TextInputEditText>(R.id.textViewLastName)
         val email = findViewById<TextInputEditText>(R.id.textViewEmail)
         val password = findViewById<TextInputEditText>(R.id.textViewPassword)
         val confirmPassword = findViewById<TextInputEditText>(R.id.textViewConfirmPassword)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                buttonSignup.text = ""          // hide text
+                buttonSignup.isEnabled = false  // prevent double click
+                progressSignUp.visibility = View.VISIBLE
+            } else {
+                buttonSignup.text = "Sign Up"
+                buttonSignup.isEnabled = true
+                progressSignUp.visibility = View.GONE
+            }
+        }
 
         firstName.addTextChangedListener { if (it.toString().isBlank()) firstName.error = "Required field" }
         surName.addTextChangedListener { if (it.toString().isBlank()) surName.error = "Required field" }
@@ -102,11 +119,12 @@ class SignUpActivity : AppCompatActivity() {
         firebaseFirestore = Firebase.firestore
         authService = AuthService(db.userDao(), db.credentialsDao(), firebaseAuth, firebaseFirestore)
 
-        val buttonSignup = findViewById<Button>(R.id.buttonSignUp)
+
         buttonSignup.setOnClickListener {
             if (!areValidFields()) return@setOnClickListener
             lifecycleScope.launch {
                 try {
+                    setLoading(true)
                     val signupRequest = SignUpRequest(
                         firstName.text.toString(),
                         surName.text.toString(),
@@ -118,6 +136,9 @@ class SignUpActivity : AppCompatActivity() {
                     finish()
                 } catch (e: Exception) {
                     Toast.makeText(this@SignUpActivity, e.message, Toast.LENGTH_LONG).show()
+                }
+                finally {
+                    setLoading(false)
                 }
             }
         }

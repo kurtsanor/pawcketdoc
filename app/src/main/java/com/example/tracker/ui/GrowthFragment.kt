@@ -32,6 +32,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import java.time.LocalDate
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.widget.TooltipCompat
@@ -106,6 +107,19 @@ class GrowthFragment : Fragment() {
         val notesInput = view.findViewById<TextInputEditText>(R.id.notesInput)
         val buttonSaveRecord = view.findViewById<Button>(R.id.buttonSaveRecord)
 
+        val progress = view.findViewById<ProgressBar>(R.id.progress)
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                buttonSaveRecord.text = ""          // hide text
+                buttonSaveRecord.isEnabled = false  // prevent double click
+                progress.visibility = View.VISIBLE
+            } else {
+                buttonSaveRecord.text = "Save Record"
+                buttonSaveRecord.isEnabled = true
+                progress.visibility = View.GONE
+            }
+        }
+
         fun clearFields() {
             weightInput.setText("")
             heightInput.setText("")
@@ -165,12 +179,15 @@ class GrowthFragment : Fragment() {
             )
             lifecycleScope.launch {
                 try {
+                    setLoading(true)
                     growthService.insert(newEntry)
                     clearFields()
                     Toast.makeText(context, "Record Saved!", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception){
                     Log.d("error", e.toString())
                     Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                } finally {
+                    setLoading(false)
                 }
 
             }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -80,6 +81,20 @@ class MedicalFormFragment : Fragment() {
         val etNotes = view.findViewById<TextInputEditText>(R.id.etRecordNotes)
         val buttonSaveMedical = view.findViewById<Button>(R.id.btnSaveRecord)
 
+        val progress = view.findViewById<ProgressBar>(R.id.progress)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                buttonSaveMedical.text = ""          // hide text
+                buttonSaveMedical.isEnabled = false  // prevent double click
+                progress.visibility = View.VISIBLE
+            } else {
+                buttonSaveMedical.text = "Save Medical Record"
+                buttonSaveMedical.isEnabled = true
+                progress.visibility = View.GONE
+            }
+        }
+
         buttonSaveMedical.setOnClickListener {
             if (etRecordTitle.text.isNullOrBlank()) {
                 etRecordTitle.error = "Record title is required"
@@ -141,11 +156,14 @@ class MedicalFormFragment : Fragment() {
 
             lifecycleScope.launch {
                 try {
+                    setLoading(true)
                     medicalRecordService.insert(newRecord)
                     Toast.makeText(context, "Record Saved!", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 } catch (e: Exception) {
                     Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                } finally {
+                    setLoading(false)
                 }
             }
         }
