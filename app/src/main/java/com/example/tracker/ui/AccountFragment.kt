@@ -27,6 +27,7 @@ class AccountFragment : Fragment() {
     private lateinit var db: AppDatabase
     private lateinit var userService: UserService
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +46,8 @@ class AccountFragment : Fragment() {
 
         db = DatabaseProvider.getDatabase(requireContext())
         firebaseAuth = Firebase.auth
-        userService = UserService(db.userDao())
+        firebaseFirestore = Firebase.firestore
+        userService = UserService(db.userDao(), firebaseFirestore)
 
         val buttonLogout = view.findViewById<TextView>(R.id.logout)
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -16,6 +17,11 @@ import com.example.tracker.database.AppDatabase
 import com.example.tracker.database.DatabaseProvider
 import com.example.tracker.service.UserService
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -25,6 +31,8 @@ class EditProfileFragment : Fragment() {
     private lateinit var userService: UserService
     private lateinit var etFirstName: TextInputEditText
     private lateinit var etSurname: TextInputEditText
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +57,27 @@ class EditProfileFragment : Fragment() {
         etSurname = view.findViewById(R.id.etSurname)
         val btnUpdateProfile = view.findViewById<Button>(R.id.btnUpdateProfile)
 
-        val userId = requireActivity().intent.getLongExtra("USER_ID", -1L)
+        val progress = view.findViewById<ProgressBar>(R.id.progress)
+
+        fun setLoading(isLoading: Boolean) {
+            if (isLoading) {
+                btnUpdateProfile.text = ""          // hide text
+                btnUpdateProfile.isEnabled = false  // prevent double click
+                progress.visibility = View.VISIBLE
+            } else {
+                btnUpdateProfile.text = "Update Profile"
+                btnUpdateProfile.isEnabled = true
+                progress.visibility = View.GONE
+            }
+        }
+
 
         db = DatabaseProvider.getDatabase(requireContext())
-        userService = UserService(db.userDao())
+        firebaseFirestore = Firebase.firestore
+        firebaseAuth = Firebase.auth
+        userService = UserService(db.userDao(), firebaseFirestore)
+
+        val userId = firebaseAuth.currentUser?.uid!!
 
         populateUserInfo(userId)
 
@@ -72,6 +97,7 @@ class EditProfileFragment : Fragment() {
             }
             lifecycleScope.launch {
                 try {
+                    setLoading(true)
                     val oldUser = userService.findById(userId)
                     val updatedUser= oldUser.copy(firstName = etFirstName.text.toString(), surName = etSurname.text.toString())
                     userService.update(updatedUser)
@@ -79,13 +105,15 @@ class EditProfileFragment : Fragment() {
                     findNavController().popBackStack()
                 } catch (e: Exception) {
                     Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                } finally {
+                    setLoading(false)
                 }
 
             }
         }
     }
 
-    fun populateUserInfo(userId: Long) {
+    fun populateUserInfo(userId: String) {
         lifecycleScope.launch {
             try {
                 val currentUser = userService.findById(userId)
