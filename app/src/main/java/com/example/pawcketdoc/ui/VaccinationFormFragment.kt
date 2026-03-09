@@ -18,6 +18,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Vaccination
 import com.example.pawcketdoc.service.VaccinationService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
@@ -111,7 +112,11 @@ class VaccinationFormFragment : Fragment() {
 
                 if (selectedDate != null && selectedDate.after(currentDate)) {
                     etAdministeredDate.error = "Date cannot be in the future"
-                    Toast.makeText(context, "Date cannot be in the future", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Invalid Date",
+                        message = "Date cannot be in the future"
+                    )
                     return@setOnClickListener
                 }
             } catch (e: Exception) {
@@ -137,7 +142,11 @@ class VaccinationFormFragment : Fragment() {
                 try {
                     setLoading(true)
                     vaccinationService.insert(newVaccination)
-                    Toast.makeText(requireContext(), "Record has been added", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Record has been added"
+                    )
                     findNavController().popBackStack()
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()

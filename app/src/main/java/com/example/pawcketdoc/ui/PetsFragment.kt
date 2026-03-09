@@ -23,6 +23,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Pet
 import com.example.pawcketdoc.service.PetService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -80,7 +81,11 @@ class PetsFragment : Fragment() {
             try {
                 petService.deleteById(id)
             } catch (e: RuntimeException) {
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                SnackbarUtil.showSuccess(
+                    view = requireView(),
+                    title = "Error",
+                    message = "There was a problem deleting"
+                )
             }
     }
 
@@ -143,9 +148,19 @@ class PetsFragment : Fragment() {
                                 // User confirmed, remove pet from list then update adapter
 //                                petList.removeAt(position)
 //                                recyclerView.adapter?.notifyItemRemoved(position)
-                                Toast.makeText(requireContext(), "${pet?.name} deleted", Toast.LENGTH_SHORT).show()
+                                SnackbarUtil.showSuccess(
+                                    view = requireView(),
+                                    title = "Success",
+                                    message = "Pet has been deleted"
+                                )
                                 dialog.dismiss()
-                            } catch (e: RuntimeException) {}
+                            } catch (e: RuntimeException) {
+                                SnackbarUtil.showError(
+                                    view = requireView(),
+                                    title = "Error",
+                                    message = "There was a problem deleting"
+                                )
+                            }
                         }
 
                     }
@@ -156,11 +171,6 @@ class PetsFragment : Fragment() {
                     }
                     .setCancelable(false)
                     .show()
-
-                // Show a simple toast on swipe
-                val dir = if (direction == ItemTouchHelper.LEFT) "left" else "right"
-                Toast.makeText(requireContext(), "Swiped ${pet?.name} to $dir", Toast.LENGTH_SHORT).show()
-
             }
         }
         // Attach the swipe handler to RecyclerView

@@ -18,6 +18,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Medication
 import com.example.pawcketdoc.service.MedicationService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
@@ -141,7 +142,11 @@ class MedicationFormFragment : Fragment() {
 
                 if (startDate != null && endDate != null && endDate.before(startDate)) {
                     etEndDate.error = "End date must be after start date"
-                    Toast.makeText(context, "End date must be after start date", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Invalid Date",
+                        message = "End date must be after start date"
+                    )
                     return@setOnClickListener
                 }
             } catch (e: Exception) {
@@ -173,7 +178,11 @@ class MedicationFormFragment : Fragment() {
                 try {
                     setLoading(true)
                     medicationService.insert(newMedication)
-                    Toast.makeText(context, "Medication Saved!", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Record has been saved"
+                    )
                     findNavController().popBackStack()
                 } catch (e: Exception) {
                     Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()

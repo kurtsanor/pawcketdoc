@@ -1,11 +1,13 @@
 package com.example.pawcketdoc.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -25,6 +27,7 @@ import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.dto.LoginRequest
 import com.example.pawcketdoc.service.AuthService
 import com.example.pawcketdoc.service.SyncService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import com.google.android.material.textfield.TextInputEditText
@@ -144,6 +147,7 @@ class MainActivity : AppCompatActivity() {
         val signUp = findViewById<TextView>(R.id.textViewSignUp)
         signUp.setOnClickListener {
             val intent = Intent(this, SignUpActivity:: class.java)
+            finish()
             startActivity(intent)
         }
 
@@ -160,6 +164,11 @@ class MainActivity : AppCompatActivity() {
 
                     val userId = firebaseAuth.currentUser?.uid!!
 
+                    SnackbarUtil.showSuccess(
+                        view = findViewById(android.R.id.content),
+                        title = "Login Successful",
+                        message = "Please wait while we sync your data"
+                    )
                     // sync all data of user from firebase to room
                     syncService.syncAll(userId)
 
@@ -167,18 +176,24 @@ class MainActivity : AppCompatActivity() {
                     finish()
                     startActivity(homePage)
                 } catch (e: FirebaseNetworkException) {
-                    Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(Color.DKGRAY)
-                        .setTextColor(Color.WHITE)
-                        .show()
+                    SnackbarUtil.showError(
+                        view = findViewById(android.R.id.content),
+                        title = "Network Error",
+                        message = "No Internet Connection"
+                    )
                 } catch (e: FirebaseAuthInvalidCredentialsException) {
-                    Snackbar.make(findViewById(android.R.id.content), "Incorrect Credentials", Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(Color.DKGRAY)
-                        .setTextColor(Color.WHITE)
-                        .show()
+                    SnackbarUtil.showError(
+                        view = findViewById(android.R.id.content),
+                        title = "Login Error",
+                        message = "Incorrect Login Credentials"
+                    )
                 } catch (e: Exception) {
                     Log.d("error", e.message.toString())
-                    Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_LONG).show()
+                    SnackbarUtil.showError(
+                        view = findViewById(android.R.id.content),
+                        title = "Error",
+                        message = e.message.toString()
+                    )
                 }
                 finally {
                     setLoading(false)
@@ -194,9 +209,8 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity, e.toString(), Toast.LENGTH_LONG).show()
             }
         }
-
-
     }
+
 
 
 }

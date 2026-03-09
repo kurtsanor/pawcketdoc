@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -23,6 +24,7 @@ import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.service.PetService
 import com.example.pawcketdoc.service.UploadService
 import com.example.pawcketdoc.util.DateFormatter
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -116,21 +118,32 @@ class PetProfileFragment : Fragment() {
         uri?.let {
             viewLifecycleOwner.lifecycleScope.launch {
                 val petId = arguments?.getString("pet_id")!!
+                val profilePic = view?.findViewById<ImageView>(R.id.profilePic)
+                val uploadOverlay = view?.findViewById<FrameLayout>(R.id.uploadOverlay)
+                lateinit var uploadResult: Map<String, String>
                 try {
+                    Glide.with(this@PetProfileFragment).clear(profilePic!!)
+                    uploadOverlay?.visibility = View.VISIBLE
+                    profilePic.isEnabled = false
                     val url = uploadService.uploadPetImage(it)
                     petService.updatePetAvatar(petId, url["secure_url"]!!, url["public_id"]!!)
-                    val profilePic = view?.findViewById<ImageView>(R.id.profilePic)
                     Glide.with(this@PetProfileFragment)
                         .load(url["secure_url"])
-                        .into(profilePic!!)
-                    view?.let { v ->
-                        Snackbar.make(v, "Profile photo updated!", Snackbar.LENGTH_LONG)
-                            .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.accent))
-                            .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                            .show()
-                    }
+                        .into(profilePic)
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Avatar has been updated"
+                    )
                 } catch (e: Exception) {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = "An error occurred"
+                    )
+                } finally {
+                    profilePic?.isEnabled = true
+                    uploadOverlay?.visibility = View.GONE
                 }
             }
         }

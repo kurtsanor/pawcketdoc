@@ -20,6 +20,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Pet
 import com.example.pawcketdoc.service.PetService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
@@ -148,13 +149,25 @@ class PetFormActivityFragment : Fragment() {
                 try {
                     setLoading(true)
                     petService.insert(newPet)
-                    Toast.makeText(requireContext(), "Pet has been added", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Pet has been added"
+                    )
                     findNavController().popBackStack()
                 } catch (e: RuntimeException) {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = e.message.toString()
+                    )
                 }
                 catch (e: FirebaseNetworkException) {
-                    Toast.makeText(requireContext(), "No Internet Connection", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Network Error",
+                        message = "No Internet Connection"
+                    )
                 } finally {
                     setLoading(false)
                 }

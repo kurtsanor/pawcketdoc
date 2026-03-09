@@ -18,6 +18,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.MedicalRecord
 import com.example.pawcketdoc.service.MedicalRecordService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
@@ -157,10 +158,18 @@ class MedicalFormFragment : Fragment() {
                 try {
                     setLoading(true)
                     medicalRecordService.insert(newRecord)
-                    Toast.makeText(context, "Record Saved!", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Record has been saved"
+                    )
                     findNavController().popBackStack()
                 } catch (e: Exception) {
-                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = e.message.toString()
+                    )
                 } finally {
                     setLoading(false)
                 }

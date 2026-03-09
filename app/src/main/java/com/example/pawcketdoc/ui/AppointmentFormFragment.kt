@@ -18,6 +18,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Appointment
 import com.example.pawcketdoc.service.AppointmentService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -120,7 +121,11 @@ class AppointmentFormFragment : Fragment() {
 
                 if (selectedDateTime.isBefore(currentDateTime)) {
                     etAppointmentDateTime.error = "Appointment cannot be in the past"
-                    Toast.makeText(context, "Appointment cannot be in the past", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = "Appointment Cannot be in the past"
+                    )
                     return@setOnClickListener
                 }
             } catch (e: Exception) {
@@ -143,10 +148,18 @@ class AppointmentFormFragment : Fragment() {
                 try {
                     setLoading(true)
                     appointmentService.insert(newAppointment)
-                    Toast.makeText(context, "Appointment set!", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Appointment Set!"
+                    )
                     findNavController().popBackStack()
                 } catch (e: Exception) {
-                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = e.message.toString()
+                    )
                 } finally {
                     setLoading(false)
                 }

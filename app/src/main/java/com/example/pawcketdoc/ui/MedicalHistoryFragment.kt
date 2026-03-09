@@ -23,6 +23,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.MedicalRecord
 import com.example.pawcketdoc.service.MedicalRecordService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -142,7 +143,11 @@ class MedicalHistoryFragment : Fragment() {
                         lifecycleScope.launch {
                             try {
                                 medicalRecordService.deleteById(record.id)
-                                Toast.makeText(requireContext(), "${record?.title} deleted", Toast.LENGTH_SHORT).show()
+                                SnackbarUtil.showSuccess(
+                                    view = requireView(),
+                                    title = "Success",
+                                    message = "Record has been deleted"
+                                )
                                 dialog.dismiss()
                             } catch (e: RuntimeException) {}
                         }
@@ -155,11 +160,6 @@ class MedicalHistoryFragment : Fragment() {
                     }
                     .setCancelable(false)
                     .show()
-
-                // Show a simple toast on swipe
-                val dir = if (direction == ItemTouchHelper.LEFT) "left" else "right"
-                Toast.makeText(requireContext(), "Swiped id ${record?.id} to $dir", Toast.LENGTH_SHORT).show()
-
             }
         }
         // Attach the swipe handler to RecyclerView

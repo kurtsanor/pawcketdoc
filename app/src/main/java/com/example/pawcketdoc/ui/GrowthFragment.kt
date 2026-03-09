@@ -40,6 +40,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.dto.GrowthProgress
 import com.example.pawcketdoc.service.GrowthService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Firebase
@@ -177,10 +178,18 @@ class GrowthFragment : Fragment() {
                     setLoading(true)
                     growthService.insert(newEntry)
                     clearFields()
-                    Toast.makeText(context, "Record Saved!", Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showSuccess(
+                        view = requireView(),
+                        title = "Success",
+                        message = "Record has been saved"
+                    )
                 } catch (e: Exception){
                     Log.d("error", e.toString())
-                    Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+                    SnackbarUtil.showError(
+                        view = requireView(),
+                        title = "Error",
+                        message = e.message.toString()
+                    )
                 } finally {
                     setLoading(false)
                 }
@@ -311,7 +320,11 @@ class GrowthFragment : Fragment() {
                         lifecycleScope.launch {
                             try {
                                 growthService.deleteById(growth.id)
-                                Toast.makeText(requireContext(), "id ${growth?.id} deleted", Toast.LENGTH_SHORT).show()
+                                SnackbarUtil.showSuccess(
+                                    view = requireView(),
+                                    title = "Success",
+                                    message = "Record has been deleted"
+                                )
                                 dialog.dismiss()
                             } catch (e: RuntimeException) {}
                         }
@@ -324,11 +337,6 @@ class GrowthFragment : Fragment() {
                     }
                     .setCancelable(false)
                     .show()
-
-                // Show a simple toast on swipe
-                val dir = if (direction == ItemTouchHelper.LEFT) "left" else "right"
-                Toast.makeText(requireContext(), "Swiped id ${growth?.id} to $dir", Toast.LENGTH_SHORT).show()
-
             }
         }
         // Attach the swipe handler to RecyclerView

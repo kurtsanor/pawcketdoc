@@ -24,6 +24,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Appointment
 import com.example.pawcketdoc.service.AppointmentService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -151,10 +152,18 @@ class AppointmentFragment : Fragment() {
                         lifecycleScope.launch {
                             try {
                                 appointmentService.deleteById(appointment.id)
-                                Toast.makeText(requireContext(), "${appointment?.title} deleted", Toast.LENGTH_SHORT).show()
+                                SnackbarUtil.showSuccess(
+                                    view = requireView(),
+                                    title = "Success",
+                                    message = "Appointment has been deleted"
+                                )
                                 dialog.dismiss()
                             } catch (e: Exception) {
-                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                                SnackbarUtil.showError(
+                                    view = requireView(),
+                                    title = "Error",
+                                    message = e.message.toString()
+                                )
                             }
                         }
 
@@ -166,11 +175,6 @@ class AppointmentFragment : Fragment() {
                     }
                     .setCancelable(false)
                     .show()
-
-                // Show a simple toast on swipe
-                val dir = if (direction == ItemTouchHelper.LEFT) "left" else "right"
-                Toast.makeText(requireContext(), "Swiped id ${appointment?.id} to $dir", Toast.LENGTH_SHORT).show()
-
             }
         }
         // Attach the swipe handler to RecyclerView

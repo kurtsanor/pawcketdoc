@@ -23,6 +23,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Medication
 import com.example.pawcketdoc.service.MedicationService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -104,6 +105,7 @@ class MedicationFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun loadMedications(petId: String) {
         medications = medicationService.findAllByPetId(petId)
         medications.observe(viewLifecycleOwner) { medications ->
@@ -145,7 +147,11 @@ class MedicationFragment : Fragment() {
                         lifecycleScope.launch {
                             try {
                                 medicationService.deleteById(medication.id)
-                                Toast.makeText(requireContext(), "${medication?.name} deleted", Toast.LENGTH_SHORT).show()
+                                SnackbarUtil.showSuccess(
+                                    view = requireView(),
+                                    title = "Success",
+                                    message = "Record has been saved"
+                                )
                                 dialog.dismiss()
                             } catch (e: RuntimeException) {
                                 Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
@@ -160,11 +166,6 @@ class MedicationFragment : Fragment() {
                     }
                     .setCancelable(false)
                     .show()
-
-                // Show a simple toast on swipe
-                val dir = if (direction == ItemTouchHelper.LEFT) "left" else "right"
-                Toast.makeText(requireContext(), "Swiped id ${medication?.id} to $dir", Toast.LENGTH_SHORT).show()
-
             }
         }
         // Attach the swipe handler to RecyclerView
