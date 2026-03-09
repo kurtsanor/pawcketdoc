@@ -6,14 +6,14 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.tracker.ui.HomeFragment"
+        android:name="com.example.pawcketdoc.ui.HomeFragment"
         android:label="Home"
         >
     </fragment>
 
     <fragment
         android:id="@+id/petsFragment"
-        android:name="com.example.tracker.ui.PetsFragment"
+        android:name="com.example.pawcketdoc.ui.PetsFragment"
         android:label="Pets"
         >
         <action
@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/accountFragment"
-        android:name="com.example.tracker.ui.AccountFragment"
+        android:name="com.example.pawcketdoc.ui.AccountFragment"
         android:label="Account"
         >
         <action
@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/petProfileFragment"
-        android:name="com.example.tracker.ui.PetProfileFragment"
+        android:name="com.example.pawcketdoc.ui.PetProfileFragment"
         android:label="Pet Profile">
         <action
             android:id="@+id/action_petProfile_to_documents"
@@ -113,19 +113,19 @@
 
     <fragment
         android:id="@+id/petFormFragment"
-        android:name="com.example.tracker.ui.PetFormActivityFragment"
+        android:name="com.example.pawcketdoc.ui.PetFormActivityFragment"
         android:label="Pet Form"
         >
     </fragment>
     <fragment
         android:id="@+id/documentsFragment"
-        android:name="com.example.tracker.ui.DocumentsFragment"
+        android:name="com.example.pawcketdoc.ui.DocumentsFragment"
         android:label="Documents"
         >
     </fragment>
     <fragment
         android:id="@+id/vaccinationsFragment"
-        android:name="com.example.tracker.ui.VaccinationFragment"
+        android:name="com.example.pawcketdoc.ui.VaccinationFragment"
         android:label="Vaccination"
         >
 
@@ -140,18 +140,18 @@
     </fragment>
     <fragment
         android:id="@+id/vaccinationFormFragment"
-        android:name="com.example.tracker.ui.VaccinationFormFragment"
+        android:name="com.example.pawcketdoc.ui.VaccinationFormFragment"
         android:label="Vaccination Form"
         />
     <fragment
         android:id="@+id/growthFragment"
-        android:name="com.example.tracker.ui.GrowthFragment"
+        android:name="com.example.pawcketdoc.ui.GrowthFragment"
         android:label="Growth"
         >
     </fragment>
     <fragment
         android:id="@+id/medicalHistoryFragment"
-        android:name="com.example.tracker.ui.MedicalHistoryFragment"
+        android:name="com.example.pawcketdoc.ui.MedicalHistoryFragment"
         android:label="Medical History"
         >
         <action
@@ -166,13 +166,13 @@
     </fragment>
     <fragment
         android:id="@+id/medicalHistoryFormFragment"
-        android:name="com.example.tracker.ui.MedicalFormFragment"
+        android:name="com.example.pawcketdoc.ui.MedicalFormFragment"
         android:label="Medical History Form"
         >
     </fragment>
     <fragment
         android:id="@+id/appointmentFragment"
-        android:name="com.example.tracker.ui.AppointmentFragment"
+        android:name="com.example.pawcketdoc.ui.AppointmentFragment"
         android:label="Appointment"
         >
         <action
@@ -186,14 +186,14 @@
     </fragment>
     <fragment
         android:id="@+id/appointmentFormFragment"
-        android:name="com.example.tracker.ui.AppointmentFormFragment"
+        android:name="com.example.pawcketdoc.ui.AppointmentFormFragment"
         android:label="Appointment Form"
         >
 
     </fragment>
     <fragment
         android:id="@+id/medicationFragment"
-        android:name="com.example.tracker.ui.MedicationFragment"
+        android:name="com.example.pawcketdoc.ui.MedicationFragment"
         android:label="Medication"
         >
         <action
@@ -207,19 +207,19 @@
     </fragment>
     <fragment
         android:id="@+id/medicationFormFragment"
-        android:name="com.example.tracker.ui.MedicationFormFragment"
+        android:name="com.example.pawcketdoc.ui.MedicationFormFragment"
         android:label="Medication Form"
         >
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.tracker.ui.EditProfileFragment"
+        android:name="com.example.pawcketdoc.ui.EditProfileFragment"
         android:label="Edit Profile"
         >
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.example.tracker.ui.ChangePasswordFragment"
+        android:name="com.example.pawcketdoc.ui.ChangePasswordFragment"
         android:label="Change Password"
         >
     </fragment>
