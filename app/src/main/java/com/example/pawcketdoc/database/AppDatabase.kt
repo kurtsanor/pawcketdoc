@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.pawcketdoc.dao.AppointmentDao
 import com.example.pawcketdoc.dao.CredentialsDao
+import com.example.pawcketdoc.dao.DocumentDao
 import com.example.pawcketdoc.dao.GrowthDao
 import com.example.pawcketdoc.dao.MedicalRecordDao
 import com.example.pawcketdoc.dao.MedicationDao
@@ -13,6 +14,7 @@ import com.example.pawcketdoc.dao.UserDao
 import com.example.pawcketdoc.dao.VaccinationDao
 import com.example.pawcketdoc.model.Appointment
 import com.example.pawcketdoc.model.Credentials
+import com.example.pawcketdoc.model.Document
 import com.example.pawcketdoc.model.Growth
 import com.example.pawcketdoc.model.MedicalRecord
 import com.example.pawcketdoc.model.Medication
@@ -30,7 +32,8 @@ import com.example.pawcketdoc.util.Converters
     User::class,
     Vaccination::class,
     Credentials::class,
-], version = 14)
+    Document::class,
+], version = 16)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun appointmentDao(): AppointmentDao
@@ -42,4 +45,5 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun vaccinationDao(): VaccinationDao
 
     abstract fun credentialsDao(): CredentialsDao
+    abstract fun documentDao(): DocumentDao
 }

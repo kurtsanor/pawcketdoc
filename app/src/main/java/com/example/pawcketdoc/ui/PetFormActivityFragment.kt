@@ -10,7 +10,6 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -45,17 +44,26 @@ class PetFormActivityFragment : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
 
+    private val breedMap = mapOf(
+        "Dog" to listOf("Aspin", "Labrador", "Golden Retriever", "Bulldog", "Poodle", "Beagle", "Shih Tzu", "Chihuahua", "Dachshund", "German Shepherd"),
+        "Cat" to listOf("Puspin", "Persian", "Siamese", "Maine Coon", "Ragdoll", "British Shorthair", "Sphynx", "Bengal", "Birman"),
+        "Bird" to listOf("Parrot", "Cockatiel", "Canary", "Lovebird", "Budgerigar", "Finch", "Macaw"),
+        "Rabbit" to listOf("Holland Lop", "Netherland Dwarf", "Mini Rex", "Lionhead", "Angora"),
+        "Hamster" to listOf("Syrian", "Dwarf Campbell", "Roborovski", "Chinese"),
+        "Guinea Pig" to listOf("American", "Peruvian", "Abyssinian", "Teddy"),
+        "Fish" to listOf("Goldfish", "Betta", "Guppy", "Koi", "Angelfish", "Molly"),
+        "Turtle" to listOf("Red-Eared Slider", "Box Turtle", "Painted Turtle", "Snapping Turtle"),
+        "Snake" to listOf("Ball Python", "Corn Snake", "King Snake", "Boa Constrictor"),
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // IMPORTANT: keep using your existing XML
         val view = inflater.inflate(R.layout.activity_pet_form, container, false)
-
         val headerBar = requireActivity().findViewById<View>(R.id.headerBar)
         headerBar.setBackgroundColor(android.graphics.Color.WHITE)
-
         return view
     }
 
@@ -73,8 +81,8 @@ class PetFormActivityFragment : Fragment() {
         subtitle.visibility = View.VISIBLE
 
         setupDatePicker(view)
+        setupTypeDropdown(view)
         setupGenderDropdown(view)
-
 
         db = DatabaseProvider.getDatabase(requireContext())
         firebaseAuth = Firebase.auth
@@ -82,8 +90,8 @@ class PetFormActivityFragment : Fragment() {
         petService = PetService(db.petDao(), firebaseFirestore)
 
         val petName = view.findViewById<TextInputEditText>(R.id.etPetName)
-        val petType = view.findViewById<TextInputEditText>(R.id.etPetType)
-        val petBreed = view.findViewById<TextInputEditText>(R.id.etBreed)
+        val petType = view.findViewById<AutoCompleteTextView>(R.id.actvPetType)
+        val petBreed = view.findViewById<AutoCompleteTextView>(R.id.actvBreed)
         val petGender = view.findViewById<AutoCompleteTextView>(R.id.actvGender)
         val petBirthdate = view.findViewById<TextInputEditText>(R.id.etBirthDate)
 
@@ -92,8 +100,8 @@ class PetFormActivityFragment : Fragment() {
 
         fun setLoading(isLoading: Boolean) {
             if (isLoading) {
-                buttonAddPet.text = ""          // hide text
-                buttonAddPet.isEnabled = false  // prevent double click
+                buttonAddPet.text = ""
+                buttonAddPet.isEnabled = false
                 progress.visibility = View.VISIBLE
             } else {
                 buttonAddPet.text = "Add to Pets"
@@ -102,7 +110,6 @@ class PetFormActivityFragment : Fragment() {
             }
         }
 
-
         buttonAddPet.setOnClickListener {
             if (petName.text.isNullOrBlank()) {
                 petName.error = "Pet name is required"
@@ -110,7 +117,6 @@ class PetFormActivityFragment : Fragment() {
             } else {
                 petName.error = null
             }
-
             if (petType.text.isNullOrBlank()) {
                 petType.error = "Pet type is required"
                 return@setOnClickListener
@@ -161,8 +167,7 @@ class PetFormActivityFragment : Fragment() {
                         title = "Error",
                         message = e.message.toString()
                     )
-                }
-                catch (e: FirebaseNetworkException) {
+                } catch (e: FirebaseNetworkException) {
                     SnackbarUtil.showError(
                         view = requireView(),
                         title = "Network Error",
@@ -171,14 +176,12 @@ class PetFormActivityFragment : Fragment() {
                 } finally {
                     setLoading(false)
                 }
-
             }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         val subtitle = requireActivity().findViewById<TextView>(R.id.txtHeaderSubtitle)
         subtitle.text = ""
         subtitle.visibility = View.GONE
@@ -192,6 +195,47 @@ class PetFormActivityFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         requireActivity().findViewById<View>(R.id.bottomNavigationView)?.visibility = View.VISIBLE
+    }
+
+    private fun setupTypeDropdown(root: View) {
+        val types = breedMap.keys.toList()
+        val typeAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            types
+        )
+
+        val typeAutoComplete = root.findViewById<AutoCompleteTextView>(R.id.actvPetType)
+        val breedAutoComplete = root.findViewById<AutoCompleteTextView>(R.id.actvBreed)
+
+        typeAutoComplete.setAdapter(typeAdapter)
+
+        typeAutoComplete.setOnItemClickListener { _, _, _, _ ->
+            val selectedType = typeAutoComplete.text.toString()
+            val breeds = breedMap[selectedType] ?: listOf("Mixed / Unknown")
+
+            val breedAdapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                breeds
+            )
+            breedAutoComplete.setAdapter(breedAdapter)
+            breedAutoComplete.text.clear()
+            breedAutoComplete.isEnabled = true
+        }
+    }
+
+    private fun setupGenderDropdown(root: View) {
+        val genders = arrayOf("Male", "Female")
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            genders
+        )
+
+        val genderAutoComplete = root.findViewById<AutoCompleteTextView>(R.id.actvGender)
+        genderAutoComplete.setAdapter(adapter)
     }
 
     private fun setupDatePicker(root: View) {
@@ -212,19 +256,5 @@ class PetFormActivityFragment : Fragment() {
                 dateInput.setText(dateString)
             }
         }
-    }
-
-    private fun setupGenderDropdown(root: View) {
-        val genders = arrayOf("Male", "Female", "Other")
-
-        // In fragments, use requireContext() instead of "this"
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_spinner_dropdown_item,
-            genders
-        )
-
-        val genderAutoComplete = root.findViewById<AutoCompleteTextView>(R.id.actvGender)
-        genderAutoComplete.setAdapter(adapter)
     }
 }

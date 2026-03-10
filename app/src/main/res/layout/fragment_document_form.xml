@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.PetFormActivityFragment"
     android:background="@color/white">
 
     <LinearLayout
@@ -33,17 +32,17 @@
             app:hintTextColor="@color/accent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPetName"
+                android:id="@+id/etDocumentName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Pet Name"
+                android:hint="Document Name"
                 android:inputType="textCapWords"
                 android:textSize="14sp"
                 android:fontFamily="@font/inter_regular"
                 android:background="@drawable/rounded_edit_text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Species Dropdown -->
+        <!-- Document Type Dropdown -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
@@ -61,72 +60,17 @@
             app:hintTextColor="@color/accent">
 
             <AutoCompleteTextView
-                android:id="@+id/actvPetType"
+                android:id="@+id/actvDocumentType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Type"
+                android:hint="Document Type"
                 android:inputType="none"
                 android:textSize="14sp"
                 android:fontFamily="@font/inter_regular"
                 android:background="@drawable/rounded_edit_text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Breed Dropdown -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E0E0E0"
-            app:boxStrokeWidth="1.5dp"
-            app:boxStrokeWidthFocused="1.5dp"
-            app:boxBackgroundColor="@android:color/white"
-            app:hintTextColor="@color/accent">
-
-            <AutoCompleteTextView
-                android:id="@+id/actvBreed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Breed"
-                android:inputType="none"
-                android:textSize="14sp"
-                android:fontFamily="@font/inter_regular"
-                android:background="@drawable/rounded_edit_text"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Gender Dropdown -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E0E0E0"
-            app:boxStrokeWidth="1.5dp"
-            app:boxStrokeWidthFocused="1.5dp"
-            app:boxBackgroundColor="@android:color/white"
-            app:hintTextColor="@color/accent">
-
-            <AutoCompleteTextView
-                android:id="@+id/actvGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Gender"
-                android:inputType="none"
-                android:textSize="14sp"
-                android:fontFamily="@font/inter_regular"
-                android:background="@drawable/rounded_edit_text"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
+        <!-- Date Issued -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -145,12 +89,70 @@
             app:startIconTint="@color/accent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etBirthDate"
+                android:id="@+id/etDateIssued"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="false"
-                android:hint="Birth Date"
+                android:hint="Date Issued"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_regular"
+                android:background="@drawable/rounded_edit_text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- File Upload -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeColor="#E0E0E0"
+            app:boxStrokeWidth="1.5dp"
+            app:boxStrokeWidthFocused="1.5dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:hintTextColor="@color/accent"
+            app:startIconTint="@color/accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFileName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="Attach File (PDF, JPG, PNG)"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter_regular"
+                android:background="@drawable/rounded_edit_text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Notes -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeColor="#E0E0E0"
+            app:boxStrokeWidth="1.5dp"
+            app:boxStrokeWidthFocused="1.5dp"
+            app:boxBackgroundColor="@android:color/white"
+            app:hintTextColor="@color/accent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Notes (Optional)"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:gravity="top"
                 android:textSize="14sp"
                 android:fontFamily="@font/inter_regular"
                 android:background="@drawable/rounded_edit_text"/>
@@ -170,13 +172,13 @@
             android:layout_marginBottom="20dp">
 
             <Button
-                android:id="@+id/buttonAddPet"
+                android:id="@+id/buttonAddDocument"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_3d"
                 app:backgroundTint="@null"
                 android:fontFamily="@font/inter_bold"
-                android:text="Add To Pets"
+                android:text="Add Document"
                 android:textColor="@color/white" />
 
             <ProgressBar
@@ -186,6 +188,7 @@
                 android:layout_gravity="center"
                 android:indeterminateTint="@color/white"
                 android:visibility="gone" />
+
         </FrameLayout>
 
     </LinearLayout>

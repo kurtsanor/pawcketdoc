@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
             db.medicationDao(),
             db.growthDao(),
             db.vaccinationDao(),
-            db.medicalRecordDao())
+            db.medicalRecordDao(),
+            db.documentDao())
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -75,13 +76,13 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val uId = firebaseAuth.currentUser?.uid
-
-        if (!uId.isNullOrBlank()) {
-            val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
-            startActivity(homePage)
-            finish()
-        }
+//        val uId = firebaseAuth.currentUser?.uid
+//
+//        if (!uId.isNullOrBlank()) {
+//            val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
+//            startActivity(homePage)
+//            finish()
+//        }
 
         val buttonSignIn = findViewById<Button>(R.id.buttonSignIn)
         val email = findViewById<TextInputEditText>(R.id.emailField)
@@ -203,8 +204,6 @@ class MainActivity : AppCompatActivity() {
 
         buttonGoogleLogin.setOnClickListener {
             try {
-                val currentUser = firebaseAuth.currentUser?.email
-                Toast.makeText(this@MainActivity, currentUser.toString(), Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
                 Toast.makeText(this@MainActivity, e.toString(), Toast.LENGTH_LONG).show()
             }

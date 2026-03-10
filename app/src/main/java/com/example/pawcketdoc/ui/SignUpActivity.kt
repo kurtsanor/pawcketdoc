@@ -1,5 +1,6 @@
 package com.example.pawcketdoc.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -18,6 +19,7 @@ import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.dto.SignUpRequest
 import com.example.pawcketdoc.service.AuthService
+import com.example.pawcketdoc.util.SnackbarUtil
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -46,6 +48,8 @@ class SignUpActivity : AppCompatActivity() {
         }
         val signInLink = findViewById<TextView>(R.id.textViewSignIn)
         signInLink.setOnClickListener {
+            val intent = Intent(this, MainActivity:: class.java)
+            startActivity(intent)
             finish()
         }
 
@@ -131,8 +135,16 @@ class SignUpActivity : AppCompatActivity() {
                         password.text.toString()
                     )
                     authService.register(signupRequest)
-                    Toast.makeText(this@SignUpActivity, "Account has been created", Toast.LENGTH_LONG).show()
-                    finish()
+                    SnackbarUtil.showSuccess(
+                        view = findViewById(android.R.id.content),
+                        title = "Success",
+                        message = "Account has been registered"
+                    )
+                    firstName.text?.clear()
+                    surName.text?.clear()
+                    email.text?.clear()
+                    password.text?.clear()
+                    confirmPassword.text?.clear()
                 } catch (e: Exception) {
                     Toast.makeText(this@SignUpActivity, e.message, Toast.LENGTH_LONG).show()
                 }

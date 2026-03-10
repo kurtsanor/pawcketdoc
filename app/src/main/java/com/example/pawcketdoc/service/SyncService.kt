@@ -3,6 +3,7 @@ package com.example.pawcketdoc.service
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.pawcketdoc.dao.AppointmentDao
+import com.example.pawcketdoc.dao.DocumentDao
 import com.example.pawcketdoc.dao.GrowthDao
 import com.example.pawcketdoc.dao.MedicalRecordDao
 import com.example.pawcketdoc.dao.MedicationDao
@@ -10,6 +11,7 @@ import com.example.pawcketdoc.dao.PetDao
 import com.example.pawcketdoc.dao.UserDao
 import com.example.pawcketdoc.dao.VaccinationDao
 import com.example.pawcketdoc.model.Appointment
+import com.example.pawcketdoc.model.Document
 import com.example.pawcketdoc.model.Growth
 import com.example.pawcketdoc.model.MedicalRecord
 import com.example.pawcketdoc.model.Medication
@@ -32,7 +34,8 @@ class SyncService(
     private val medicationDao: MedicationDao,
     private val growthDao: GrowthDao,
     private val vaccinationDao: VaccinationDao,
-    private val medicalRecordDao: MedicalRecordDao
+    private val medicalRecordDao: MedicalRecordDao,
+    private val documentDao: DocumentDao
 ) {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -45,7 +48,32 @@ class SyncService(
             launch { syncGrowth(userId) }
             launch { syncVaccinations(userId) }
             launch { syncMedicalRecords(userId) }
+            launch { syncDocuments(userId) }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun syncDocuments(userId: String) {
+        val snapshot = firebaseFirestore
+            .collection("documents")
+            .whereEqualTo("userId", userId)
+            .get()
+            .await()
+
+        val documents = snapshot.documents.map { doc ->
+            Document(
+                id = doc.id,
+                petId = doc.getString("petId") ?: "",
+                name = doc.getString("name") ?: "",
+                type = doc.getString("type") ?: "",
+                notes = doc.getString("notes") ?: "",
+                fileUrl = doc.getString("fileUrl") ?: "",
+                publicId = doc.getString("publicId") ?: "",
+                dateIssued = doc.getString("dateIssued")?.let { LocalDate.parse(it) }
+            )
+        }
+
+        documentDao.insertAll(documents)
     }
 
     private suspend fun syncUser(userId: String) {

@@ -118,10 +118,24 @@
         >
     </fragment>
     <fragment
+        android:id="@+id/documentFormFragment"
+        android:name="com.example.pawcketdoc.ui.DocumentFormFragment"
+        android:label="Document Form"
+        >
+    </fragment>
+    <fragment
         android:id="@+id/documentsFragment"
         android:name="com.example.pawcketdoc.ui.DocumentsFragment"
-        android:label="Documents"
-        >
+        android:label="Documents">
+
+        <action
+            android:id="@+id/action_documents_to_documentForm"
+            app:destination="@+id/documentFormFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@anim/slide_out_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/vaccinationsFragment"
