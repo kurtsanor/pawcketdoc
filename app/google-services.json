@@ -12,7 +12,20 @@
           "package_name": "com.example.pawcketdoc"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "747918208021-77apln3b9kr0gjeprgq663c8h5m3rb78.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pawcketdoc",
+            "certificate_hash": "adc4abb968bdbd98a081cac5a33fdd5ef031d751"
+          }
+        },
+        {
+          "client_id": "747918208021-0p2oun6do3e3rtoloj5dnqoejfh3om63.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDf6YN96UA2h6QA9YU_5nfk3RLcXp4Meyk"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "747918208021-0p2oun6do3e3rtoloj5dnqoejfh3om63.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

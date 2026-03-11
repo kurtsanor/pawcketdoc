@@ -14,6 +14,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -28,16 +29,21 @@ import com.example.pawcketdoc.dto.LoginRequest
 import com.example.pawcketdoc.service.AuthService
 import com.example.pawcketdoc.service.SyncService
 import com.example.pawcketdoc.util.SnackbarUtil
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +53,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var syncService: SyncService
+    private lateinit var googleSignInClient: GoogleSignInClient
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            firebaseAuthWithGoogle(account.idToken!!)
+        } catch (e: ApiException) {
+            SnackbarUtil.showError(
+                view = findViewById(android.R.id.content),
+                title = "Error",
+                message = "Google sign-in failed: ${e.message}"
+            )
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,21 +92,16 @@ class MainActivity : AppCompatActivity() {
             db.growthDao(),
             db.vaccinationDao(),
             db.medicalRecordDao(),
-            db.documentDao())
+            db.documentDao()
+        )
+
+        setupGoogleSignIn()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(0, 0, 0, 0)
             insets
         }
-
-//        val uId = firebaseAuth.currentUser?.uid
-//
-//        if (!uId.isNullOrBlank()) {
-//            val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
-//            startActivity(homePage)
-//            finish()
-//        }
 
         val buttonSignIn = findViewById<Button>(R.id.buttonSignIn)
         val email = findViewById<TextInputEditText>(R.id.emailField)
@@ -92,8 +111,8 @@ class MainActivity : AppCompatActivity() {
 
         fun setLoading(isLoading: Boolean) {
             if (isLoading) {
-                buttonSignIn.text = ""          // hide text
-                buttonSignIn.isEnabled = false  // prevent double click
+                buttonSignIn.text = ""
+                buttonSignIn.isEnabled = false
                 progressSignIn.visibility = View.VISIBLE
             } else {
                 buttonSignIn.text = "Sign In"
@@ -108,46 +127,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Validates email if input is a valid email address.
         fun emailValidation(): Boolean {
             val eml = email.text.toString().trim()
-
             return when {
-                eml.isBlank() -> {
-                    email.error = "Required field"
-                    false
-                }
-                !Patterns.EMAIL_ADDRESS.matcher(eml).matches() -> {
-                    email.error = "Invalid email format!"
-                    false
-                }
-                else -> {
-                    email.error = null
-                    true
-                }
+                eml.isBlank() -> { email.error = "Required field"; false }
+                !Patterns.EMAIL_ADDRESS.matcher(eml).matches() -> { email.error = "Invalid email format!"; false }
+                else -> { email.error = null; true }
             }
         }
 
-        // Validates whether password meets the password format.
         fun passwordValidation(): Boolean {
             val pwd = password.text.toString().trim()
-
             return when {
-                pwd.isBlank() -> {
-                    password.error = "Required field"
-                    false
-                }
-
-                else -> {
-                    password.error = null
-                    true
-                }
+                pwd.isBlank() -> { password.error = "Required field"; false }
+                else -> { password.error = null; true }
             }
         }
 
         val signUp = findViewById<TextView>(R.id.textViewSignUp)
         signUp.setOnClickListener {
-            val intent = Intent(this, SignUpActivity:: class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             finish()
             startActivity(intent)
         }
@@ -162,17 +161,13 @@ class MainActivity : AppCompatActivity() {
                         password.text.toString()
                     )
                     authService.login(loginRequest)
-
                     val userId = firebaseAuth.currentUser?.uid!!
-
                     SnackbarUtil.showSuccess(
                         view = findViewById(android.R.id.content),
                         title = "Login Successful",
                         message = "Please wait while we sync your data"
                     )
-                    // sync all data of user from firebase to room
                     syncService.syncAll(userId)
-
                     val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
                     finish()
                     startActivity(homePage)
@@ -195,21 +190,71 @@ class MainActivity : AppCompatActivity() {
                         title = "Error",
                         message = e.message.toString()
                     )
-                }
-                finally {
+                } finally {
                     setLoading(false)
                 }
             }
         }
 
         buttonGoogleLogin.setOnClickListener {
-            try {
-            } catch (e: Exception) {
-                Toast.makeText(this@MainActivity, e.toString(), Toast.LENGTH_LONG).show()
+            googleSignInClient.signOut().addOnCompleteListener {
+                val signInIntent = googleSignInClient.signInIntent
+                googleSignInLauncher.launch(signInIntent)
             }
         }
     }
 
+    private fun setupGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        lifecycleScope.launch {
+            try {
+                firebaseAuth.signInWithCredential(credential).await()
+                val user = firebaseAuth.currentUser
+                val userId = user?.uid!!
 
+                val userDoc = firebaseFirestore.collection("users").document(userId).get().await()
+                if (!userDoc.exists()) {
+                    // first time login will save to Firestore
+                    firebaseFirestore.collection("users").document(userId).set(
+                        mapOf(
+                            "id" to userId,
+                            "firstName" to (user.displayName?.split(" ")?.firstOrNull() ?: ""),
+                            "surName" to (user.displayName?.split(" ")?.drop(1)?.joinToString(" ") ?: ""),
+                        )
+                    ).await()
+                }
+                SnackbarUtil.showSuccess(
+                    view = findViewById(android.R.id.content),
+                    title = "Login Successful",
+                    message = "Please wait while we sync your data"
+                )
+                Log.d("user", firebaseAuth.currentUser?.displayName!!)
+                syncService.syncAll(userId)
+                val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
+                finish()
+                startActivity(homePage)
+            } catch (e: FirebaseNetworkException) {
+                SnackbarUtil.showError(
+                    view = findViewById(android.R.id.content),
+                    title = "Network Error",
+                    message = "No Internet Connection"
+                )
+            } catch (e: Exception) {
+                SnackbarUtil.showError(
+                    view = findViewById(android.R.id.content),
+                    title = "Error",
+                    message = "Google sign-in failed: ${e.message}"
+                )
+            }
+        }
+    }
 }
