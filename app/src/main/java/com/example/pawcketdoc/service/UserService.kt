@@ -18,6 +18,18 @@ class UserService(
         return userDao.findByIdLiveData(id)
     }
 
+    suspend fun updateAvatar(userId: String, avatarUrl: String, avatarPublicId: String) {
+        firebaseFirestore.collection("users").document(userId)
+            .update(
+                mapOf(
+                    "avatarUrl" to avatarUrl,
+                    "avatarPublicId" to avatarPublicId
+                )
+            )
+
+        userDao.updateAvatar(userId, avatarUrl, avatarPublicId)
+    }
+
     suspend fun update(user: User) {
         firebaseFirestore.collection("users")
             .document(user.id)

@@ -1,18 +1,14 @@
 package com.example.pawcketdoc.ui
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -45,7 +41,6 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
@@ -54,6 +49,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var firebaseFirestore: FirebaseFirestore
     private lateinit var syncService: SyncService
     private lateinit var googleSignInClient: GoogleSignInClient
+
+    private lateinit var buttonSignIn: Button
+    private lateinit var buttonGoogleLogin: Button
+    private lateinit var progressSignIn: ProgressBar
+    private lateinit var progressGoogle: ProgressBar
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val googleSignInLauncher = registerForActivityResult(
@@ -98,28 +98,17 @@ class MainActivity : AppCompatActivity() {
         setupGoogleSignIn()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(0, 0, 0, 0)
             insets
         }
 
-        val buttonSignIn = findViewById<Button>(R.id.buttonSignIn)
+        buttonSignIn = findViewById(R.id.buttonSignIn)
+        buttonGoogleLogin = findViewById(R.id.buttonGoogleLogin)
+        progressSignIn = findViewById(R.id.progressSignIn)
+        progressGoogle = findViewById(R.id.progressGoogle)
+
         val email = findViewById<TextInputEditText>(R.id.emailField)
         val password = findViewById<TextInputEditText>(R.id.passwordField)
-        val buttonGoogleLogin = findViewById<Button>(R.id.buttonGoogleLogin)
-        val progressSignIn = findViewById<ProgressBar>(R.id.progressSignIn)
-
-        fun setLoading(isLoading: Boolean) {
-            if (isLoading) {
-                buttonSignIn.text = ""
-                buttonSignIn.isEnabled = false
-                progressSignIn.visibility = View.VISIBLE
-            } else {
-                buttonSignIn.text = "Sign In"
-                buttonSignIn.isEnabled = true
-                progressSignIn.visibility = View.GONE
-            }
-        }
 
         email.addTextChangedListener {
             if (!Patterns.EMAIL_ADDRESS.matcher(it.toString()).matches()) {
@@ -204,6 +193,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setLoading(isLoading: Boolean) {
+        if (isLoading) {
+            buttonSignIn.text = ""
+            buttonSignIn.isEnabled = false
+            progressSignIn.visibility = View.VISIBLE
+        } else {
+            buttonSignIn.text = "Sign In"
+            buttonSignIn.isEnabled = true
+            progressSignIn.visibility = View.GONE
+        }
+    }
+
+    private fun setGoogleLoading(isLoading: Boolean) {
+        if (isLoading) {
+            buttonGoogleLogin.text = ""
+            buttonGoogleLogin.isEnabled = false
+            progressGoogle.visibility = View.VISIBLE
+        } else {
+            buttonGoogleLogin.text = "Google"
+            buttonGoogleLogin.isEnabled = true
+            progressGoogle.visibility = View.GONE
+        }
+    }
+
     private fun setupGoogleSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -217,18 +230,19 @@ class MainActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         lifecycleScope.launch {
             try {
+                setGoogleLoading(true)
                 firebaseAuth.signInWithCredential(credential).await()
                 val user = firebaseAuth.currentUser
                 val userId = user?.uid!!
 
                 val userDoc = firebaseFirestore.collection("users").document(userId).get().await()
                 if (!userDoc.exists()) {
-                    // first time login will save to Firestore
                     firebaseFirestore.collection("users").document(userId).set(
                         mapOf(
                             "id" to userId,
                             "firstName" to (user.displayName?.split(" ")?.firstOrNull() ?: ""),
                             "surName" to (user.displayName?.split(" ")?.drop(1)?.joinToString(" ") ?: ""),
+                            "avatarUrl" to user.photoUrl
                         )
                     ).await()
                 }
@@ -237,7 +251,6 @@ class MainActivity : AppCompatActivity() {
                     title = "Login Successful",
                     message = "Please wait while we sync your data"
                 )
-                Log.d("user", firebaseAuth.currentUser?.displayName!!)
                 syncService.syncAll(userId)
                 val homePage = Intent(this@MainActivity, LayoutActivity::class.java)
                 finish()
@@ -254,6 +267,8 @@ class MainActivity : AppCompatActivity() {
                     title = "Error",
                     message = "Google sign-in failed: ${e.message}"
                 )
+            } finally {
+                setGoogleLoading(false)
             }
         }
     }

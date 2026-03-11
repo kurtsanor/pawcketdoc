@@ -24,4 +24,7 @@ interface UserDao {
 
     @Query("SELECT * FROM User WHERE id = :id")
     suspend fun findById(id: String): User
+
+    @Query("UPDATE User SET avatarUrl = :avatarUrl, avatarPublicId = :avatarPublicId WHERE id = :userId")
+    suspend fun updateAvatar(userId: String, avatarUrl: String, avatarPublicId: String)
 }

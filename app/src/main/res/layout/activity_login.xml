@@ -160,22 +160,36 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                    <Button
-                        android:id="@+id/buttonGoogleLogin"
-                        style="@style/Widget.Material3.Button.IconButton.Outlined"
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#FBFBFB"
-                        android:fontFamily="@font/inter_bold"
-                        android:text="Google"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="#050000"
-                        app:icon="@drawable/google"
-                        app:iconGravity="textStart"
-                        app:iconPadding="10dp"
-                        app:iconTint="@null"
-                        app:strokeColor="#E0E0E0" />
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/buttonGoogleLogin"
+                            style="@style/Widget.Material3.Button.IconButton.Outlined"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FBFBFB"
+                            android:fontFamily="@font/inter_bold"
+                            android:text="Google"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="#050000"
+                            app:icon="@drawable/google"
+                            app:iconGravity="textStart"
+                            app:iconPadding="10dp"
+                            app:iconTint="@null"
+                            app:strokeColor="#E0E0E0" />
+
+                        <ProgressBar
+                            android:id="@+id/progressGoogle"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:indeterminateTint="@color/accent"
+                            android:visibility="gone" />
+
+                    </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"

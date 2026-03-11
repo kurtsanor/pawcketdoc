@@ -60,4 +60,27 @@ class UploadService(private val context: Context) {
             "public_id" to result["public_id"] as String
         )
     }
+
+    suspend fun uploadUserAvatar(
+        uri: Uri,
+        folder: String = "pawcketdoc/users/"
+    ): Map<String, String> = withContext(Dispatchers.IO) {
+        val stream = context.contentResolver.openInputStream(uri)
+        val tempFile = File.createTempFile("avatar_", ".jpg", context.cacheDir)
+        tempFile.outputStream().use { stream?.copyTo(it) }
+
+        val result = CloudinaryConfig.instance.uploader().upload(
+            tempFile.absolutePath,
+            ObjectUtils.asMap(
+                "resource_type", "auto",
+                "folder", folder
+            )
+        )
+
+        mapOf(
+            "secure_url" to result["secure_url"] as String,
+            "public_id" to result["public_id"] as String
+        )
+    }
+
 }
