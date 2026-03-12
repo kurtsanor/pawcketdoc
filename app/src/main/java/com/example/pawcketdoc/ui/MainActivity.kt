@@ -76,7 +76,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
         db = DatabaseProvider.getDatabase(this)
@@ -96,11 +95,6 @@ class MainActivity : AppCompatActivity() {
         )
 
         setupGoogleSignIn()
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login)) { v, insets ->
-            v.setPadding(0, 0, 0, 0)
-            insets
-        }
 
         buttonSignIn = findViewById(R.id.buttonSignIn)
         buttonGoogleLogin = findViewById(R.id.buttonGoogleLogin)
