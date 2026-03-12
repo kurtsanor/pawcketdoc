@@ -13,7 +13,8 @@
         android:theme="@style/Theme.CRUD_prac">
         <activity
             android:name=".ui.SignUpActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.LayoutActivity"
             android:exported="false" />
