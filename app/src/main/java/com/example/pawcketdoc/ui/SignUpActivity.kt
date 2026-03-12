@@ -6,6 +6,7 @@ import android.util.Patterns
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -26,33 +27,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
     private lateinit var authService: AuthService
-
     private lateinit var firebaseAuth: FirebaseAuth
-
     private lateinit var firebaseFirestore: FirebaseFirestore
+
+    private var enableValidation = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_sign_up)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.signup)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(0, 0, 0, 0)
-            insets
-        }
-        val signInLink = findViewById<TextView>(R.id.textViewSignIn)
-        signInLink.setOnClickListener {
-            val intent = Intent(this, MainActivity:: class.java)
-            startActivity(intent)
-            finish()
-        }
 
+        val signInLink = findViewById<TextView>(R.id.textViewSignIn)
         val buttonSignup = findViewById<Button>(R.id.buttonSignUp)
         val progressSignUp = findViewById<ProgressBar>(R.id.progressSignUp)
 
@@ -64,8 +55,8 @@ class SignUpActivity : AppCompatActivity() {
 
         fun setLoading(isLoading: Boolean) {
             if (isLoading) {
-                buttonSignup.text = ""          // hide text
-                buttonSignup.isEnabled = false  // prevent double click
+                buttonSignup.text = ""
+                buttonSignup.isEnabled = false
                 progressSignUp.visibility = View.VISIBLE
             } else {
                 buttonSignup.text = "Sign Up"
@@ -74,11 +65,77 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
-        firstName.addTextChangedListener { if (it.toString().isBlank()) firstName.error = "Required field" }
-        surName.addTextChangedListener { if (it.toString().isBlank()) surName.error = "Required field" }
-        email.addTextChangedListener { if (!Patterns.EMAIL_ADDRESS.matcher(it.toString()).matches()) email.error = "Invalid email format" }
-        password.addTextChangedListener { if (it.toString().isEmpty()) password.error = "Required field" }
-        confirmPassword.addTextChangedListener { if (it.toString() != password.text.toString()) confirmPassword.error = "Passwords do not match" }
+        fun clearForm() {
+            enableValidation = false
+
+            firstName.error = null
+            surName.error = null
+            email.error = null
+            password.error = null
+            confirmPassword.error = null
+
+            firstName.text?.clear()
+            surName.text?.clear()
+            email.text?.clear()
+            password.text?.clear()
+            confirmPassword.text?.clear()
+
+            firstName.post {
+                enableValidation = true
+            }
+        }
+
+        firstName.addTextChangedListener {
+            if (!enableValidation) return@addTextChangedListener
+
+            firstName.error = if (it.toString().isBlank()) "Required field" else null
+        }
+
+        surName.addTextChangedListener {
+            if (!enableValidation) return@addTextChangedListener
+
+            surName.error = if (it.toString().isBlank()) "Required field" else null
+        }
+
+        email.addTextChangedListener {
+            if (!enableValidation) return@addTextChangedListener
+
+            val value = it.toString()
+            email.error = when {
+                value.isBlank() -> "Required field"
+                !Patterns.EMAIL_ADDRESS.matcher(value).matches() -> "Invalid email format"
+                else -> null
+            }
+        }
+
+        password.addTextChangedListener {
+            if (!enableValidation) return@addTextChangedListener
+
+            val value = it.toString()
+            password.error = when {
+                value.isBlank() -> "Required field"
+                value.length < 6 -> "Must be at least 6 characters"
+                else -> null
+            }
+
+            val confirmValue = confirmPassword.text.toString()
+            confirmPassword.error = when {
+                confirmValue.isBlank() -> null
+                confirmValue != value -> "Passwords do not match"
+                else -> null
+            }
+        }
+
+        confirmPassword.addTextChangedListener {
+            if (!enableValidation) return@addTextChangedListener
+
+            val value = it.toString()
+            confirmPassword.error = when {
+                value.isBlank() -> "Required field"
+                value != password.text.toString() -> "Passwords do not match"
+                else -> null
+            }
+        }
 
         fun areValidFields(): Boolean {
             return when {
@@ -122,6 +179,11 @@ class SignUpActivity : AppCompatActivity() {
         firebaseFirestore = Firebase.firestore
         authService = AuthService(db.userDao(), db.credentialsDao(), firebaseAuth, firebaseFirestore)
 
+        signInLink.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         buttonSignup.setOnClickListener {
             if (!areValidFields()) return@setOnClickListener
@@ -140,21 +202,20 @@ class SignUpActivity : AppCompatActivity() {
                         title = "Success",
                         message = "Account has been registered"
                     )
-                    firstName.text?.clear()
-                    surName.text?.clear()
-                    email.text?.clear()
-                    password.text?.clear()
-                    confirmPassword.text?.clear()
+                    clearForm()
+
+                    delay(1500)
+
+                    val intent = Intent(this@SignUpActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+
                 } catch (e: Exception) {
                     Toast.makeText(this@SignUpActivity, e.message, Toast.LENGTH_LONG).show()
-                }
-                finally {
+                } finally {
                     setLoading(false)
                 }
             }
         }
-
-
-
     }
 }

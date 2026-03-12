@@ -1,7 +1,6 @@
 package com.example.pawcketdoc.config
 
 import com.cloudinary.Cloudinary
-import com.example.pawcketdoc.BuildConfig
 
 object CloudinaryConfig {
     val instance: Cloudinary by lazy {
