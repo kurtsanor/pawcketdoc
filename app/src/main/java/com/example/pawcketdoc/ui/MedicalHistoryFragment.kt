@@ -1,6 +1,5 @@
 package com.example.pawcketdoc.ui
 
-import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,12 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawcketdoc.R
@@ -24,14 +20,13 @@ import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.MedicalRecord
 import com.example.pawcketdoc.service.MedicalRecordService
 import com.example.pawcketdoc.util.SnackbarUtil
+import com.example.pawcketdoc.util.SwipeDeleteHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 
 class MedicalHistoryFragment : Fragment() {
 
@@ -45,16 +40,13 @@ class MedicalHistoryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         return inflater.inflate(R.layout.fragment_medical_history, container, false)
     }
 
     override fun onResume() {
         super.onResume()
-        requireActivity()
-            .findViewById<TextView>(R.id.txtHeaderTitle)
-            .text = "Medical History"
+        requireActivity().findViewById<TextView>(R.id.txtHeaderTitle).text = "Medical History"
         requireActivity().findViewById<View>(R.id.bottomNavigationView)?.visibility = View.GONE
     }
 
@@ -74,26 +66,20 @@ class MedicalHistoryFragment : Fragment() {
 
         val petId = arguments?.getString("pet_id")!!
 
-        recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewMedical)
+        recyclerView = view.findViewById(R.id.recyclerViewMedical)
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        val fabAddMedical = view.findViewById<FloatingActionButton>(R.id.fab_add_medical)
-
-        val bundle = Bundle().apply {
-            putString("pet_id", petId)
-        }
-
-        fabAddMedical.setOnClickListener {
+        val bundle = Bundle().apply { putString("pet_id", petId) }
+        view.findViewById<FloatingActionButton>(R.id.fab_add_medical).setOnClickListener {
             findNavController().navigate(R.id.action_medicalHistory_to_medicalHistoryForm, bundle)
         }
 
         loadMedicalRecords(petId)
-        setupSwipeHandler()
     }
 
-    fun setupPlaceholders (medicalRecords: List<MedicalRecord>) {
+    private fun setupPlaceholders(records: List<MedicalRecord>) {
         val placeholder: LinearLayout? = view?.findViewById(R.id.placeholder_empty_medical_record)
-        if (medicalRecords.isEmpty()) {
+        if (records.isEmpty()) {
             placeholder?.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
@@ -102,70 +88,30 @@ class MedicalHistoryFragment : Fragment() {
         }
     }
 
-    fun loadMedicalRecords(petId: String) {
+    private fun loadMedicalRecords(petId: String) {
         medicalRecords = medicalRecordService.findAllByPetId(petId)
-        medicalRecords.observe(viewLifecycleOwner) { medicalRecords ->
-            recyclerView.adapter = MedicalRecordAdapter(medicalRecords) { record ->
-                val bottomSheet = MedicalRecordBottomSheet.newInstance(record)
-                bottomSheet.show(parentFragmentManager, "MedicalDetailsBottomSheet")
-            }
-            setupPlaceholders(medicalRecords)
-        }
-    }
-
-    private fun setupSwipeHandler() {
-        val swipeHandler = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-
-            // drag n drop feature
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            // Called when an item is swiped
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val record = medicalRecords.value?.get(position)
-
-                if (record == null) {
-                    return
+        medicalRecords.observe(viewLifecycleOwner) { records ->
+            recyclerView.adapter = MedicalRecordAdapter(
+                medicalRecords = records,
+                onClick = { record ->
+                    MedicalRecordBottomSheet.newInstance(record)
+                        .show(parentFragmentManager, "MedicalDetailsBottomSheet")
+                },
+                onDeleteClick = { record ->
+                    SwipeDeleteHelper.confirmDelete(
+                        fragment = this,
+                        message = "Are you sure you want to delete ${record.title}?"
+                    ) {
+                        medicalRecordService.deleteById(record.id)
+                        SnackbarUtil.showSuccess(
+                            view = requireView(),
+                            title = "Success",
+                            message = "Record has been deleted"
+                        )
+                    }
                 }
-
-
-                // Show confirmation dialog
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Delete Record")
-                    .setMessage("Are you sure you want to delete ${record?.title}?")
-                    .setPositiveButton("Yes") { dialog, _ ->
-                        lifecycleScope.launch {
-                            try {
-                                medicalRecordService.deleteById(record.id)
-                                SnackbarUtil.showSuccess(
-                                    view = requireView(),
-                                    title = "Success",
-                                    message = "Record has been deleted"
-                                )
-                                dialog.dismiss()
-                            } catch (e: RuntimeException) {}
-                        }
-
-                    }
-                    .setNegativeButton("No") { dialog, _ ->
-                        // User cancelled, reset the item so it doesn’t disappear
-                        recyclerView.adapter?.notifyItemChanged(position)
-                        dialog.dismiss()
-                    }
-                    .setCancelable(false)
-                    .show()
-            }
+            )
+            setupPlaceholders(records)
         }
-        // Attach the swipe handler to RecyclerView
-        val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
-
-
 }

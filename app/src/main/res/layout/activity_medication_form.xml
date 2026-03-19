@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/bg_primary">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,10 +28,10 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/border"
                 app:boxStrokeWidth="1.5dp"
                 app:boxStrokeWidthFocused="1.5dp"
-                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundColor="@color/surface"
                 app:hintTextColor="@color/accent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -54,10 +54,10 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/border"
                 app:boxStrokeWidth="1.5dp"
                 app:boxStrokeWidthFocused="1.5dp"
-                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundColor="@color/surface"
                 app:hintTextColor="@color/accent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -80,10 +80,10 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/border"
                 app:boxStrokeWidth="1.5dp"
                 app:boxStrokeWidthFocused="1.5dp"
-                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundColor="@color/surface"
                 app:hintTextColor="@color/accent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -108,10 +108,10 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/border"
                 app:boxStrokeWidth="1.5dp"
                 app:boxStrokeWidthFocused="1.5dp"
-                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundColor="@color/surface"
                 app:hintTextColor="@color/accent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -137,10 +137,10 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/border"
                 app:boxStrokeWidth="1.5dp"
                 app:boxStrokeWidthFocused="1.5dp"
-                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundColor="@color/surface"
                 app:hintTextColor="@color/accent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -164,10 +164,10 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/border"
                 app:boxStrokeWidth="1.5dp"
                 app:boxStrokeWidthFocused="1.5dp"
-                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundColor="@color/surface"
                 app:hintTextColor="@color/accent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -192,10 +192,10 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/border"
                 app:boxStrokeWidth="1.5dp"
                 app:boxStrokeWidthFocused="1.5dp"
-                app:boxBackgroundColor="@android:color/white"
+                app:boxBackgroundColor="@color/surface"
                 app:hintTextColor="@color/accent">
 
                 <com.google.android.material.textfield.TextInputEditText

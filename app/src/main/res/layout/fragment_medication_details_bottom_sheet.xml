@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="Carprofen"
                 android:textSize="20sp"
-                android:textColor="@color/black"
+                android:textColor="@color/text_primary"
                 android:fontFamily="@font/inter_semibold"
                 android:gravity="center"/>
 
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="Jan 10 – Jan 17, 2026"
                 android:textSize="14sp"
-                android:textColor="#555555"
+                android:textColor="@color/text_secondary"
                 android:fontFamily="@font/inter_regular"
                 android:layout_marginTop="4dp"
                 android:gravity="center"/>
@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="For arthritis pain"
-            android:textColor="#555555"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:fontFamily="@font/inter_regular"
             android:layout_marginBottom="12dp"/>
@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="25mg"
-            android:textColor="#555555"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:fontFamily="@font/inter_regular"
             android:layout_marginBottom="12dp"/>
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Twice/day"
-            android:textColor="#555555"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:fontFamily="@font/inter_regular"
             android:layout_marginBottom="12dp"/>
@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Give with food."
-            android:textColor="#555555"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:fontFamily="@font/inter_regular"/>
     </LinearLayout>

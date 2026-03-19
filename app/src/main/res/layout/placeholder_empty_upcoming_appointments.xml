@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="No Upcoming Appointments"
         android:textSize="16sp"
-        android:textColor="@color/black"
+        android:textColor="@color/text_primary"
         android:fontFamily="@font/inter_bold"
         android:layout_marginTop="12dp" />
 
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="It looks quiet in here for now."
         android:textSize="13sp"
-        android:textColor="#949494"
+        android:textColor="@color/subtle_gray"
         android:fontFamily="@font/inter_regular"
         android:layout_marginTop="4dp" />
 

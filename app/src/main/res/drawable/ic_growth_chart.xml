@@ -7,12 +7,12 @@
     <!-- Background -->
     <path
         android:pathData="M0,0 H300 V140 H0 Z"
-        android:fillColor="#FFFFFF" />
+        android:fillColor="@color/surface" />
 
     <!-- Horizontal grid lines -->
     <path
         android:pathData="M20,30 L290,30 M20,55 L290,55 M20,80 L290,80 M20,105 L290,105"
-        android:strokeColor="#E0E0E0"
+        android:strokeColor="@color/border"
         android:strokeWidth="1" />
 
     <!-- Axes -->

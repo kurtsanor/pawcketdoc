@@ -92,4 +92,23 @@ dependencies {
     implementation("com.cloudinary:cloudinary-android:2.3.1")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1")
+}
+
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("your-keystore.jks")
+            storePassword = "yourStorePassword"
+            keyAlias = "yourAlias"
+            keyPassword = "yourKeyPassword"
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+        }
+    }
 }

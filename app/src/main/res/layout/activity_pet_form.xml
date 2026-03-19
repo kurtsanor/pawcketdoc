@@ -7,14 +7,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.PetFormActivityFragment"
-    android:background="@color/white">
+    android:background="@color/bg_primary">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:background="@color/white"
+        android:background="@color/bg_primary"
         android:padding="16dp">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -26,10 +26,10 @@
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E0E0E0"
+            app:boxStrokeColor="@color/border"
             app:boxStrokeWidth="1.5dp"
             app:boxStrokeWidthFocused="1.5dp"
-            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundColor="@color/surface"
             app:hintTextColor="@color/accent">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -54,10 +54,10 @@
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E0E0E0"
+            app:boxStrokeColor="@color/border"
             app:boxStrokeWidth="1.5dp"
             app:boxStrokeWidthFocused="1.5dp"
-            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundColor="@color/surface"
             app:hintTextColor="@color/accent">
 
             <AutoCompleteTextView
@@ -82,10 +82,10 @@
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E0E0E0"
+            app:boxStrokeColor="@color/border"
             app:boxStrokeWidth="1.5dp"
             app:boxStrokeWidthFocused="1.5dp"
-            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundColor="@color/surface"
             app:hintTextColor="@color/accent">
 
             <AutoCompleteTextView
@@ -110,10 +110,10 @@
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E0E0E0"
+            app:boxStrokeColor="@color/border"
             app:boxStrokeWidth="1.5dp"
             app:boxStrokeWidthFocused="1.5dp"
-            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundColor="@color/surface"
             app:hintTextColor="@color/accent">
 
             <AutoCompleteTextView
@@ -136,10 +136,10 @@
             app:boxCornerRadiusBottomStart="12dp"
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
-            app:boxStrokeColor="#E0E0E0"
+            app:boxStrokeColor="@color/border"
             app:boxStrokeWidth="1.5dp"
             app:boxStrokeWidthFocused="1.5dp"
-            app:boxBackgroundColor="@android:color/white"
+            app:boxBackgroundColor="@color/surface"
             app:hintTextColor="@color/accent"
             app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
             app:startIconTint="@color/accent">

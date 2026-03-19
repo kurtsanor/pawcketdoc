@@ -14,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/secondary"
+            android:background="@color/bg_secondary"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -26,7 +26,7 @@
                 android:background="@drawable/search_bar_design"
                 android:queryHint="Search documents..."
                 android:layout_marginBottom="20dp"
-                android:backgroundTint="#FFFFFF" />
+                android:backgroundTint="@color/surface" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:textSize="18sp"
                 android:fontFamily="@font/inter_bold"
                 android:layout_marginStart="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/text_primary"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewMedical"

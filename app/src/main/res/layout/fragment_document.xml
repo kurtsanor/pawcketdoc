@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/secondary"
+    android:background="@color/bg_secondary"
     tools:context=".ui.DocumentsFragment">
 
     <!-- Empty State -->
@@ -28,7 +28,7 @@
             android:text="No documents yet"
             android:fontFamily="@font/inter_semibold"
             android:textSize="16sp"
-            android:textColor="#AAAAAA"
+            android:textColor="@color/text_hint"
             android:layout_marginTop="12dp" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:text="Tap + to add a document"
             android:fontFamily="@font/inter_regular"
             android:textSize="13sp"
-            android:textColor="#CCCCCC"
+            android:textColor="@color/text_quaternary"
             android:layout_marginTop="4dp" />
 
     </LinearLayout>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.PetProfileFragment"
-    android:background="@color/white">
+    android:background="@color/bg_primary">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:orientation="vertical"
-            android:background="@color/secondary">
+            android:background="@color/bg_secondary">
 
             <!--Profile Card-->
             <androidx.cardview.widget.CardView
@@ -105,7 +105,7 @@
                             android:text="Golden Retriever, Beige"
                             android:textSize="18sp"
                             android:fontFamily="@font/inter_regular"
-                            android:textColor="#F2F2F2"
+                            android:textColor="@color/breed_text_on_accent"
                             android:layout_marginBottom="10dp"
                             android:ellipsize="end"
                             android:maxLines="1"
@@ -120,7 +120,7 @@
                                 android:layout_height="wrap_content"
                                 app:contentPadding="6dp"
                                 app:cardCornerRadius="10dp"
-                                android:backgroundTint="@color/light_accent"
+                                android:backgroundTint="@color/surface_tint"
                                 android:layout_marginRight="10dp">
 
                                 <TextView
@@ -130,7 +130,7 @@
                                     android:text="Male"
                                     android:textSize="16sp"
                                     android:fontFamily="@font/inter_regular"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/text_primary"
                                     android:drawableStart="@drawable/male_small"
                                     android:drawablePadding="7dp"
                                     android:drawableTint="@color/accent"
@@ -141,7 +141,7 @@
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_marginEnd="8dp"
-                                android:backgroundTint="@color/light_accent"
+                                android:backgroundTint="@color/surface_tint"
                                 app:cardCornerRadius="10dp"
                                 app:cardElevation="0dp"
                                 app:cardPreventCornerOverlap="true"
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_bold"
                 android:text="My Stuff"
-                android:textColor="@color/black"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="5dp"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="10dp"
@@ -192,14 +192,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/surface"
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
                     android:text="Documents\n"
                     android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="#444444"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     app:cornerRadius="15dp"
                     app:icon="@drawable/docfile"
@@ -216,14 +216,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/surface"
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
                     android:text="Vaccine Records"
                     android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="#444444"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     app:cornerRadius="15dp"
                     app:icon="@drawable/vacc"
@@ -238,14 +238,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/surface"
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
                     android:text="Growth History"
                     android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="#444444"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     app:cornerRadius="15dp"
                     app:icon="@drawable/grow"
@@ -260,14 +260,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/surface"
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
                     android:text="Medical History"
                     android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="#444444"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     app:cornerRadius="15dp"
                     app:icon="@drawable/med"
@@ -282,14 +282,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/surface"
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
                     android:text="Appointment\n"
                     android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="#444444"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     app:cornerRadius="15dp"
                     app:icon="@drawable/appoint"
@@ -304,14 +304,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/surface"
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
                     android:text="Medications\n"
                     android:textAlignment="center"
                     android:textAllCaps="false"
-                    android:textColor="#444444"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     app:cornerRadius="15dp"
                     app:icon="@drawable/medicinee"
@@ -331,7 +331,7 @@
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/inter_bold"
                 android:text="Basic Information"
-                android:textColor="@color/black"
+                android:textColor="@color/text_primary"
                 android:textSize="18sp" />
 
             <!--Basic Info Card-->
@@ -366,7 +366,7 @@
                                 android:layout_width="46dp"
                                 android:layout_height="50dp"
                                 android:layout_marginEnd="15dp"
-                                android:backgroundTint="@color/light_accent"
+                                android:backgroundTint="@color/surface_tint"
                                 app:cardCornerRadius="10dp"
                                 app:cardElevation="0dp"
                                 app:cardPreventCornerOverlap="true"
@@ -387,7 +387,7 @@
                                     android:text="Name"
                                     android:fontFamily="@font/inter_semibold"
                                     android:textSize="16sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                                 <TextView
                                     android:id="@+id/infoPetName"
                                     android:layout_width="match_parent"
@@ -395,7 +395,7 @@
                                     android:text="Buddy"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -412,7 +412,7 @@
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
                                 android:layout_marginEnd="15dp"
-                                android:backgroundTint="@color/light_accent"
+                                android:backgroundTint="@color/surface_tint"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
                                 <ImageView
@@ -431,7 +431,7 @@
                                     android:text="Species"
                                     android:fontFamily="@font/inter_semibold"
                                     android:textSize="16sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                                 <TextView
                                     android:id="@+id/infoPetSpecies"
                                     android:layout_width="match_parent"
@@ -439,7 +439,7 @@
                                     android:text="Dog"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -456,7 +456,7 @@
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
                                 android:layout_marginEnd="15dp"
-                                android:backgroundTint="@color/light_accent"
+                                android:backgroundTint="@color/surface_tint"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
                                 <ImageView
@@ -475,7 +475,7 @@
                                     android:text="Breed"
                                     android:fontFamily="@font/inter_semibold"
                                     android:textSize="16sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                                 <TextView
                                     android:id="@+id/infoPetBreed"
                                     android:layout_width="match_parent"
@@ -483,7 +483,7 @@
                                     android:text="Golden Retriever"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -500,7 +500,7 @@
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
                                 android:layout_marginEnd="15dp"
-                                android:backgroundTint="@color/light_accent"
+                                android:backgroundTint="@color/surface_tint"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
                                 <ImageView
@@ -519,7 +519,7 @@
                                     android:text="Gender"
                                     android:fontFamily="@font/inter_semibold"
                                     android:textSize="16sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                                 <TextView
                                     android:id="@+id/infoPetGender"
                                     android:layout_width="match_parent"
@@ -527,7 +527,7 @@
                                     android:text="Male"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -544,7 +544,7 @@
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
                                 android:layout_marginEnd="15dp"
-                                android:backgroundTint="@color/light_accent"
+                                android:backgroundTint="@color/surface_tint"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
                                 <ImageView
@@ -563,7 +563,7 @@
                                     android:text="Birthdate"
                                     android:fontFamily="@font/inter_semibold"
                                     android:textSize="16sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                                 <TextView
                                     android:id="@+id/infoPetBirthdate"
                                     android:layout_width="match_parent"
@@ -571,7 +571,7 @@
                                     android:text="Male"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="@color/text_primary" />
                             </LinearLayout>
                         </LinearLayout>
 

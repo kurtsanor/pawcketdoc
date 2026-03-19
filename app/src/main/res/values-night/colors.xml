@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="accent">#7FD19A</color>
+    <color name="light_accent">#173528</color>
+    <color name="secondary">#111815</color>
+
+    <color name="bg_primary">#0E1411</color>
+    <color name="bg_secondary">#111815</color>
+    <color name="surface">#16201B</color>
+    <color name="surface_soft">#1B2620</color>
+    <color name="surface_tint">#173528</color>
+    <color name="surface_muted">#243129</color>
+    <color name="border">#314238</color>
+    <color name="divider">#314238</color>
+
+    <color name="text_primary">#F3F7F4</color>
+    <color name="text_secondary">#C5D1CA</color>
+    <color name="text_tertiary">#9EACA3</color>
+    <color name="text_hint">#839087</color>
+    <color name="text_quaternary">#728076</color>
+
+    <color name="delete_red">#EF5350</color>
+    <color name="info_blue">#8AB4F8</color>
+    <color name="warning_orange">#FFC266</color>
+    <color name="success_green">#6FCF97</color>
+    <color name="link_blue">#8AB4F8</color>
+    <color name="subtle_gray">#9EACA3</color>
+
+    <color name="accent_deep">#255C44</color>
+    <color name="delete_red_deep">#8E1E1E</color>
+    <color name="delete_red_light">#C94646</color>
+    <color name="gradient_start">#19432F</color>
+    <color name="gradient_end">#2B5D46</color>
+    <color name="shadow_soft">#55000000</color>
+    <color name="snackbar_border">#314238</color>
+    <color name="breed_text_on_accent">#E7F0EA</color>
+</resources>
