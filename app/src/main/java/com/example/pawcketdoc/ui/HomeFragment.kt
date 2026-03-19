@@ -282,7 +282,7 @@ class HomeFragment : Fragment() {
             setDrawEntryLabels(false)
 
             isDrawHoleEnabled = true
-            holeRadius = 70f
+            holeRadius = 77f
             setHoleColor(Color.TRANSPARENT)
 
             animateY(1400, Easing.EaseInOutQuad)

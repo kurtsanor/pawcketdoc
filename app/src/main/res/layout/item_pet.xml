@@ -12,11 +12,12 @@
     app:contentPadding="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
-        <!--Pet Picture-->
+
         <FrameLayout
             android:layout_width="100dp"
             android:layout_height="match_parent"
@@ -33,13 +34,12 @@
                 android:scaleType="centerCrop" />
         </FrameLayout>
 
-        <!--Right Section Outer Layout-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="10"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!--Right Section Inner Layout-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,18 +50,20 @@
                     android:layout_weight="5"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <!--Pet Name-->
+
+                    <!-- MD3 Title Medium: 16sp bold — reduced from 18sp -->
                     <TextView
                         android:id="@+id/petName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Buddy"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:fontFamily="@font/inter_bold"
                         android:textColor="@color/black"/>
-                    <!--Pet Breed-->
+
+                    <!-- MD3 Body Medium: 14sp regular — reduced from 16sp -->
                     <TextView
                         android:id="@+id/petBreed"
                         android:layout_width="match_parent"
@@ -71,32 +73,33 @@
                         android:textColor="#3E3E3E"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
+
+                <!-- MD3 Label Large: 14sp medium — fixed dp → sp; weight reduced from semibold (600) to medium (500) -->
                 <Button
                     style="@style/ShapeAppearanceOverlay.Material3.Button"
                     android:layout_width="wrap_content"
-                    android:layout_height="39dp"
+                    android:layout_height="36dp"
                     android:backgroundTint="@color/light_accent"
                     android:text="Healthy ✓"
-                    android:textSize="14dp"
+                    android:textSize="12sp"
                     android:textColor="@color/accent"
                     android:fontFamily="@font/inter_semibold"
                     />
             </LinearLayout>
-            <!--Line Break-->
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:dividerColor="#EEEEEE"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"/>
-            <!--Statistics-->
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -111,7 +114,8 @@
                         android:src="@drawable/checkup"
                         app:tint="#289045"
                         android:layout_marginRight="10dp"/>
-                    <!--Pet Health Percentage-->
+
+                    <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
                     <TextView
                         android:id="@+id/gender"
                         android:layout_width="0dp"
@@ -119,17 +123,18 @@
                         android:layout_height="wrap_content"
                         android:text="Dog"
                         android:textSize="14sp"
-                        android:fontFamily="@font/inter_semibold"
+                        android:fontFamily="@font/inter_regular"
                         android:textColor="@color/black"
-                        android:layout_marginRight="20dp"
-                        />
+                        android:layout_marginRight="20dp"/>
+
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/pawprint"
                         app:tint="#FFAB40"
                         android:layout_marginEnd="10dp"/>
-                    <!--Pet Activity Count-->
+
+                    <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
                     <TextView
                         android:id="@+id/petType"
                         android:layout_width="0dp"
@@ -137,12 +142,10 @@
                         android:layout_height="wrap_content"
                         android:text="Male"
                         android:textSize="14sp"
-                        android:fontFamily="@font/inter_semibold"
-                        android:textColor="@color/black"
-                        />
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/black"/>
 
                 </LinearLayout>
-
 
                 <ImageView
                     android:layout_width="wrap_content"

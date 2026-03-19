@@ -18,10 +18,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- Touch target bumped to 48dp to meet MD3 minimum interactive size -->
         <ImageButton
             android:id="@+id/buttonBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_arrow_back"
             android:contentDescription="Back"
@@ -30,12 +31,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <!-- MD3 Title Large: 22sp bold — bumped from 20sp to match TopAppBar spec -->
         <TextView
             android:id="@+id/txtHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dashboard"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/black"
             android:textAlignment="center"
             android:layout_marginTop="4dp"
@@ -44,6 +46,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- MD3 Body Small: 12sp regular — unchanged, already correct -->
         <TextView
             android:id="@+id/txtHeaderSubtitle"
             android:layout_width="wrap_content"

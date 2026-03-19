@@ -19,6 +19,7 @@
             android:padding="10dp"
             android:background="@color/secondary">
 
+            <!-- MD3 Title Medium: 16sp bold — reduced from 18sp -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -28,7 +29,7 @@
                 android:text="New Growth Entry"
                 android:textColor="@color/black"
                 android:layout_marginStart="15dp"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -49,6 +50,7 @@
                         android:weightSum="2"
                         android:layout_marginBottom="10dp">
 
+                        <!-- MD3 Body Medium: 14sp regular — unchanged, already correct -->
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/weightLayout"
                             android:layout_width="0dp"
@@ -161,6 +163,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="15dp">
 
+                <!-- Save button: font unchanged, already correct -->
                 <Button
                     android:id="@+id/buttonSaveRecord"
                     android:layout_width="match_parent"
@@ -180,20 +183,20 @@
                     android:visibility="gone" />
             </FrameLayout>
 
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_marginVertical="10dp">
 
+                <!-- MD3 Title Medium: 16sp bold — reduced from 18sp -->
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Weight Progress"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:fontFamily="@font/inter_bold"
                     android:layout_marginStart="15dp"
                     android:textColor="@color/black"/>
@@ -201,8 +204,7 @@
                 <Spinner
                     android:id="@+id/spinnerYear"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
@@ -222,12 +224,13 @@
                     android:layout_marginVertical="10dp" />
             </androidx.cardview.widget.CardView>
 
+            <!-- MD3 Title Medium: 16sp bold — reduced from 18sp -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Recent Entries"
                 android:layout_marginVertical="10dp"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:fontFamily="@font/inter_bold"
                 android:layout_marginStart="15dp"
                 android:textColor="@color/black" />
@@ -241,8 +244,7 @@
             <include
                 android:id="@+id/placeholder_empty_growth"
                 layout="@layout/placeholder_empty_growths"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
         </LinearLayout>
 

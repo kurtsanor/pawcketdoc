@@ -5,7 +5,7 @@
     android:id="@+id/login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,9 +31,7 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
+                    android:layout_height="300dp"
                     app:srcCompat="@drawable/logo"
                     app:tint="@color/white"/>
             </LinearLayout>
@@ -52,24 +50,26 @@
                     android:padding="20dp"
                     android:paddingBottom="48dp">
 
+                    <!-- MD3 Headline Medium: 28sp bold -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_bold"
                         android:text="Login"
                         android:textColor="@color/black"
-                        android:textSize="30sp"
+                        android:textSize="28sp"
                         android:textStyle="bold" />
 
+                    <!-- MD3 Body Large: 16sp regular — reduced from 18sp -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="25dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_marginBottom="24dp"
                         android:fontFamily="@font/inter_regular"
                         android:text="Please sign in to continue."
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -86,6 +86,7 @@
                         app:boxStrokeWidthFocused="1.5dp"
                         app:hintTextColor="@color/accent">
 
+                        <!-- MD3 Body Medium: 14sp regular — unchanged, already correct -->
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/emailField"
                             android:layout_width="match_parent"
@@ -118,6 +119,7 @@
                         app:endIconMode="password_toggle"
                         app:hintTextColor="@color/accent">
 
+                        <!-- MD3 Body Medium: 14sp regular — unchanged, already correct -->
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/passwordField"
                             android:layout_width="match_parent"
@@ -136,6 +138,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <!-- MD3 Label Large: 14sp bold — unchanged, already correct -->
                         <Button
                             android:id="@+id/buttonSignIn"
                             android:layout_width="match_parent"
@@ -155,6 +158,7 @@
                             android:visibility="gone" />
                     </FrameLayout>
 
+                    <!-- MD3 Body Small: 12sp regular — reduced from 14sp -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -163,12 +167,13 @@
                         android:text="Or Sign In With"
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
+                        <!-- MD3 Label Large: 14sp bold — unchanged, already correct -->
                         <Button
                             android:id="@+id/buttonGoogleLogin"
                             style="@style/Widget.Material3.Button.IconButton.Outlined"
@@ -203,14 +208,16 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
+                        <!-- MD3 Body Small: 12sp regular — reduced from 14sp -->
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_regular"
                             android:text="Don't have an account? "
                             android:textColor="#000000"
-                            android:textSize="14sp" />
+                            android:textSize="12sp" />
 
+                        <!-- MD3 Label Large: 14sp bold — unchanged, already correct -->
                         <TextView
                             android:id="@+id/textViewSignUp"
                             android:layout_width="wrap_content"

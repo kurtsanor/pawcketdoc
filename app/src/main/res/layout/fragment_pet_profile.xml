@@ -19,14 +19,14 @@
             android:orientation="vertical"
             android:background="@color/secondary">
 
-            <!--Profile Card-->
+            <!-- Profile Hero Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="160dp"
                 android:layout_marginHorizontal="3dp"
                 android:layout_marginBottom="15dp"
-                app:cardCornerRadius="10dp"
-                >
+                app:cardCornerRadius="10dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -34,60 +34,65 @@
                     android:padding="15dp"
                     android:gravity="center_vertical"
                     android:background="@drawable/green_gradient">
+
+                    <!-- Profile picture: 104dp frame / 96dp image -->
                     <FrameLayout
-                        android:layout_width="116dp"
-                        android:layout_height="116dp"
+                        android:layout_width="104dp"
+                        android:layout_height="104dp"
                         android:background="@drawable/circle_border"
-                        android:layout_marginEnd="20dp">
+                        android:layout_marginEnd="16dp">
+
                         <ImageView
                             android:id="@+id/profilePic"
-                            android:layout_width="108dp"
-                            android:layout_height="108dp"
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
                             android:layout_gravity="center"
                             android:src="@drawable/dawg"
                             android:clipToOutline="true"
                             android:background="@drawable/circle_border"
                             android:scaleType="centerCrop" />
 
-                        <!-- Upload progress overlay -->
                         <FrameLayout
                             android:id="@+id/uploadOverlay"
-                            android:layout_width="108dp"
-                            android:layout_height="108dp"
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
                             android:layout_gravity="center"
                             android:clipToOutline="true"
                             android:outlineProvider="bounds"
                             android:visibility="gone">
-
                             <ProgressBar
                                 android:id="@+id/uploadProgress"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
                                 android:layout_gravity="center"
                                 android:indeterminateTint="@color/cardview_dark_background" />
-
                         </FrameLayout>
 
+                        <!-- Camera button scaled to match smaller picture -->
                         <androidx.cardview.widget.CardView
                             android:id="@+id/btnChangePhoto"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
                             android:layout_gravity="bottom|end"
-                            app:cardCornerRadius="15dp"
+                            app:cardCornerRadius="13dp"
                             app:cardElevation="2dp"
                             android:backgroundTint="@color/accent">
                             <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/camera"
                                 app:tint="@color/white" />
                         </androidx.cardview.widget.CardView>
+
                     </FrameLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
+                        <!-- MD3 Title Large: 22sp bold -->
                         <TextView
                             android:id="@+id/petName"
                             android:layout_width="match_parent"
@@ -98,22 +103,25 @@
                             android:textColor="@color/white"
                             android:ellipsize="end"
                             android:maxLines="1" />
+
+                        <!-- MD3 Body Medium: 14sp regular -->
                         <TextView
                             android:id="@+id/petBreed"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Golden Retriever, Beige"
-                            android:textSize="18sp"
+                            android:textSize="14sp"
                             android:fontFamily="@font/inter_regular"
                             android:textColor="#F2F2F2"
                             android:layout_marginBottom="10dp"
                             android:ellipsize="end"
-                            android:maxLines="1"
-                           />
+                            android:maxLines="1" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="wrap_content"
@@ -121,31 +129,31 @@
                                 app:contentPadding="6dp"
                                 app:cardCornerRadius="10dp"
                                 android:backgroundTint="@color/light_accent"
-                                android:layout_marginRight="10dp">
+                                android:layout_marginEnd="10dp">
 
+                                <!-- MD3 Label Small: 12sp regular -->
                                 <TextView
                                     android:id="@+id/genderHeader"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Male"
-                                    android:textSize="16sp"
+                                    android:textSize="12sp"
                                     android:fontFamily="@font/inter_regular"
                                     android:textColor="@color/black"
                                     android:drawableStart="@drawable/male_small"
-                                    android:drawablePadding="7dp"
-                                    android:drawableTint="@color/accent"
-                                    />
+                                    android:drawablePadding="5dp"
+                                    android:drawableTint="@color/accent" />
                             </androidx.cardview.widget.CardView>
 
                             <androidx.cardview.widget.CardView
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
                                 android:layout_marginEnd="8dp"
                                 android:backgroundTint="@color/light_accent"
                                 app:cardCornerRadius="10dp"
                                 app:cardElevation="0dp"
                                 app:cardPreventCornerOverlap="true"
-                                app:contentPadding="7dp">
+                                app:contentPadding="6dp">
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
@@ -153,15 +161,15 @@
                                     app:tint="@color/accent" />
                             </androidx.cardview.widget.CardView>
 
+                            <!-- MD3 Body Small: 12sp regular -->
                             <TextView
                                 android:id="@+id/birthdayHeader"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Born&#10;Jan 1, 2026"
-                                android:textSize="13sp"
+                                android:textSize="12sp"
                                 android:fontFamily="@font/inter_regular"
-                                android:textColor="@color/white"
-                                />
+                                android:textColor="@color/white" />
 
                         </LinearLayout>
 
@@ -170,6 +178,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- MD3 Title Medium: 16sp bold -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -179,7 +188,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="10dp"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <androidx.gridlayout.widget.GridLayout
                 android:layout_width="match_parent"
@@ -323,7 +332,7 @@
 
             </androidx.gridlayout.widget.GridLayout>
 
-
+            <!-- MD3 Title Medium: 16sp bold -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -332,9 +341,9 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="Basic Information"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
-            <!--Basic Info Card-->
+            <!-- Basic Info Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -344,6 +353,7 @@
                 app:cardMaxElevation="3dp"
                 app:cardPreventCornerOverlap="true"
                 android:layout_marginHorizontal="3dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -364,8 +374,8 @@
                             app:layout_columnWeight="1">
                             <androidx.cardview.widget.CardView
                                 android:layout_width="46dp"
-                                android:layout_height="50dp"
-                                android:layout_marginEnd="15dp"
+                                android:layout_height="46dp"
+                                android:layout_marginEnd="12dp"
                                 android:backgroundTint="@color/light_accent"
                                 app:cardCornerRadius="10dp"
                                 app:cardElevation="0dp"
@@ -380,13 +390,14 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Name"
                                     android:fontFamily="@font/inter_semibold"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textColor="@color/black" />
                                 <TextView
                                     android:id="@+id/infoPetName"
@@ -395,7 +406,7 @@
                                     android:text="Buddy"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="#7E7E7E" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -407,11 +418,11 @@
                             app:layout_columnWeight="1"
                             android:layout_margin="5dp">
                             <androidx.cardview.widget.CardView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
-                                android:layout_marginEnd="15dp"
+                                android:layout_marginEnd="12dp"
                                 android:backgroundTint="@color/light_accent"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
@@ -424,13 +435,14 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Species"
                                     android:fontFamily="@font/inter_semibold"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textColor="@color/black" />
                                 <TextView
                                     android:id="@+id/infoPetSpecies"
@@ -439,7 +451,7 @@
                                     android:text="Dog"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="#7E7E7E" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -451,11 +463,11 @@
                             android:layout_margin="5dp"
                             app:layout_columnWeight="1">
                             <androidx.cardview.widget.CardView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
-                                android:layout_marginEnd="15dp"
+                                android:layout_marginEnd="12dp"
                                 android:backgroundTint="@color/light_accent"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
@@ -468,13 +480,14 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Breed"
                                     android:fontFamily="@font/inter_semibold"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textColor="@color/black" />
                                 <TextView
                                     android:id="@+id/infoPetBreed"
@@ -483,7 +496,7 @@
                                     android:text="Golden Retriever"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="#7E7E7E" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -495,11 +508,11 @@
                             app:layout_columnWeight="1"
                             android:layout_margin="5dp">
                             <androidx.cardview.widget.CardView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
-                                android:layout_marginEnd="15dp"
+                                android:layout_marginEnd="12dp"
                                 android:backgroundTint="@color/light_accent"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
@@ -512,13 +525,14 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Gender"
                                     android:fontFamily="@font/inter_semibold"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textColor="@color/black" />
                                 <TextView
                                     android:id="@+id/infoPetGender"
@@ -527,7 +541,7 @@
                                     android:text="Male"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="#7E7E7E" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -539,11 +553,11 @@
                             android:layout_margin="5dp"
                             app:layout_columnWeight="1">
                             <androidx.cardview.widget.CardView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
                                 app:cardCornerRadius="10dp"
                                 app:cardPreventCornerOverlap="true"
-                                android:layout_marginEnd="15dp"
+                                android:layout_marginEnd="12dp"
                                 android:backgroundTint="@color/light_accent"
                                 app:cardElevation="0dp"
                                 app:contentPadding="10dp">
@@ -556,22 +570,23 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:gravity="center_vertical">
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Birthdate"
                                     android:fontFamily="@font/inter_semibold"
-                                    android:textSize="16sp"
+                                    android:textSize="14sp"
                                     android:textColor="@color/black" />
                                 <TextView
                                     android:id="@+id/infoPetBirthdate"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Male"
+                                    android:text="Jan 1, 2026"
                                     android:fontFamily="@font/inter_regular"
                                     android:textSize="14sp"
-                                    android:textColor="@color/black" />
+                                    android:textColor="#7E7E7E" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -580,7 +595,6 @@
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
-
     </ScrollView>
 
 </FrameLayout>
