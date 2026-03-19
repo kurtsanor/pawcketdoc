@@ -1,99 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRevealLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="3dp"
     android:layout_marginBottom="10dp"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="1dp"
-    app:cardMaxElevation="3dp">
+    app:dragEdge="left"
+    app:mode="same_level">
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_swipe_delete"
+            android:contentDescription="Delete document"
+            android:padding="18dp"
+            android:src="@drawable/ic_delete_24"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/frontCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
+        app:cardCornerRadius="10dp"
+        app:cardElevation="1dp"
+        app:cardMaxElevation="3dp">
 
-        <!-- Side Image with same padding as body -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="90dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp">
-            <ImageView
-                android:id="@+id/imgDocumentIcon"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:minHeight="90dp"
-                android:src="@drawable/docfile"
-                android:scaleType="centerCrop"
-                android:background="@color/light_accent" />
-        </androidx.cardview.widget.CardView>
-
-        <!-- Document Info -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical">
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-            <TextView
-                android:id="@+id/tvDocumentName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Document Name"
-                android:fontFamily="@font/inter_semibold"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:maxLines="1"
-                android:ellipsize="end" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp">
 
-            <TextView
-                android:id="@+id/tvDocumentType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Vet Certificate"
-                android:fontFamily="@font/inter_regular"
-                android:textSize="13sp"
-                android:textColor="#888888"
-                android:layout_marginTop="4dp" />
+                <ImageView
+                    android:id="@+id/imgDocumentIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/surface_tint"
+                    android:minHeight="90dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/docfile" />
+            </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tvDateIssued"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Issued: Jan 1, 2026"
-                android:fontFamily="@font/inter_regular"
-                android:textSize="12sp"
-                android:textColor="#AAAAAA"
-                android:layout_marginTop="4dp" />
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvNotes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Notes here..."
-                android:fontFamily="@font/inter_regular"
-                android:textSize="12sp"
-                android:textColor="#AAAAAA"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:layout_marginTop="4dp"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tvDocumentName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_semibold"
+                    android:maxLines="1"
+                    android:text="Document Name"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tvDocumentType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="Vet Certificate"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvDateIssued"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="Issued: Jan 1, 2026"
+                    android:textColor="@color/text_hint"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_regular"
+                    android:maxLines="1"
+                    android:text="Notes here..."
+                    android:textColor="@color/text_hint"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/rightarrow"
+                app:tint="@color/text_quaternary" />
 
         </LinearLayout>
 
-        <!-- Arrow -->
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/rightarrow"
-            app:tint="#CCCCCC" />
+    </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

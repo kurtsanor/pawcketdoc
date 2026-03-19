@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_regular"
                         android:text="Golden Retriever"
-                        android:textColor="#3E3E3E"
+                        android:textColor="@color/text_primary"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:textSize="14sp" />
@@ -92,7 +92,7 @@
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:dividerColor="#EEEEEE"
+                app:dividerColor="@color/surface_muted"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"/>
 
@@ -112,7 +112,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/checkup"
-                        app:tint="#289045"
+                        app:tint="@color/accent"
                         android:layout_marginRight="10dp"/>
 
                     <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
@@ -124,14 +124,14 @@
                         android:text="Dog"
                         android:textSize="14sp"
                         android:fontFamily="@font/inter_regular"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_primary"
                         android:layout_marginRight="20dp"/>
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/pawprint"
-                        app:tint="#FFAB40"
+                        app:tint="@color/warning_orange"
                         android:layout_marginEnd="10dp"/>
 
                     <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
@@ -143,7 +143,7 @@
                         android:text="Male"
                         android:textSize="14sp"
                         android:fontFamily="@font/inter_regular"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/text_primary"/>
 
                 </LinearLayout>
 
@@ -151,7 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="18dp"
                     android:src="@drawable/rightarrow"
-                    app:tint="#1F1E1E"/>
+                    app:tint="@color/text_primary"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -1,6 +1,5 @@
 package com.example.pawcketdoc.ui
 
-import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -35,12 +34,12 @@ import android.widget.Toast
 import androidx.appcompat.widget.TooltipCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.dto.GrowthProgress
 import com.example.pawcketdoc.service.GrowthService
 import com.example.pawcketdoc.util.SnackbarUtil
+import com.example.pawcketdoc.util.SwipeDeleteHelper
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Firebase
@@ -49,7 +48,6 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
-import java.lang.RuntimeException
 import com.google.android.material.R as MaterialR
 
 
@@ -230,7 +228,6 @@ class GrowthFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         loadGrowthEntries(petId)
-        setupSwipeHandler()
     }
 
     private fun filterChartByYear(petId: String, year: String, lineChart: LineChart) {
@@ -282,67 +279,31 @@ class GrowthFragment : Fragment() {
     private fun loadGrowthEntries(petId: String) {
         growthList = growthService.findAllByPetId(petId)
         growthList.observe(viewLifecycleOwner) { growths ->
-            recyclerView.adapter = GrowthAdapter(growths) { growth ->
-                val bottomSheet = GrowthDetailsBottomSheet.newInstance(growth)
-                bottomSheet.show(parentFragmentManager, "GrowthDetailsBottomSheet")
-            }
+            recyclerView.adapter = GrowthAdapter(
+                growthEntries = growths,
+                onClick = { growth ->
+                    val bottomSheet = GrowthDetailsBottomSheet.newInstance(growth)
+                    bottomSheet.show(parentFragmentManager, "GrowthDetailsBottomSheet")
+                },
+                onDeleteClick = { growth ->
+                    SwipeDeleteHelper.confirmDelete(
+                        fragment = this,
+                        message = "Are you sure you want to delete this growth record?"
+                    ) {
+                        growthService.deleteById(growth.id)
+                        SnackbarUtil.showSuccess(
+                            view = requireView(),
+                            title = "Success",
+                            message = "Record has been deleted"
+                        )
+                    }
+                }
+            )
             setupPlaceholders(growths)
         }
     }
 
-    private fun setupSwipeHandler() {
-        val swipeHandler = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
-            // drag n drop feature
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            // Called when an item is swiped
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val growth = growthList.value?.get(position)
-
-                if (growth == null) {
-                    return
-                }
-
-
-                // Show confirmation dialog
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Delete Record")
-                    .setMessage("Are you sure you want to delete id ${growth?.id}?")
-                    .setPositiveButton("Yes") { dialog, _ ->
-                        lifecycleScope.launch {
-                            try {
-                                growthService.deleteById(growth.id)
-                                SnackbarUtil.showSuccess(
-                                    view = requireView(),
-                                    title = "Success",
-                                    message = "Record has been deleted"
-                                )
-                                dialog.dismiss()
-                            } catch (e: RuntimeException) {}
-                        }
-
-                    }
-                    .setNegativeButton("No") { dialog, _ ->
-                        // User cancelled, reset the item so it doesn’t disappear
-                        recyclerView.adapter?.notifyItemChanged(position)
-                        dialog.dismiss()
-                    }
-                    .setCancelable(false)
-                    .show()
-            }
-        }
-        // Attach the swipe handler to RecyclerView
-        val itemTouchHelper = ItemTouchHelper(swipeHandler)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-    }
 
     private fun createLineChart(lineChart: LineChart, weightProgress: List<GrowthProgress>) {
         val entries = ArrayList<Entry>()

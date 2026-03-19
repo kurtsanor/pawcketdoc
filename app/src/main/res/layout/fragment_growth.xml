@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/bg_primary"
     tools:context=".ui.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp"
-            android:background="@color/secondary">
+            android:background="@color/bg_secondary">
 
             <!-- MD3 Title Medium: 16sp bold — reduced from 18sp -->
             <TextView
@@ -27,7 +27,7 @@
                 android:layout_marginBottom="15dp"
                 android:fontFamily="@font/inter_bold"
                 android:text="New Growth Entry"
-                android:textColor="@color/black"
+                android:textColor="@color/text_primary"
                 android:layout_marginStart="15dp"
                 android:textSize="16sp" />
 
@@ -61,10 +61,10 @@
                             app:boxCornerRadiusTopEnd="12dp"
                             app:boxCornerRadiusBottomStart="12dp"
                             app:boxCornerRadiusBottomEnd="12dp"
-                            app:boxStrokeColor="#E0E0E0"
+                            app:boxStrokeColor="@color/border"
                             app:boxStrokeWidth="1.5dp"
                             app:boxStrokeWidthFocused="1.5dp"
-                            app:boxBackgroundColor="@android:color/white"
+                            app:boxBackgroundColor="@color/surface"
                             app:hintTextColor="@color/accent"
                             app:endIconMode="custom"
                             app:endIconDrawable="@drawable/ic_info"
@@ -97,10 +97,10 @@
                             app:boxCornerRadiusTopEnd="12dp"
                             app:boxCornerRadiusBottomStart="12dp"
                             app:boxCornerRadiusBottomEnd="12dp"
-                            app:boxStrokeColor="#E0E0E0"
+                            app:boxStrokeColor="@color/border"
                             app:boxStrokeWidth="1.5dp"
                             app:boxStrokeWidthFocused="1.5dp"
-                            app:boxBackgroundColor="@android:color/white"
+                            app:boxBackgroundColor="@color/surface"
                             app:hintTextColor="@color/accent"
                             app:endIconMode="custom"
                             app:endIconDrawable="@drawable/ic_info"
@@ -131,10 +131,10 @@
                         app:boxCornerRadiusTopEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
                         app:boxCornerRadiusBottomEnd="12dp"
-                        app:boxStrokeColor="#E0E0E0"
+                        app:boxStrokeColor="@color/border"
                         app:boxStrokeWidth="1.5dp"
                         app:boxStrokeWidthFocused="1.5dp"
-                        app:boxBackgroundColor="@android:color/white"
+                        app:boxBackgroundColor="@color/surface"
                         app:hintTextColor="@color/accent"
                         app:endIconMode="custom"
                         app:endIconDrawable="@drawable/ic_info"
@@ -172,7 +172,7 @@
                     app:backgroundTint="@null"
                     android:fontFamily="@font/inter_bold"
                     android:text="Save Record"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="@color/white" />
 
                 <ProgressBar
                     android:id="@+id/progress"
@@ -199,7 +199,7 @@
                     android:textSize="16sp"
                     android:fontFamily="@font/inter_bold"
                     android:layout_marginStart="15dp"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/text_primary"/>
 
                 <Spinner
                     android:id="@+id/spinnerYear"
@@ -233,7 +233,7 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/inter_bold"
                 android:layout_marginStart="15dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/text_primary" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewGrowth"

@@ -34,6 +34,8 @@ import com.example.pawcketdoc.model.Appointment
 import com.example.pawcketdoc.service.AppointmentService
 import com.example.pawcketdoc.service.MedicationService
 import com.example.pawcketdoc.util.HealthUtil
+import com.example.pawcketdoc.util.SnackbarUtil
+import com.example.pawcketdoc.util.SwipeDeleteHelper
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -166,10 +168,26 @@ class HomeFragment : Fragment() {
     private fun loadUpcomingAppointments(userId: String) {
         appointments = appointmentService.findUpcomingByUserId(userId)
         appointments.observe(viewLifecycleOwner) { appointments ->
-            recyclerView.adapter = AppointmentAdapter(appointments) { appointment ->
-                val bottomSheet = AppointmentDetailsBottomSheet.newInstance(appointment)
-                bottomSheet.show(parentFragmentManager, "AppointmentDetailsBottomSheet")
-            }
+            recyclerView.adapter = AppointmentAdapter(
+                appointments = appointments,
+                onClick = { appointment ->
+                    val bottomSheet = AppointmentDetailsBottomSheet.newInstance(appointment)
+                    bottomSheet.show(parentFragmentManager, "AppointmentDetailsBottomSheet")
+                },
+                onDeleteClick = { appointment ->
+                    SwipeDeleteHelper.confirmDelete(
+                        fragment = this,
+                        message = "Are you sure you want to delete ${appointment.title}?"
+                    ) {
+                        appointmentService.deleteById(appointment.id)
+                        SnackbarUtil.showSuccess(
+                            view = requireView(),
+                            title = "Success",
+                            message = "Appointment has been deleted"
+                        )
+                    }
+                }
+            )
             setupPlaceholders(appointments)
         }
     }

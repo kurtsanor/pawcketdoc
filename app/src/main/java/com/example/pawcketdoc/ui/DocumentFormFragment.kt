@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -73,7 +74,13 @@ class DocumentFormFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_document_form, container, false)
+        val view = inflater.inflate(R.layout.fragment_document_form, container, false)
+
+        val headerBar = requireActivity().findViewById<View>(R.id.headerBar)
+        headerBar.setBackgroundColor(
+            ContextCompat.getColor(requireContext(), R.color.surface)
+        );
+        return  view
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

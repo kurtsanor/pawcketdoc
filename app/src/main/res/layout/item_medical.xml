@@ -1,137 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+<com.chauthai.swipereveallayout.SwipeRevealLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRevealLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
     android:layout_marginVertical="6dp"
-    android:layout_marginHorizontal="1dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="1dp"
-    app:strokeWidth="1dp"
-    app:strokeColor="#E0E0E0"
-    app:cardBackgroundColor="@android:color/white">
+    android:layout_marginHorizontal="3dp"
+    app:dragEdge="left"
+    app:mode="same_level">
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="4dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_swipe_delete"
+            android:contentDescription="Delete medical record"
+            android:padding="18dp"
+            android:src="@drawable/ic_delete_24"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/frontCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:gravity="center_vertical">
-
-        <ImageView
-            android:id="@+id/iconMedical"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/healthcare"
-            android:padding="10dp"
-            app:tint="@color/accent" />
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="1dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/border"
+        app:cardBackgroundColor="@color/surface">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/medicalTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="General Check-up"
-                android:fontFamily="@font/inter_semibold"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
+            <ImageView
+                android:id="@+id/iconMedical"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/healthcare"
+                android:padding="10dp"
+                app:tint="@color/accent" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_info"
-                    app:tint="#888888" />
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/medicalDiagnosis"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/medicalTitle"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/inter_regular"
-                    android:maxLines="1"
-                    android:text="Diagnosis: Fever"
-                    android:textColor="#666666"
-                    android:textSize="13sp" />
+                    android:text="General Check-up"
+                    android:fontFamily="@font/inter_semibold"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_info"
+                        app:tint="@color/text_tertiary" />
+
+                    <TextView
+                        android:id="@+id/medicalDiagnosis"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/inter_regular"
+                        android:maxLines="1"
+                        android:text="Diagnosis: Fever"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/medicine"
+                        app:tint="@color/success_green" />
+
+                    <TextView
+                        android:id="@+id/medicalTreatment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Treatment: Antibiotics"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/text_secondary"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="4dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/medicine"
-                    app:tint="#0E9554" />
-
-                <TextView
-                    android:id="@+id/medicalTreatment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Treatment: Antibiotics"
-                    android:textSize="13sp"
-                    android:fontFamily="@font/inter_regular"
-                    android:textColor="#666666"
-                    android:maxLines="1"
-                    android:ellipsize="end" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:cardBackgroundColor="#E8F5F1"
-            android:layout_marginStart="10dp">
-
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="8dp"
-                android:gravity="center">
+                app:cardCornerRadius="10dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/surface_tint"
+                android:layout_marginStart="10dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DATE"
-                    android:textColor="@color/accent"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="10sp" />
+                    android:orientation="vertical"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="8dp"
+                    android:gravity="center">
 
-                <TextView
-                    android:id="@+id/medicalDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="JAN 12"
-                    android:textColor="@color/accent"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DATE"
+                        android:textColor="@color/accent"
+                        android:fontFamily="@font/inter_bold"
+                        android:textSize="10sp" />
 
-    </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+                    <TextView
+                        android:id="@+id/medicalDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="JAN 12"
+                        android:textColor="@color/accent"
+                        android:fontFamily="@font/inter_bold"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
