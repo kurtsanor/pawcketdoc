@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Error"
-            android:textColor="@color/black"
+            android:textColor="@color/text_primary"
             android:fontFamily="@font/inter_bold"
             android:textSize="14sp" />
         <TextView
@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Something went wrong"
-            android:textColor="@color/black"
+            android:textColor="@color/text_primary"
             android:fontFamily="@font/inter_regular"
             android:textSize="12sp" />
     </LinearLayout>

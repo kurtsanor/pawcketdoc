@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/secondary">
+    android:background="@color/bg_secondary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                 android:layout_marginVertical="10dp"
                 android:textSize="16sp"
                 android:fontFamily="@font/inter_bold"
-                android:textColor="@color/black"/>
+                android:textColor="@color/text_primary"/>
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/donutChart"
@@ -58,7 +58,7 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/inter_bold"
                 android:layout_marginStart="16dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/text_primary"/>
 
             <Spinner
                 android:id="@+id/spinnerYear"
@@ -93,7 +93,7 @@
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/inter_bold"
             android:layout_marginStart="16dp"
-            android:textColor="@color/black" />
+            android:textColor="@color/text_primary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewVaccinationHome"

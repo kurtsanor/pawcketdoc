@@ -24,6 +24,7 @@ import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.model.Pet
 import com.example.pawcketdoc.service.PetService
 import com.example.pawcketdoc.util.SnackbarUtil
+import com.example.pawcketdoc.util.SwipeDeleteHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -74,7 +75,6 @@ class PetsFragment : Fragment() {
             findNavController().navigate(R.id.action_pets_to_petForm, )
         }
         loadPets()
-        setupSwipeHandler()
     }
 
     suspend fun deleteById(id: String) {
@@ -93,13 +93,29 @@ class PetsFragment : Fragment() {
         val currentUser = firebaseAuth.currentUser?.uid!!
         petList = petService.findAllByUserId(currentUser)
 
-        petList.observe(viewLifecycleOwner){ pets ->
-            recyclerView.adapter = PetAdapter(pets) { pet ->
-                val bundle = Bundle().apply {
-                    putString("pet_id", pet.id)
+        petList.observe(viewLifecycleOwner) { pets ->
+            recyclerView.adapter = PetAdapter(
+                pets,
+                onClick = { pet ->
+                    val bundle = Bundle().apply {
+                        putString("pet_id", pet.id)
+                    }
+                    findNavController().navigate(R.id.action_pets_to_petProfile, bundle)
+                },
+                onDeleteClick = { pet ->
+                    SwipeDeleteHelper.confirmDelete(
+                        fragment = this,
+                        message = "Are you sure you want to delete ${pet.name}?"
+                    ) {
+                        petService.deleteById(pet.id)
+                        SnackbarUtil.showSuccess(
+                            view = requireView(),
+                            title = "Success",
+                            message = "Pet has been deleted"
+                        )
+                    }
                 }
-                findNavController().navigate(R.id.action_pets_to_petProfile, bundle)
-            }
+            )
             setupPlaceholders(pets)
         }
     }

@@ -16,6 +16,8 @@ import com.example.pawcketdoc.adapter.DocumentAdapter
 import com.example.pawcketdoc.database.AppDatabase
 import com.example.pawcketdoc.database.DatabaseProvider
 import com.example.pawcketdoc.service.DocumentService
+import com.example.pawcketdoc.util.SnackbarUtil
+import com.example.pawcketdoc.util.SwipeDeleteHelper
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -34,15 +36,13 @@ class DocumentsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return inflater.inflate(R.layout.fragment_document, container, false)
     }
 
     override fun onResume() {
         super.onResume()
-        requireActivity()
-            .findViewById<TextView>(R.id.txtHeaderTitle)
-            .text = "Documents"
+        requireActivity().findViewById<TextView>(R.id.txtHeaderTitle).text = "Documents"
         requireActivity().findViewById<View>(R.id.bottomNavigationView)?.visibility = View.GONE
     }
 
@@ -64,16 +64,31 @@ class DocumentsFragment : Fragment() {
 
         val petId = arguments?.getString("pet_id")!!
         val emptyState = view.findViewById<View>(R.id.emptyState)
-
-        val bundle = Bundle().apply {
-            putString("pet_id", petId)
-        }
+        val bundle = Bundle().apply { putString("pet_id", petId) }
 
         documentService.findAllByPetId(petId).observe(viewLifecycleOwner) { documents ->
-            recyclerView.adapter = DocumentAdapter(documents) { document ->
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(document.fileUrl))
-                startActivity(intent)
-            }
+            recyclerView.adapter = DocumentAdapter(
+                documents = documents,
+                onClick = { document ->
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(document.fileUrl))
+                    startActivity(intent)
+                },
+                onDeleteClick = { document ->
+                    SwipeDeleteHelper.confirmDelete(
+                        fragment = this,
+                        title = "Delete document",
+                        message = "Are you sure you want to delete this document?"
+                    ) {
+                        documentService.deleteById(document.id)
+                        SnackbarUtil.showSuccess(
+                            view = requireView(),
+                            title = "Success",
+                            message = "Document has been deleted"
+                        )
+                    }
+                }
+            )
+
             if (documents.isEmpty()) {
                 emptyState.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE

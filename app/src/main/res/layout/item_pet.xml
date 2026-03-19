@@ -1,158 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
-    app:cardCornerRadius="20dp"
-    android:layout_marginTop="3dp"
-    android:layout_marginBottom="15dp"
-    app:cardElevation="2dp"
-    app:cardMaxElevation="3dp"
-    app:cardPreventCornerOverlap="true"
-    android:layout_marginHorizontal="3dp"
-    app:contentPadding="10dp"
+<com.chauthai.swipereveallayout.SwipeRevealLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipeRevealLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="6dp"
+    android:layout_marginHorizontal="3dp"
+    app:dragEdge="left"
+    app:mode="same_level">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <FrameLayout
-            android:layout_width="100dp"
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="72dp"
             android:layout_height="match_parent"
-            android:background="@drawable/circle_border"
-            android:layout_marginEnd="20dp">
-            <ImageView
-                android:id="@+id/profilePic"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:src="@drawable/doggy"
-                android:clipToOutline="true"
-                android:background="@drawable/circle_border"
-                android:scaleType="centerCrop" />
-        </FrameLayout>
+            android:layout_marginVertical="4dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_swipe_delete"
+            android:contentDescription="Delete pet"
+            android:padding="18dp"
+            android:src="@drawable/ic_delete_24"
+            app:tint="@color/white" />
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/frontCard"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="15dp"
+        app:cardElevation="2dp"
+        app:cardMaxElevation="3dp"
+        app:cardPreventCornerOverlap="true"
+        android:layout_marginHorizontal="3dp"
+        app:contentPadding="10dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="10"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/circle_border"
+                android:layout_marginEnd="20dp">
+                <ImageView
+                    android:id="@+id/profilePic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/doggy"
+                    android:clipToOutline="true"
+                    android:background="@drawable/circle_border"
+                    android:scaleType="centerCrop" />
+            </FrameLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="10"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="5"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- MD3 Title Medium: 16sp bold — reduced from 18sp -->
-                    <TextView
-                        android:id="@+id/petName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Buddy"
-                        android:textSize="16sp"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/inter_bold"
-                        android:textColor="@color/black"/>
-
-                    <!-- MD3 Body Medium: 14sp regular — reduced from 16sp -->
-                    <TextView
-                        android:id="@+id/petBreed"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_regular"
-                        android:text="Golden Retriever"
-                        android:textColor="#3E3E3E"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <!-- MD3 Label Large: 14sp medium — fixed dp → sp; weight reduced from semibold (600) to medium (500) -->
-                <Button
-                    style="@style/ShapeAppearanceOverlay.Material3.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:backgroundTint="@color/light_accent"
-                    android:text="Healthy ✓"
-                    android:textSize="12sp"
-                    android:textColor="@color/accent"
-                    android:fontFamily="@font/inter_semibold"
-                    />
-            </LinearLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:dividerColor="#EEEEEE"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/genderImage"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/checkup"
-                        app:tint="#289045"
-                        android:layout_marginRight="10dp"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
-                    <TextView
-                        android:id="@+id/gender"
+                        <!-- MD3 Title Medium: 16sp bold — reduced from 18sp -->
+                        <TextView
+                            android:id="@+id/petName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Buddy"
+                            android:textSize="16sp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_bold"
+                            android:textColor="@color/black"/>
+
+                        <!-- MD3 Body Medium: 14sp regular — reduced from 16sp -->
+                        <TextView
+                            android:id="@+id/petBreed"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_regular"
+                            android:text="Golden Retriever"
+                            android:textColor="@color/text_primary"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <!-- MD3 Label Large: 14sp medium — fixed dp → sp; weight reduced from semibold (600) to medium (500) -->
+                    <Button
+                        style="@style/ShapeAppearanceOverlay.Material3.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:backgroundTint="@color/light_accent"
+                        android:text="Healthy ✓"
+                        android:textSize="12sp"
+                        android:textColor="@color/accent"
+                        android:fontFamily="@font/inter_semibold"
+                        />
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerColor="@color/surface_muted"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="Dog"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/inter_regular"
-                        android:textColor="@color/black"
-                        android:layout_marginRight="20dp"/>
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/genderImage"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/checkup"
+                            app:tint="@color/accent"
+                            android:layout_marginRight="10dp"/>
+
+                        <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
+                        <TextView
+                            android:id="@+id/gender"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:text="Dog"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginRight="20dp"/>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/pawprint"
+                            app:tint="@color/warning_orange"
+                            android:layout_marginEnd="10dp"/>
+
+                        <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
+                        <TextView
+                            android:id="@+id/petType"
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="wrap_content"
+                            android:text="Male"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/text_primary"/>
+
+                    </LinearLayout>
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/pawprint"
-                        app:tint="#FFAB40"
-                        android:layout_marginEnd="10dp"/>
-
-                    <!-- MD3 Body Medium: 14sp regular — weight reduced from inter_semibold (600) to inter_regular (400) -->
-                    <TextView
-                        android:id="@+id/petType"
-                        android:layout_width="0dp"
-                        android:layout_weight="2"
-                        android:layout_height="wrap_content"
-                        android:text="Male"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/inter_regular"
-                        android:textColor="@color/black"/>
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:src="@drawable/rightarrow"
+                        app:tint="@color/text_primary"/>
                 </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="18dp"
-                    android:src="@drawable/rightarrow"
-                    app:tint="#1F1E1E"/>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>

@@ -6,14 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="@color/secondary"
     tools:context=".ui.AccountFragment">
+    android:background="@color/bg_primary">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/bg_secondary">
 
         <!-- Profile Card -->
         <androidx.cardview.widget.CardView
@@ -73,13 +74,13 @@
                         android:layout_gravity="bottom|end"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="2dp"
-                        android:backgroundTint="@color/secondary">
+                        android:backgroundTint="@color/bg_secondary">
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_gravity="center"
                             android:src="@drawable/camera"
-                            app:tint="@color/black" />
+                            app:tint="@color/text_primary" />
                     </androidx.cardview.widget.CardView>
 
                 </FrameLayout>
@@ -92,7 +93,7 @@
                     android:fontFamily="@font/inter_bold"
                     android:text="John Doe"
                     android:textAlignment="center"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp" />
 
                 <!-- MD3 Body Medium: 14sp regular — reduced from 16sp; role label is supporting text -->
@@ -102,7 +103,7 @@
                     android:text="Pet Owner"
                     android:textSize="14sp"
                     android:fontFamily="@font/inter_regular"
-                    android:textColor="#7E7E7E"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginTop="2dp"
                     android:textAlignment="center"/>
 
@@ -134,7 +135,7 @@
                     android:layout_marginBottom="15dp"
                     android:textSize="12sp"
                     android:fontFamily="@font/inter_regular"
-                    android:textColor="#767676" />
+                    android:textColor="@color/text_secondary" />
 
                 <!-- MD3 Body Large: 16sp regular — weight reduced from semibold (600) to regular (400) -->
                 <TextView
@@ -144,7 +145,7 @@
                     android:text="Edit Profile"
                     android:textSize="16sp"
                     android:fontFamily="@font/inter_regular"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:drawableLeft="@drawable/edit"
                     android:drawableRight="@drawable/rightarrow"
                     android:drawablePadding="20dp"
@@ -159,7 +160,7 @@
                     android:text="Change Password"
                     android:textSize="16sp"
                     android:fontFamily="@font/inter_regular"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:drawableLeft="@drawable/reset"
                     android:drawableRight="@drawable/rightarrow"
                     android:drawablePadding="12dp"

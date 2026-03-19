@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -49,7 +50,9 @@ class MedicalFormFragment : Fragment() {
         val view = inflater.inflate(R.layout.activity_medical_form, container, false)
 
         val headerBar = requireActivity().findViewById<View>(R.id.headerBar)
-        headerBar.setBackgroundColor(android.graphics.Color.WHITE)
+        headerBar.setBackgroundColor(
+            ContextCompat.getColor(requireContext(), R.color.surface)
+        );
 
         return  view
     }
