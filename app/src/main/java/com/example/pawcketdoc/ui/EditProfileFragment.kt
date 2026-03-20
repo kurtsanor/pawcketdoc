@@ -10,6 +10,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.pawcketdoc.R
@@ -56,6 +58,13 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, 0, 0, ime.bottom.coerceAtLeast(systemBars.bottom))
+            insets
+        }
         etFirstName = view.findViewById(R.id.etFirstName)
         etSurname = view.findViewById(R.id.etSurname)
         val btnUpdateProfile = view.findViewById<Button>(R.id.btnUpdateProfile)
