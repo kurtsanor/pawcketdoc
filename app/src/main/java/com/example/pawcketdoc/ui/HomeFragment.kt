@@ -9,6 +9,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -292,6 +294,10 @@ class HomeFragment : Fragment() {
             selectionShift = 8f
         }
 
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true)
+        val primaryTextColor = ContextCompat.getColor(requireContext(), typedValue.resourceId)
+
         donutChart.apply {
             data = PieData(dataSet)
             setUsePercentValues(true)
@@ -313,6 +319,7 @@ class HomeFragment : Fragment() {
             ss.setSpan(RelativeSizeSpan(1.9f), 0, 3, 0)
             ss.setSpan(ForegroundColorSpan(Color.GRAY), 4, text.length, 0)
             centerText = ss
+            setCenterTextColor(primaryTextColor)
         }
 
         donutChart.legend.apply {
@@ -324,6 +331,7 @@ class HomeFragment : Fragment() {
             yOffset = 10f
             form = Legend.LegendForm.CIRCLE
             textSize = 12f
+            textColor = primaryTextColor
         }
 
         donutChart.invalidate()

@@ -32,8 +32,6 @@
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
                     app:srcCompat="@drawable/logo"
                     app:tint="@color/white"/>
             </LinearLayout>

@@ -93,7 +93,7 @@
                             android:maxLines="1"
                             android:ellipsize="end"
                             android:fontFamily="@font/inter_bold"
-                            android:textColor="@color/black"/>
+                            android:textColor="@color/text_primary"/>
 
                         <!-- MD3 Body Medium: 14sp regular — reduced from 16sp -->
                         <TextView

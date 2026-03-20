@@ -190,11 +190,11 @@
                 android:layout_marginStart="10dp"
                 android:textSize="16sp" />
 
+            <!-- MD3 Title Medium: 16sp bold -->
             <androidx.gridlayout.widget.GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:columnCount="3"
-                app:useDefaultMargins="true">
+                app:columnCount="3">
 
                 <Button
                     android:id="@+id/buttonDocuments"
@@ -205,7 +205,7 @@
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
-                    android:text="Documents\n"
+                    android:text="Docs"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/text_secondary"
@@ -213,7 +213,7 @@
                     app:cornerRadius="15dp"
                     app:icon="@drawable/docfile"
                     app:iconGravity="top"
-                    app:iconPadding="0dp"
+                    app:iconPadding="8dp"
                     app:iconSize="45dp"
                     app:iconTint="@null"
                     app:layout_column="0"
@@ -229,7 +229,7 @@
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
-                    android:text="Vaccine Records"
+                    android:text="Vaccine"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/text_secondary"
@@ -237,7 +237,7 @@
                     app:cornerRadius="15dp"
                     app:icon="@drawable/vacc"
                     app:iconGravity="top"
-                    app:iconPadding="0dp"
+                    app:iconPadding="8dp"
                     app:iconSize="45dp"
                     app:iconTint="@null"
                     app:layout_columnWeight="1" />
@@ -251,7 +251,7 @@
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
-                    android:text="Growth History"
+                    android:text="Growth"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/text_secondary"
@@ -259,7 +259,7 @@
                     app:cornerRadius="15dp"
                     app:icon="@drawable/grow"
                     app:iconGravity="top"
-                    app:iconPadding="0dp"
+                    app:iconPadding="8dp"
                     app:iconSize="45dp"
                     app:iconTint="@null"
                     app:layout_columnWeight="1" />
@@ -273,7 +273,7 @@
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
-                    android:text="Medical History"
+                    android:text="Medical"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/text_secondary"
@@ -281,7 +281,7 @@
                     app:cornerRadius="15dp"
                     app:icon="@drawable/med"
                     app:iconGravity="top"
-                    app:iconPadding="0dp"
+                    app:iconPadding="8dp"
                     app:iconSize="45dp"
                     app:iconTint="@null"
                     app:layout_columnWeight="1" />
@@ -295,7 +295,7 @@
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
-                    android:text="Appointment\n"
+                    android:text="Schedule"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/text_secondary"
@@ -303,7 +303,7 @@
                     app:cornerRadius="15dp"
                     app:icon="@drawable/appoint"
                     app:iconGravity="top"
-                    app:iconPadding="0dp"
+                    app:iconPadding="8dp"
                     app:iconSize="45dp"
                     app:iconTint="@null"
                     app:layout_columnWeight="1" />
@@ -317,7 +317,7 @@
                     android:ellipsize="none"
                     android:scrollHorizontally="false"
                     android:singleLine="false"
-                    android:text="Medications\n"
+                    android:text="Meds"
                     android:textAlignment="center"
                     android:textAllCaps="false"
                     android:textColor="@color/text_secondary"
@@ -325,14 +325,13 @@
                     app:cornerRadius="15dp"
                     app:icon="@drawable/medicinee"
                     app:iconGravity="top"
-                    app:iconPadding="0dp"
+                    app:iconPadding="8dp"
                     app:iconSize="45dp"
                     app:iconTint="@null"
                     app:layout_columnWeight="1" />
 
             </androidx.gridlayout.widget.GridLayout>
 
-            <!-- MD3 Title Medium: 16sp bold -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

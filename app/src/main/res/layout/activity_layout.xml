@@ -18,11 +18,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Touch target bumped to 48dp to meet MD3 minimum interactive size -->
+
         <ImageButton
             android:id="@+id/buttonBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_arrow_back"
             android:contentDescription="Back"

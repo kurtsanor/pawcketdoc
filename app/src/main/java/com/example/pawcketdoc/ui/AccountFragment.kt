@@ -1,5 +1,6 @@
 package com.example.pawcketdoc.ui
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +13,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -99,6 +102,17 @@ class AccountFragment : Fragment() {
         firebaseFirestore = Firebase.firestore
         userService = UserService(db.userDao(), firebaseFirestore)
         uploadService = UploadService(requireContext())
+
+        val switchDarkMode = view.findViewById<SwitchCompat>(R.id.switchDarkMode)
+        val prefs = requireContext().getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+        switchDarkMode.isChecked = prefs.getBoolean("dark_mode", false)
+
+        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
+            val mode = if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            AppCompatDelegate.setDefaultNightMode(mode)
+            prefs.edit().putBoolean("dark_mode", isChecked).apply()
+        }
 
         val buttonLogout = view.findViewById<TextView>(R.id.logout)
         buttonLogout.setOnClickListener {

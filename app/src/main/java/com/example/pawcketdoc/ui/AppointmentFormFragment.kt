@@ -53,7 +53,7 @@ class AppointmentFormFragment : Fragment() {
             ContextCompat.getColor(requireContext(), R.color.surface)
         );
 
-        return  view
+        return view
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:background="@color/bg_primary"
     tools:context=".ui.AccountFragment">
-    android:background="@color/bg_primary">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,7 +85,6 @@
 
                 </FrameLayout>
 
-                <!-- MD3 Title Large: 22sp bold — bumped from 20sp, profile name is a prominent identity element -->
                 <TextView
                     android:id="@+id/fullName"
                     android:layout_width="match_parent"
@@ -96,7 +95,6 @@
                     android:textColor="@color/text_primary"
                     android:textSize="18sp" />
 
-                <!-- MD3 Body Medium: 14sp regular — reduced from 16sp; role label is supporting text -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -127,7 +125,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- MD3 Label Small: 12sp regular — reduced from 14sp semibold; section labels are secondary chrome -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -137,7 +134,6 @@
                     android:fontFamily="@font/inter_regular"
                     android:textColor="@color/text_secondary" />
 
-                <!-- MD3 Body Large: 16sp regular — weight reduced from semibold (600) to regular (400) -->
                 <TextView
                     android:id="@+id/tvEditProfile"
                     android:layout_width="match_parent"
@@ -149,10 +145,10 @@
                     android:drawableLeft="@drawable/edit"
                     android:drawableRight="@drawable/rightarrow"
                     android:drawablePadding="20dp"
+                    android:drawableTint="@color/text_primary"
                     android:minHeight="48dp"
                     android:gravity="center_vertical"/>
 
-                <!-- MD3 Body Large: 16sp regular — weight reduced from semibold (600) to regular (400) -->
                 <TextView
                     android:id="@+id/tvChangePassword"
                     android:layout_width="match_parent"
@@ -164,13 +160,77 @@
                     android:drawableLeft="@drawable/reset"
                     android:drawableRight="@drawable/rightarrow"
                     android:drawablePadding="12dp"
+                    android:drawableTint="@color/text_primary"
                     android:minHeight="48dp"
                     android:gravity="center_vertical"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Log Out button — font unchanged, already correct -->
+        <!-- Preferences Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="15dp"
+            android:layout_marginBottom="15dp"
+            app:cardElevation="1dp"
+            app:cardMaxElevation="3dp"
+            app:cardPreventCornerOverlap="true"
+            android:layout_marginHorizontal="3dp"
+            app:contentPadding="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Preferences"
+                    android:layout_marginBottom="15dp"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="@color/text_secondary" />
+
+                <!-- Dark Mode Toggle Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:minHeight="48dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/darkmode"
+                        android:layout_marginEnd="20dp"
+                        app:tint="@color/text_primary"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Dark Mode"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/text_primary"/>
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/switchDarkMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        app:thumbTint="@color/accent"
+                        app:trackTint="@color/text_secondary"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Log Out button -->
         <Button
             android:id="@+id/logout"
             android:layout_width="match_parent"
