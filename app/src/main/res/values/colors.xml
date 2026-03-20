@@ -7,7 +7,7 @@
     <color name="light_accent">#E8F5F1</color>
     <color name="secondary">#F6F6F6</color>
 
-    <color name="bg_primary">#FFFFFFFF</color>
+    <color name="bg_primary">#FFFFFF</color>
     <color name="bg_secondary">#F6F6F6</color>
     <color name="surface">#FFFFFFFF</color>
     <color name="surface_soft">#FAFAFA</color>

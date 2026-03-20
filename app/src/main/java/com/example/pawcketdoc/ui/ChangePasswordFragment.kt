@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.pawcketdoc.R
@@ -50,7 +51,9 @@ class ChangePasswordFragment : Fragment() {
     ): View? {
 
         val headerBar = requireActivity().findViewById<View>(R.id.headerBar)
-        headerBar.setBackgroundColor(android.graphics.Color.WHITE)
+        headerBar.setBackgroundColor(
+            ContextCompat.getColor(requireContext(), R.color.surface)
+        );
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_change_password, container, false)
     }

@@ -201,10 +201,6 @@ class DocumentFormFragment : Fragment() {
         requireActivity().findViewById<View>(R.id.bottomNavigationView)?.visibility = View.GONE
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        requireActivity().findViewById<View>(R.id.bottomNavigationView)?.visibility = View.VISIBLE
-    }
 
     private fun setupDocumentTypeDropdown(root: View) {
         val documentTypes = listOf(

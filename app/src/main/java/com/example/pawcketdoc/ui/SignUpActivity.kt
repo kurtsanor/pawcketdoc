@@ -41,7 +41,14 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_sign_up)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.signup)) { v, insets ->
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, 0, 0, imeInsets.bottom.coerceAtLeast(systemBars.bottom))
+            insets
+        }
 
         val signInLink = findViewById<TextView>(R.id.textViewSignIn)
         val buttonSignup = findViewById<Button>(R.id.buttonSignUp)

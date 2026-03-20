@@ -86,7 +86,7 @@
             android:textColor="@color/white"
             android:fontFamily="@font/inter_bold"
             android:textAllCaps="false"
-            android:layout_marginBottom="20dp" />
+             />
 
     </LinearLayout>
 
