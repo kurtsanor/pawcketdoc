@@ -61,8 +61,7 @@ class EditProfileFragment : Fragment() {
 
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(0, 0, 0, ime.bottom.coerceAtLeast(systemBars.bottom))
+            v.setPadding(0, 0, 0, ime.bottom)
             insets
         }
         etFirstName = view.findViewById(R.id.etFirstName)
